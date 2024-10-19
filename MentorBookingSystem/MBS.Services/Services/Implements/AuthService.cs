@@ -14,7 +14,6 @@ public class AuthService : IAuthService
         var result = await WebUtils.PostAsync(ApiEndPoints.LoginUrl, request);
         var response = WebUtils.HandleResponse<BaseModel<LoginResponse, LoginRequest>>(result);
         return response;
-        
     }
 
     public async Task LoginWithGoogleAsync()

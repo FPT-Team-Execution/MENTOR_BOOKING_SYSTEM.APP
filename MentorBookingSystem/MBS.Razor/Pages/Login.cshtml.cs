@@ -15,10 +15,9 @@ namespace MBS.Razor.Pages
         {
             this._authService = authService;
         }
-        
-        [BindProperty]
-        public LoginRequest LoginRequest { get; set; }
-        
+
+        [BindProperty] public LoginRequest LoginRequest { get; set; }
+
         public void OnGet()
         {
         }
@@ -29,11 +28,17 @@ namespace MBS.Razor.Pages
             {
                 return Page();
             }
-            
+
             var response = await _authService.LoginAsync(LoginRequest);
+
+            if (!response.StatusCode.Equals(StatusCodes.Status200OK))
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return Page();
+            }
+
             HttpContext.Session.SetString("AccessToken", response.ResponseModel.JwtToken.AccessToken);
             HttpContext.Session.SetString("RefreshToken", response.ResponseModel.JwtToken.RefreshToken);
-
             return Redirect(RouteEndpoints.AdminDashboard);
         }
     }

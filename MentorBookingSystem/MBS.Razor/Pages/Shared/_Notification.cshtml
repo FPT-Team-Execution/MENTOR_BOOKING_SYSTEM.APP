@@ -1,0 +1,29 @@
+﻿<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@if (TempData["SuccessMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: '@TempData["SuccessMessage"]',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    </script>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <script>
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '@TempData["ErrorMessage"]',
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false
+        });
+    </script>
+}
+
