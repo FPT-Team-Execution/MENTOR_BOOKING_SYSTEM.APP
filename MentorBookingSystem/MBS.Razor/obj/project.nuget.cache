@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "a3/XrDQuwuIfkxzY4yO2dEzhj8QAHsyakfcUtj4qXIsVL0NM1fCevWlntHNUJ60fIR79D3qeJskKvARFQ+iWWQ==",
+  "dgSpecHash": "f9KVbZAg2U9jKO4XpkYX2JyHeozoe/SAogxRXVUjSwab++7kyW03N/l9k1c+bGx87wOP6zVS/5JKdbhh9bazaA==",
   "success": true,
   "projectFilePath": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\MBS.Razor.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\uinic\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
