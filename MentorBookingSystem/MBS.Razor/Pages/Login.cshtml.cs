@@ -39,6 +39,8 @@ namespace MBS.Razor.Pages
 
             HttpContext.Session.SetString("AccessToken", response.ResponseModel.JwtToken.AccessToken);
             HttpContext.Session.SetString("RefreshToken", response.ResponseModel.JwtToken.RefreshToken);
+            
+            TempData["SuccessMessage"] = response.Message;
             return Redirect(RouteEndpoints.AdminDashboard);
         }
     }
