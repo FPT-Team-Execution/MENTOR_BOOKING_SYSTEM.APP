@@ -1,7 +1,68 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\wwwroot\\css\\sb-admin-2.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\wwwroot\\css\\sb-admin-2.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\wwwroot\\css\\site.css||{A5401142-F49D-43DB-90B1-F57BA349E55C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\pages\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\pages\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\pages\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\pages\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\pages\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\pages\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\pages\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\pages\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\pages\\shared\\_layoutadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\pages\\shared\\_layoutadmin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\pages\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\pages\\privacy.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.razor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}|MBS.Razor\\MBS.Razor.csproj|solutionrelative:mbs.razor\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}|MBS.Services\\MBS.Services.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.services\\utils\\webutils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}|MBS.Services\\MBS.Services.csproj|solutionrelative:mbs.services\\utils\\webutils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}|MBS.Services\\MBS.Services.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.services\\models\\basemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}|MBS.Services\\MBS.Services.csproj|solutionrelative:mbs.services\\models\\basemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}|MBS.Services\\MBS.Services.csproj|c:\\fpt_university_sources\\after_ojt\\term_7\\prn221\\mentor_booking_system.app\\mentorbookingsystem\\mbs.services\\models\\iresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}|MBS.Services\\MBS.Services.csproj|solutionrelative:mbs.services\\models\\iresponse.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,7 +70,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Bookmark",
@@ -30,6 +91,197 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "site.css",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\wwwroot\\css\\site.css",
+              "RelativeDocumentMoniker": "MBS.Razor\\wwwroot\\css\\site.css",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\wwwroot\\css\\site.css",
+              "RelativeToolTip": "MBS.Razor\\wwwroot\\css\\site.css",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-10-19T09:00:31.469Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "sb-admin-2.css",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\wwwroot\\css\\sb-admin-2.css",
+              "RelativeDocumentMoniker": "MBS.Razor\\wwwroot\\css\\sb-admin-2.css",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\wwwroot\\css\\sb-admin-2.css",
+              "RelativeToolTip": "MBS.Razor\\wwwroot\\css\\sb-admin-2.css",
+              "ViewState": "AgIAAKAmAAAAAAAAAAAowLAmAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003000|",
+              "WhenOpened": "2024-10-19T08:52:17.414Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "MBS.Razor\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Properties\\launchSettings.json",
+              "RelativeToolTip": "MBS.Razor\\Properties\\launchSettings.json",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA8AAAAfAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-19T08:51:00.481Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Login.cshtml",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Login.cshtml",
+              "RelativeDocumentMoniker": "MBS.Razor\\Pages\\Login.cshtml",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Login.cshtml",
+              "RelativeToolTip": "MBS.Razor\\Pages\\Login.cshtml",
+              "ViewState": "AgIAACAAAAAAAAAAAAAAACwAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T08:43:42.071Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "MBS.Razor\\Pages\\_ViewStart.cshtml",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\_ViewStart.cshtml",
+              "RelativeToolTip": "MBS.Razor\\Pages\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T08:38:30.599Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "Privacy.cshtml",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Privacy.cshtml",
+              "RelativeDocumentMoniker": "MBS.Razor\\Pages\\Privacy.cshtml",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Privacy.cshtml",
+              "RelativeToolTip": "MBS.Razor\\Pages\\Privacy.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T08:38:03.044Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Index.cshtml",
+              "RelativeDocumentMoniker": "MBS.Razor\\Pages\\Index.cshtml",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Index.cshtml",
+              "RelativeToolTip": "MBS.Razor\\Pages\\Index.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T08:28:29.292Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Error.cshtml",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Error.cshtml",
+              "RelativeDocumentMoniker": "MBS.Razor\\Pages\\Error.cshtml",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Error.cshtml",
+              "RelativeToolTip": "MBS.Razor\\Pages\\Error.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T08:28:28.756Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "_LayoutAdmin.cshtml",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Shared\\_LayoutAdmin.cshtml",
+              "RelativeDocumentMoniker": "MBS.Razor\\Pages\\Shared\\_LayoutAdmin.cshtml",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Shared\\_LayoutAdmin.cshtml",
+              "RelativeToolTip": "MBS.Razor\\Pages\\Shared\\_LayoutAdmin.cshtml",
+              "ViewState": "AgIAAHEBAAAAAAAAAAAQwIEBAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T08:28:16.454Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "MBS.Razor\\Pages\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Pages\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "MBS.Razor\\Pages\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABYAAAAHAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-10-19T08:24:56.109Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Program.cs",
+              "RelativeDocumentMoniker": "MBS.Razor\\Program.cs",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\Program.cs",
+              "RelativeToolTip": "MBS.Razor\\Program.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABQAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T07:49:00.028Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\appsettings.json",
+              "RelativeDocumentMoniker": "MBS.Razor\\appsettings.json",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Razor\\appsettings.json",
+              "RelativeToolTip": "MBS.Razor\\appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-10-19T07:48:56.257Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "BaseModel.cs",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Services\\Models\\BaseModel.cs",
+              "RelativeDocumentMoniker": "MBS.Services\\Models\\BaseModel.cs",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Services\\Models\\BaseModel.cs",
+              "RelativeToolTip": "MBS.Services\\Models\\BaseModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAB8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T07:38:51.857Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "IResponse.cs",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Services\\Models\\IResponse.cs",
+              "RelativeDocumentMoniker": "MBS.Services\\Models\\IResponse.cs",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Services\\Models\\IResponse.cs",
+              "RelativeToolTip": "MBS.Services\\Models\\IResponse.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T07:35:13.828Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "WebUtils.cs",
+              "DocumentMoniker": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Services\\Utils\\WebUtils.cs",
+              "RelativeDocumentMoniker": "MBS.Services\\Utils\\WebUtils.cs",
+              "ToolTip": "C:\\FPT_University_Sources\\After_OJT\\Term_7\\PRN221\\MENTOR_BOOKING_SYSTEM.APP\\MentorBookingSystem\\MBS.Services\\Utils\\WebUtils.cs",
+              "RelativeToolTip": "MBS.Services\\Utils\\WebUtils.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-19T07:26:14.313Z"
             }
           ]
         },

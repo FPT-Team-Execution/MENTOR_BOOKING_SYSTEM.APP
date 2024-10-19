@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35312.102
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBS.Razor", "MBS.Razor\MBS.Razor.csproj", "{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBS.Razor", "MBS.Razor\MBS.Razor.csproj", "{F6E041C0-D0BF-4DD4-B578-E4EE20526A5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBS.Services", "MBS.Services\MBS.Services.csproj", "{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBS.Services", "MBS.Services\MBS.Services.csproj", "{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
