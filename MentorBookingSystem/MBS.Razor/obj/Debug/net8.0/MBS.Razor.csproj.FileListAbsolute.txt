@@ -29,3 +29,8 @@ C:\FPT_University_Sources\After_OJT\Term_7\PRN221\MENTOR_BOOKING_SYSTEM.APP\Ment
 C:\FPT_University_Sources\After_OJT\Term_7\PRN221\MENTOR_BOOKING_SYSTEM.APP\MentorBookingSystem\MBS.Razor\obj\Debug\net8.0\MBS.Razor.pdb
 C:\FPT_University_Sources\After_OJT\Term_7\PRN221\MENTOR_BOOKING_SYSTEM.APP\MentorBookingSystem\MBS.Razor\obj\Debug\net8.0\MBS.Razor.genruntimeconfig.cache
 C:\FPT_University_Sources\After_OJT\Term_7\PRN221\MENTOR_BOOKING_SYSTEM.APP\MentorBookingSystem\MBS.Razor\obj\Debug\net8.0\ref\MBS.Razor.dll
+C:\FPT_University_Sources\After_OJT\Term_7\PRN221\MENTOR_BOOKING_SYSTEM.APP\MentorBookingSystem\MBS.Razor\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\FPT_University_Sources\After_OJT\Term_7\PRN221\MENTOR_BOOKING_SYSTEM.APP\MentorBookingSystem\MBS.Razor\bin\Debug\net8.0\MBS.Services.dll
+C:\FPT_University_Sources\After_OJT\Term_7\PRN221\MENTOR_BOOKING_SYSTEM.APP\MentorBookingSystem\MBS.Razor\bin\Debug\net8.0\MBS.Services.pdb
+C:\FPT_University_Sources\After_OJT\Term_7\PRN221\MENTOR_BOOKING_SYSTEM.APP\MentorBookingSystem\MBS.Razor\obj\Debug\net8.0\MBS.Razor.csproj.AssemblyReference.cache
+C:\FPT_University_Sources\After_OJT\Term_7\PRN221\MENTOR_BOOKING_SYSTEM.APP\MentorBookingSystem\MBS.Razor\obj\Debug\net8.0\MBS.Razor.csproj.CopyComplete

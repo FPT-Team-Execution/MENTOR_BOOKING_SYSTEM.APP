@@ -14,7 +14,7 @@ namespace MBS.Razor.Pages
 
         public void OnGet()
         {
-
+            Response.Redirect("Login");
         }
     }
 }
