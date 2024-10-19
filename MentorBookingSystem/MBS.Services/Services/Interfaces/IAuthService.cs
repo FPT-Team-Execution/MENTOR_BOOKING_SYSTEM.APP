@@ -8,5 +8,6 @@ public interface IAuthService
 {
     public Task<BaseModel<LoginResponse, LoginRequest>> LoginAsync(LoginRequest request);
     public Task LoginWithGoogleAsync();
-    
+
+    public Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request);
 }

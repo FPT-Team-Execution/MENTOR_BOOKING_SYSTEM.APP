@@ -20,4 +20,11 @@ public class AuthService : IAuthService
     {
         // var result = await WebUtils.GetAsync();
     }
+
+    public async Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request)
+    {
+        var result = await WebUtils.PostAsync(ApiEndPoints.RegisterUrl, request);
+        var response = WebUtils.HandleResponse<BaseModel<RegisterResponse, RegisterRequest>>(result);
+        return response;
+    }
 }
