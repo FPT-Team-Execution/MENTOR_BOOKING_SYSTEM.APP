@@ -7,4 +7,5 @@ public interface IAuthService
 {
     public Task<LoginResponse> LoginAsync(LoginRequest request);
     public Task LoginWithGoogleAsync();
+    
 }
