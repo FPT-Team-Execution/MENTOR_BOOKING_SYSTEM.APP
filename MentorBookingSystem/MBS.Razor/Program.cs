@@ -1,7 +1,13 @@
+using MBS.Services.Services;
+using MBS.Services.Services.Implements;
+using MBS.Services.Services.Interfaces;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 var app = builder.Build();
 
