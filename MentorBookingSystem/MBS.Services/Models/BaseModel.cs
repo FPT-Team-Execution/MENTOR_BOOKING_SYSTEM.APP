@@ -20,7 +20,7 @@ namespace MBS.Services.Models
         public bool IsSuccess { get; set; }
         public required string Message { get; set; }
         public int StatusCode { get; set; }
-        public TResponseRequestModel? ResponseRequestModel { get; set; }
+        public required TResponseRequestModel ResponseRequestModel { get; set; }
     };
 
     public class BaseModel : IResponse

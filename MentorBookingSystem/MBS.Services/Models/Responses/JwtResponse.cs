@@ -1,4 +1,7 @@
-﻿namespace MBS.Services.Models.Responses;
+﻿using System.Text.Json.Serialization;
+
+namespace MBS.Services.Models.Responses;
+
 
 public class JwtResponse
 {

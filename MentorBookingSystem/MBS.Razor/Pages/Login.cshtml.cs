@@ -1,3 +1,4 @@
+using MBS.Services.Constants;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
@@ -22,9 +23,18 @@ namespace MBS.Razor.Pages
         {
         }
 
-        public void OnPost()
+        public async Task<IActionResult> OnPost()
         {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
             
+            var response = await _authService.LoginAsync(LoginRequest);
+            HttpContext.Session.SetString("AccessToken", response.ResponseModel.JwtToken.AccessToken);
+            HttpContext.Session.SetString("RefreshToken", response.ResponseModel.JwtToken.RefreshToken);
+
+            return Redirect(RouteEndpoints.AdminDashboard);
         }
     }
 }
