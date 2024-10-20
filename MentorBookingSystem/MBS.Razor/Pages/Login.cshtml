@@ -2,6 +2,7 @@
 @model MBS.Razor.Pages.LoginModel
 @{
     Layout = "_Layout";
+   
 }
 
 <!DOCTYPE html>
@@ -70,10 +71,9 @@
                                         Login
                                     </button>
                                     <hr>
-                                    <a asp-page="/LoginGoogle" class="btn btn-google btn-user btn-block">
+                                    <a class="btn btn-google btn-user btn-block" asp-page-handler="LoginWithGoogle" >
                                         <i class="fab fa-google fa-fw"></i> Login with Google
                                     </a>
-
                                 </form>
                                 <hr>
                                 <div class="text-center">
