@@ -49,7 +49,7 @@ namespace MBS.Razor.Pages
         public void OnGetLoginWithGoogle()
         {
             var clientId = "1096581745243-bj51g3cd4rq13codonsoftbk8h7tq4mi.apps.googleusercontent.com";
-            var redirectUrl = "http://localhost:7102/AuthCallBack";
+            var redirectUrl = "https://localhost:7102/AuthCallBack";
             //better solution
             // var redirectUrl = $"http://localhost:7102/Login?handler={RouteEndpointHandlers.Callback}";
 
