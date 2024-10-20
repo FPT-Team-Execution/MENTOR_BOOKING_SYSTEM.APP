@@ -46,7 +46,7 @@ public static class RouteEndpoints
 
     // Admin Calendar Routes
     public const string AdminCalender = "/AdminPage/CalendarPage";
-    public const string AdminCalenderEvent = "/AdminPage/CalendarPage/EvenPage";
+    public const string AdminCalenderEvent = "/AdminPage/CalendarPage/EventPage";
 
  
 
