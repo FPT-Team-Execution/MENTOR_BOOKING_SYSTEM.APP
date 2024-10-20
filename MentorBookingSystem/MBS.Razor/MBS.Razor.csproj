@@ -10,4 +10,8 @@
     <ProjectReference Include="..\MBS.Services\MBS.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\AdminPage\UserPage\MentorPage\Index.cshtml" />
+  </ItemGroup>
+
 </Project>
