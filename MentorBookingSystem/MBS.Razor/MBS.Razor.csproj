@@ -16,4 +16,8 @@
     <_ContentIncludedByDefault Remove="Pages\AdminPage\UserPage\MentorPage\Index.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\StudentPage\" />
+  </ItemGroup>
+
 </Project>
