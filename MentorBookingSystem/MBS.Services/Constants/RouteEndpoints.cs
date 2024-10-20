@@ -2,12 +2,12 @@
 
 public static class RouteEndpoints
 {
+    #region Login Page
     public const string Login = "/Login";
     public const string Logout = "/Logout";
     public const string Register = "/Register";
-    public const string LoginGoogle = "/LoginGoogle";
 
-
+    #endregion
     // Admin routes
     public const string Admin = "/AdminPage";
     public const string AdminDashboard = "/AdminPage/Dashboard";
@@ -47,4 +47,7 @@ public static class RouteEndpoints
     // Admin Calendar Routes
     public const string AdminCalender = "/AdminPage/CalendarPage";
     public const string AdminCalenderEvent = "/AdminPage/CalendarPage/EvenPage";
+
+ 
+
 }

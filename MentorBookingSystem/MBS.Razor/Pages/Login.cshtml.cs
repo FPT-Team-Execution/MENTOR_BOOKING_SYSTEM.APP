@@ -51,7 +51,7 @@ namespace MBS.Razor.Pages
             var clientId = "1096581745243-bj51g3cd4rq13codonsoftbk8h7tq4mi.apps.googleusercontent.com";
             var redirectUrl = "http://localhost:7102/AuthCallBack";
             //better solution
-            // var redirectUrl = "http://localhost:7102/Login?handler=callback";
+            // var redirectUrl = $"http://localhost:7102/Login?handler={RouteEndpointHandlers.Callback}";
 
             var state = Guid.NewGuid().ToString();
             var scope = "openid email profile";
