@@ -1,0 +1,134 @@
+@* @page *@
+@model MentorDetailPartial
+
+
+<div>
+    <form>
+        <div class=" mb-3">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="https://via.placeholder.com/150" class="img-fluid rounded-start"/>
+                </div>
+
+                <div class="col-md-8 d-flex flex-column justify-content-between">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6 d-flex align-items-center mb-2">
+                                <span class="me-2 d-none d-md-inline text-nowrap">Title of degree</span>
+                                <a href="#" class="text-primary">
+                                    <i class="fas fa-image fa-lg"></i>
+                                </a>
+                            </div>
+
+                            <div class="col-6 d-flex align-items-center mb-2">
+                                <span class="me-2 d-none d-md-inline text-nowrap">Title of degree</span>
+                                <a href="#" class="text-primary">
+                                    <i class="fas fa-image fa-lg"></i>
+                                </a>
+                            </div>
+
+                            <div class="col-6 d-flex align-items-center mb-2">
+                                <span class="me-2 d-none d-md-inline text-nowrap">Title of degree</span>
+                                <a href="#" class="text-primary">
+                                    <i class="fas fa-image fa-lg"></i>
+                                </a>
+                            </div>
+
+                            <div class="col-6 d-flex align-items-center mb-2">
+                                <span class="me-2 d-none d-md-inline text-nowrap">Title of degree</span>
+                                <a href="#" class="text-primary">
+                                    <i class="fas fa-image fa-lg"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="mentorName" class="form-label">Full Name</label>
+            <input type="email" class="form-control" id="mentorName" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="mentorEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="mentorEmail" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="mentorPw" class="form-label">Password</label>
+            <input type="password" class="form-control" id="mentorPw">
+        </div>
+        <div class="mb-3">
+            
+            <div class="mb-3 d-flex align-items-center justify-content-between">
+                <label for="mentorSkills">Skills</label>
+                <input type="text" class="form-control me-2 w-75 mr-2" id="mentorSkills" placeholder="Enter skill">
+                <!-- Text to create new majors -->
+                <a href="#" class="text-primary">+ Add</a>
+            </div>
+            <div class="d-flex align-items-center flex-wrap text-white mb-2">
+                <span class="badge bg-secondary d-flex align-items-center me-2 mr-2">
+                    Skill 1
+                    <i class="fas fa-trash-alt ms-2 ml-2 text-danger"></i>
+                </span>
+                <span class="badge bg-secondary d-flex align-items-center me-2 mr-2">
+                    Skill 2
+                    <i class="fas fa-trash-alt ms-2 ml-2 text-danger"></i>
+                </span>
+                <span class="badge bg-secondary d-flex align-items-center me-2 mr-2">
+                    Skill 3
+                    <i class="fas fa-trash-alt ms-2 ml-2 text-danger"></i>
+                </span>
+            </div>
+            
+
+        </div>
+        <div class="mb-3">
+            <div class="mb-3 d-flex align-items-center justify-content-between">
+                <label for="mentorMajors">Majors</label>
+                <input type="text" class="form-control me-2 w-75 mr-2" id="mentorMajors" placeholder="Enter major">
+                <!-- Text to create new majors -->
+                <a href="#" class="text-primary">+ Add</a>
+            </div>
+            
+            <div class="d-flex align-items-center flex-wrap text-white mb-2">
+                <span class="badge bg-secondary d-flex align-items-center me-2 mr-2">
+                    Major 1
+                    <i class="fas fa-trash-alt ms-2 ml-2 text-danger"></i>
+                </span>
+                <span class="badge bg-secondary d-flex align-items-center me-2 mr-2">
+                    Major 2
+                    <i class="fas fa-trash-alt ms-2 ml-2 text-danger"></i>
+                </span>
+                <span class="badge bg-secondary d-flex align-items-center me-2 mr-2">
+                    Major 3
+                    <i class="fas fa-trash-alt ms-2 ml-2 text-danger"></i>
+                </span>
+            </div>
+
+
+        </div>
+
+
+        <div class="mb-3">
+            <label for="mentorIndustry" class="form-label">Industry</label>
+            <input type="password" class="form-control" id="mentorIndustry">
+        </div>
+        <div class="mb-3 pl-0 form-check d-flex justify-content-start">
+            <div class="w-auto mr-2">
+                <label for="mentorStatus" class="form-label">Status</label>
+                <select id="mentorStatus" class="form-control" aria-describedby="statusHelp">
+                    <option value="active">Active</option>
+                    <option value="inactive">UnActive</option>
+                </select>
+            </div>
+            <div class="w-75">
+                <label for="mentorPoint" class="form-label">Point</label>
+                <input type="email" class="form-control" id="mentorPoint" aria-describedby="emailHelp">
+            </div>
+        </div>
+        <div class="d-flex justify-content-start ">
+            <button type="submit" class="btn btn-primary mr-2">Update</button>
+            <button type="submit" class="btn btn-danger mr-2">Delete</button>
+        </div>
+    </form>
+</div>
