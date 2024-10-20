@@ -1,8 +1,7 @@
 ﻿@page
 @model MBS.Razor.Pages.LoginModel
 @{
-    Layout = "_Layout";
-   
+    Layout = "Shared/_Layout";
 }
 
 <!DOCTYPE html>
@@ -55,7 +54,7 @@
                                         <span asp-validation-for="LoginRequest.Email" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">
-                                        <input asp-for="LoginRequest.Email" type="password" class="form-control form-control-user"
+                                        <input asp-for="LoginRequest.Password" type="password" class="form-control form-control-user"
                                                id="exampleInputPassword" placeholder="Password">
                                         <span asp-validation-for="LoginRequest.Password" class="text-danger"></span>
                                     </div>
@@ -80,7 +79,7 @@
                                     <a class="small" href="forgot-password.html">Forgot Password?</a>
                                 </div>
                                 <div class="text-center">
-                                    <a class="small" href="/Register">Create an Account!</a>
+                                    <a class="small" asp-page="@RouteEndpoints.Register">Create an Account!</a>
                                 </div>
                             </div>
                         </div>

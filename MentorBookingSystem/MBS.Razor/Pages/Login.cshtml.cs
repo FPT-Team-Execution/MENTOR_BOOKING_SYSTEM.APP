@@ -1,3 +1,4 @@
+using MBS.Services.Constants;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
@@ -14,17 +15,33 @@ namespace MBS.Razor.Pages
         {
             this._authService = authService;
         }
-        
-        [BindProperty]
-        public LoginRequest LoginRequest { get; set; }
-        
+
+        [BindProperty] public LoginRequest LoginRequest { get; set; }
+
         public void OnGet()
         {
         }
 
-        public void OnPost()
+        public async Task<IActionResult> OnPost()
         {
+            if (!ModelState.IsValid)
+            {
+                return Page();
+            }
+
+            var response = await _authService.LoginAsync(LoginRequest);
+
+            if (!response.StatusCode.Equals(StatusCodes.Status200OK))
+            {
+                TempData["ErrorMessage"] = response.Message;
+                return Page();
+            }
+
+            HttpContext.Session.SetString("AccessToken", response.ResponseModel.JwtToken.AccessToken);
+            HttpContext.Session.SetString("RefreshToken", response.ResponseModel.JwtToken.RefreshToken);
             
+            TempData["SuccessMessage"] = response.Message;
+            return Redirect(RouteEndpoints.AdminDashboard);
         }
         /// <summary>
         /// Redirect to google sign in

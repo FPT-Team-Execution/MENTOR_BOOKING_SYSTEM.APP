@@ -1,4 +1,5 @@
 ﻿using MBS.Services.Constants;
+using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Models.Responses.Auth;
 using MBS.Services.Services.Interfaces;
@@ -8,16 +9,22 @@ namespace MBS.Services.Services.Implements;
 
 public class AuthService : IAuthService
 {
-    public async Task<LoginResponse> LoginAsync(LoginRequest request)
+    public async Task<BaseModel<LoginResponse, LoginRequest>> LoginAsync(LoginRequest request)
     {
         var result = await WebUtils.PostAsync(ApiEndPoints.LoginUrl, request);
-        var response = WebUtils.HandleResponse<LoginResponse>(result);
+        var response = WebUtils.HandleResponse<BaseModel<LoginResponse, LoginRequest>>(result);
         return response;
-        
     }
 
     public async Task LoginWithGoogleAsync()
     {
         // var result = await WebUtils.GetAsync();
+    }
+
+    public async Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request)
+    {
+        var result = await WebUtils.PostAsync(ApiEndPoints.RegisterUrl, request);
+        var response = WebUtils.HandleResponse<BaseModel<RegisterResponse, RegisterRequest>>(result);
+        return response;
     }
 }

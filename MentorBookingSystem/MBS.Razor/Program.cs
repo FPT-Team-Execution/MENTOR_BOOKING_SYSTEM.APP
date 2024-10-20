@@ -22,6 +22,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 //         // options.CallbackPath = "/api/auth/signin-google"; // Set the callback path
 //     });
 
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,5 +42,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapRazorPages();
+
+app.UseSession();
 
 app.Run();

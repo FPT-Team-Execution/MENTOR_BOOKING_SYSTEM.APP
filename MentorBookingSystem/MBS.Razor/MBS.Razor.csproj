@@ -13,6 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.0" />
+    <_ContentIncludedByDefault Remove="Pages\AdminPage\UserPage\MentorPage\Index.cshtml" />
   </ItemGroup>
 
 </Project>
