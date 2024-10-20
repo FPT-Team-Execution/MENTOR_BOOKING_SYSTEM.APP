@@ -6,10 +6,28 @@
 }
 
 <div class="row h-100">
-<div class="col-lg-8 mb-4">
-<div class="card h-100">
-<div class="card-body">
-<h5 class="card-title mb-4">Mentors</h5>
+<div class="col-lg-8">
+<div class="card">
+
+<div class="d-flex justify-content-end my-2">
+    <div class="d-inline-flex align-items-lg-start">
+        <form class=" form-inline  mw-100 navbar-search mx-2 shadow-sm">
+            <div class="input-group  border rounded">
+                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                       aria-label="Search" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </form>
+        <button class="btn btn-primary" type="button">
+            Create
+        </button>
+    </div>
+</div>
+
 <div class="table-responsive">
 <table class="table table-hover">
 <thead>
@@ -558,7 +576,7 @@
 </tbody>
 </table>
 </div>
-</div>
+
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center mb-4">
         <li class="page-item">
