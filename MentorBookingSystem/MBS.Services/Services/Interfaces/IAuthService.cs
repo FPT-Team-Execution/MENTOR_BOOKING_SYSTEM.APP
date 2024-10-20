@@ -1,5 +1,6 @@
 ﻿using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
+using MBS.Services.Models.Responses;
 using MBS.Services.Models.Responses.Auth;
 
 namespace MBS.Services.Services.Interfaces;

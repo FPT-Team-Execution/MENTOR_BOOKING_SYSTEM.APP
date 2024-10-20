@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace MBS.Services.Models.Responses.Auth;
+﻿namespace MBS.Services.Models.Responses;
 
 public class LoginResponse
 {

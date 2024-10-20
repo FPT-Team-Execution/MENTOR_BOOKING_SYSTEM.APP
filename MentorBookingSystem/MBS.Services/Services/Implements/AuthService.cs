@@ -1,6 +1,7 @@
 ﻿using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
+using MBS.Services.Models.Responses;
 using MBS.Services.Models.Responses.Auth;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
