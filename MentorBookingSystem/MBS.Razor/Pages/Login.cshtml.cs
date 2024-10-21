@@ -58,9 +58,9 @@ namespace MBS.Razor.Pages
 
             return userSession.Role switch
             {
-                UserRole.Admin => Redirect(RouteEndpoints.Admin),
-                UserRole.Student => Redirect(RouteEndpoints.Student),
-                UserRole.Mentor => Redirect(RouteEndpoints.Mentor),
+                UserRole.Admin => Redirect(RouteEndpoints.AdminDashboard),
+                UserRole.Student => Redirect(RouteEndpoints.StudentProject),
+                UserRole.Mentor => Redirect(RouteEndpoints.MentorMeeting),
                 _ => Redirect(RouteEndpoints.Login)
             };
         }

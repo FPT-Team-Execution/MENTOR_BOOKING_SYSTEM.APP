@@ -111,6 +111,21 @@
         <!-- Nav Item - Pages Collapse Menu -->
 
         <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+               aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Projects</span>
+            </a>
+            <div id="collapseTwo" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="@RouteEndpoints.MentorMeeting">Projects</a>
+                    <a class="collapse-item" href="@RouteEndpoints.MentorMeeting">Progresses</a>
+                    <a class="collapse-item" href="@RouteEndpoints.MentorMeetingMember">Groups</a>
+                </div>
+            </div>
+        </li>
+        
+        <li class="nav-item">
             <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
                aria-expanded="true" aria-controls="collapseThree">
                 <i class="fas fa-fw fa-cog"></i>
@@ -147,16 +162,9 @@
         </li>
 
         <li class="nav-item">
-            <a class="nav-link" href="@RouteEndpoints.MentorProject">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Projects</span>
-            </a>
-        </li>
-
-        <li class="nav-item">
             <a class="nav-link" href="@RouteEndpoints.MentorGroup">
                 <i class="fas fa-fw fa-chart-area"></i>
-                <span>Groups</span>
+                <span>Mentors</span>
             </a>
         </li>
 
@@ -182,7 +190,7 @@
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
-            <div class="container-fluid">
+            <div class="container-fluid mt-4">
                 @RenderBody()
                 <partial name="_Notification"/>
             </div>
