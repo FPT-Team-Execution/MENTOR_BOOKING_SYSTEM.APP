@@ -60,6 +60,7 @@ namespace MBS.Razor.Pages
             {
                 UserRole.Admin => Redirect(RouteEndpoints.Admin),
                 UserRole.Mentor => Redirect(RouteEndpoints.Mentor),
+                UserRole.Student => Redirect(RouteEndpoints.Student),
                 _ => Redirect(RouteEndpoints.Login)
             };
         }

@@ -1,3 +1,22 @@
+@using MBS.Services.Models.Sessions
+@using Newtonsoft.Json
+@{
+    var userSessionString = Context.Session.GetString("UserSession");
+
+    if (userSessionString is null)
+    {
+        Context.Response.Redirect(RouteEndpoints.Logout);
+    }
+    else
+    {
+        var userSessionObject = JsonConvert.DeserializeObject<UserSession?>(userSessionString);
+        if (userSessionObject.Role != UserRole.Mentor)
+        {
+            Context.Response.Redirect(RouteEndpoints.Logout);
+        }
+    }
+}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -142,7 +161,7 @@
             <span>Groups</span>
         </a>
     </li>
-    
+
     <!-- Nav Item - Utilities Collapse Menu -->
     @* <li class="nav-item"> *@
     @*     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" *@
@@ -214,7 +233,7 @@
     <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
     </div>
-    
+
 
 </ul>
 <!-- End of Sidebar -->

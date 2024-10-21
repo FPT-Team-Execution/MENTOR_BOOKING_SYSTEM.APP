@@ -77,4 +77,10 @@ public static class RouteEndpoints
     public const string MentorGroup = "/MentorPage/GroupPage";
     
     #endregion
+
+    #region StudentRoutes
+
+    public const string Student = "/StudentPage";
+
+    #endregion
 }
