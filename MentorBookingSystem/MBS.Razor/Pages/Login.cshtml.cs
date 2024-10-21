@@ -76,16 +76,21 @@ namespace MBS.Razor.Pages
         public void OnGetLoginWithGoogle()
         {
             var clientId = "1096581745243-bj51g3cd4rq13codonsoftbk8h7tq4mi.apps.googleusercontent.com";
-            var redirectUrl = "https://localhost:7102/AuthCallBack";
+            // var redirectUrl = "https://localhost:7102/AuthCallBack";
             //better solution
-            // var redirectUrl = $"http://localhost:7102/Login?handler={RouteEndpointHandlers.Callback}";
+            var redirectUrl = $"https://localhost:7102/Login?handler={RouteEndpointHandlers.Callback}";
+            // var redirectUrl = "https://localhost:7554/api/auth/signin-google";
 
-            var state = Guid.NewGuid().ToString();
-            var scope = "openid email profile";
+            // var state = Guid.NewGuid().ToString();
+            // var scope = "openid email profile";
+            var scope = $"{Uri.EscapeDataString("https://www.googleapis.com/auth/calendar")} {Uri.EscapeDataString("https://www.googleapis.com/auth/userinfo.profile")} {Uri.EscapeDataString("https://www.googleapis.com/auth/userinfo.email")}";
             var responseType = "code";
+            // var googleAuthUrl =
+            //     $"https://accounts.google.com/o/oauth2/v2/auth?redirect_uri={redirectUrl}&prompt=consent&response_type={responseType}&" +
+            //     $"client_id={clientId}&scope={scope}&access_type=offline&state={state}";
             var googleAuthUrl =
-                $"https://accounts.google.com/o/oauth2/v2/auth?redirect_uri={redirectUrl}&prompt=consent&response_type={responseType}&" +
-                $"client_id={clientId}&scope={scope}&access_type=offline&state={state}";
+                $"https://accounts.google.com/o/oauth2/v2/auth?redirect_uri={redirectUrl}&response_type={responseType}&" +
+                $"client_id={clientId}&scope={scope}&access_type=offline";
             Response.Redirect(googleAuthUrl);
         }
 
@@ -94,6 +99,7 @@ namespace MBS.Razor.Pages
         /// </summary>
         public void OnGetCallback(string code, string state, string scopes)
         {
+            
             Response.Redirect("/Login");
         }
     }
