@@ -3,11 +3,11 @@
 public static class RouteEndpoints
 {
     #region Auth Routes
-    
+
     public const string Login = "/Login";
     public const string Logout = "/Logout";
     public const string Register = "/Register";
-    
+
     #endregion
 
     #region Admin Routes
@@ -58,25 +58,31 @@ public static class RouteEndpoints
     #region MentorRoutes
 
     public const string Mentor = "/MentorPage";
-    
+
     // Mentor Meeting Routes
     public const string MentorMeeting = "/MentorPage/MeetingPage";
     public const string MentorMeetingMember = "/MentorPage/MeetingPage/MemberPage";
     public const string MentorMeetingFeedback = "/MentorPage/MeetingPage/FeedbackPage";
-    
+
     // Mentor Calendar Routes
     public const string MentorCalender = "/MentorPage/CalendarPage";
     public const string MentorCalenderEvent = "/MentorPage/CalendarPage/EventPage";
-    
+
     // Mentor Request Routes
     public const string MentorRequest = "/MentorPage/RequestPage";
 
     // Mentor Project Routes
     public const string MentorProject = "/MentorPage/ProjectPage";
-    
+
     // Mentor Group Routes
     public const string MentorGroup = "/MentorPage/GroupPage";
-    
+
     #endregion
-    
+
+    #region StudentRoutes
+
+    public const string Student = "/StudentPage";
+    public const string StudentProject = "/StudentPage/ProjectPage";
+
+    #endregion
 }
