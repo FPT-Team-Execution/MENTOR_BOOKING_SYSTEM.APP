@@ -17,13 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\StudentPage\CalendarPage\" />
-    <Folder Include="Pages\StudentPage\MeetingPage\FeedbackPage\" />
-    <Folder Include="Pages\StudentPage\MeetingPage\MemberPage\" />
-    <Folder Include="Pages\StudentPage\MentorPage\" />
-    <Folder Include="Pages\StudentPage\ProjectPage\GroupPage\" />
-    <Folder Include="Pages\StudentPage\ProjectPage\ProgressPage\" />
-    <Folder Include="Pages\StudentPage\RequestPage\" />
+    <Folder Include="Pages\StudentPage\" />
   </ItemGroup>
 
 </Project>

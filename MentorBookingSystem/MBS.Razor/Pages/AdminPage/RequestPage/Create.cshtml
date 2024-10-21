@@ -1,0 +1,398 @@
+@page
+@model MBS.Razor.Pages.AdminPage.RequestPage.Create
+
+@{
+    Layout = "Shared/_LayoutAdmin";
+}
+
+<div class="row">
+<div class="col-sm-12 col-md-4">
+    <form>
+        <div class="mb-3">
+            <label for="title" class="form-label">Title</label>
+            <input type="email" class="form-control" id="title" aria-describedby="title">
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="project" class="form-label">Project</label>
+                <input type="text" class="form-control" id="project" aria-describedby="project" readonly>
+            </div>
+            <div class="col-md-6">
+                <label for="creator" class="form-label">Creator</label>
+                <input type="text" class="form-control" id="creator" aria-describedby="creator" readonly>
+            </div>
+        </div>
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="start" class="form-label">Start</label>
+                <input type="text" class="form-control" id="start" aria-describedby="project" readonly>
+            </div>
+            <div class="col-md-6">
+                <label for="end" class="form-label">End</label>
+                <input type="text" class="form-control" id="end" aria-describedby="creator" readonly>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="mentorPoint" class="form-label">Point</label>
+            <div class="d-inline-flex flex-nowrap w-100">
+                <input placeholder="0" type="text" class="form-control mr-2" id="mentorPoint" aria-describedby="emailHelp">
+                <button class="btn btn-success mr-2" title="credit">
+                    <i class="fas fa-solid fa-arrow-up"></i>
+                </button>
+                <button class="btn btn-danger mr-2" title="debit">
+                    <i class="fas fa-solid fa-arrow-down"></i>
+                </button>
+                <button class="btn btn-primary mr-2" title="edit point balance">
+                    <i class="fas fa-solid fa-pen"></i>
+                </button>
+
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="mentorEmail" class="form-label">Email</label>
+            <input type="email" class="form-control" id="mentorEmail" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="mentorPw" class="form-label">Password</label>
+            <input type="password" class="form-control" id="mentorPw">
+        </div>
+        <div class="mb-3">
+            <label for="studentUni" class="form-label">University</label>
+            <input type="password" class="form-control" id="studentUni">
+        </div>
+        <div class="mb-3">
+            <label for="studentMajor" class="form-label">Major</label>
+            <select class="form-control" id="studentMajor">
+                <option value="" disabled selected>Select a major</option>
+                <option value="university1">Global Business</option>
+                <option value="university2">AI</option>
+                <option value="university3">Software Engineer</option>
+            </select>
+        </div>
+
+        <div class="mb-3 mr-2 w-25">
+            <label for="mentorStatus" class="form-label">Status</label>
+            <select id="mentorStatus" class="form-control" aria-describedby="statusHelp">
+                <option value="active">Active</option>
+                <option value="inactive">UnActive</option>
+            </select>
+        </div>
+        <div class="d-flex justify-content-start ">
+            <button type="submit" class="btn btn-primary mr-2">Update</button>
+            <button type="submit" class="btn btn-danger mr-2">Delete</button>
+        </div>
+    </form>
+</div>
+<div class="col-md-8">
+    <div class="col-auto mb-3">
+        <div class="col-md-12 px-0 h-auto">
+            <div class="border rounded p-3 bg-light shadow-sm" role="button" data-toggle="collapse" href="#collapseProjects" aria-expanded="false" aria-controls="collapseProjects" style="cursor: pointer;">
+                <span class="text-primary fw-bold">Projects</span>
+                <i class="fas fa-chevron-down float-end"></i>
+            </div>
+            <div id="collapseProjects" class="collapse">
+                <div class="mt-3">
+                    <!-- Add margin for spacing after collapse -->
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Mentor</th>
+                            <th scope="col">Due Date</th>
+                            <th scope="col">Semester</th>
+                            <th scope="col">Created On</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr role="button">
+                            <th scope="row">5</th>
+                            <td>Real Homes WP Theme</td>
+                            <td>HostingPressHTML@gmail.com</td>
+                            <td>FPT University</td>
+                            <td>Software Engineer</td>
+                            <td>150</td>
+                            <td>
+                                <div class="dropdown no-arrow text-center">
+                                    <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-solid fa-image"></i>
+                                    </a>
+                                    <!-- Dropdown - Alerts -->
+                                    <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
+                                         aria-labelledby="alertsDropdown">
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="badge bg-secondary text-white">UnActive</span>
+                            </td>
+                        </tr>
+                        <!-- More rows here -->
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center mb-4">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">Prev</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <!-- More page items here -->
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 px-0 h-auto">
+            <div class="border rounded p-3 bg-light shadow-sm" role="button" data-toggle="collapse" href="#collapseCreator" aria-expanded="false" aria-controls="collapseProjects" style="cursor: pointer;">
+                <span class="text-primary fw-bold">Creators (Students)</span>
+                <i class="fas fa-chevron-down float-end"></i>
+            </div>
+            <div id="collapseCreator" class="collapse">
+                <div class="mt-3">
+                    <!-- Add margin for spacing after collapse -->
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">University</th>
+                            <th scope="col">Major</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <th scope="row">1</th>
+                        <td>Elite Admin</td>
+                        <td>HostingPressHTML@gmail.com</td>
+                        <td>FPT University</td>
+                        <td>Software Engineer</td>
+                        <td>150</td>
+                        <td>
+                            <div class="dropdown no-arrow text-center">
+                                <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-solid fa-image"></i>
+                                </a>
+                                <!-- Dropdown - Alerts -->
+                                <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
+                                     aria-labelledby="alertsDropdown">
+                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                        <div class="me-3">
+                                            <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <span class="badge bg-success text-white">Active</span>
+                        </td>
+                        <!-- More rows here -->
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center mb-4">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">Prev</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <!-- More page items here -->
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 px-0">
+            <div class="border rounded p-3 bg-light shadow-sm" role="button" data-toggle="collapse" href="#collapseMentors" aria-expanded="false" aria-controls="collapseMentors" style="cursor: pointer;">
+                <span class="text-primary fw-bold">Mentors</span>
+                <i class="fas fa-chevron-down float-end"></i>
+            </div>
+            <div id="collapseMentors" class="collapse">
+                <div class="mt-3">
+                    <!-- Add margin for spacing after collapse -->
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Skills</th>
+                            <th scope="col">Majors</th>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr role="button">
+                            <th scope="row">1</th>
+                            <td>Elite Admin</td>
+                            <td>HostingPressHTML@gmail.com</td>
+                            <td>
+                                <div class="dropdown no-arrow text-center">
+                                    <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-solid fa-list"></i>
+                                    </a>
+                                    <!-- Dropdown - Alerts -->
+                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                         aria-labelledby="alertsDropdown">
+                                        <small class="dropdown-item d-flex align-items-center text-muted me-3">Project Manager</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="dropdown no-arrow text-center">
+                                    <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-solid fa-list"></i>
+                                    </a>
+                                    <!-- Dropdown - Alerts -->
+                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                         aria-labelledby="alertsDropdown">
+                                        <small class="dropdown-item d-flex align-items-center text-muted me-3">Project Manager</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>150</td>
+                            <td>
+                                <div class="dropdown no-arrow text-center">
+                                    <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-solid fa-image"></i>
+                                    </a>
+                                    <!-- Dropdown - Alerts -->
+                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                         aria-labelledby="alertsDropdown">
+                                        <a class="dropdown-item d-flex align-items-center" href="#">
+                                            <div class="me-3">
+                                                <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success text-white">Active</span>
+                            </td>
+
+                        </tr>
+                        <!-- More rows here -->
+                        </tbody>
+                    </table>
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center mb-4">
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">Prev</span>
+                                </a>
+                            </li>
+                            <li class="page-item active">
+                                <a class="page-link" href="#">1</a>
+                            </li>
+                            <!-- More page items here -->
+                            <li class="page-item">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">Next</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12 row mx-0">
+        <div class="container">
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <input type="date" id="selectedDate" class="form-control" placeholder="Chọn ngày" style="border-radius: 0.375rem;">
+                </div>
+            </div>
+            <div class="row" id="eventsContainer">
+                <div class="col-md-2 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Start: 09:00</h5>
+                            <p class="card-text">End: 10:00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Start: 09:00</h5>
+                            <p class="card-text">End: 10:00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Start: 09:00</h5>
+                            <p class="card-text">End: 10:00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Start: 09:00</h5>
+                            <p class="card-text">End: 10:00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Start: 09:00</h5>
+                            <p class="card-text">End: 10:00</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <div class="card shadow-sm">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">Start: 09:00</h5>
+                            <p class="card-text">End: 10:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+</div>

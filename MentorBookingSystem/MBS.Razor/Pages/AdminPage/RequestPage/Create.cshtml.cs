@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace MBS.Razor.Pages.StudentPage.ProjectPage;
+namespace MBS.Razor.Pages.AdminPage.RequestPage;
 
-public class Index : PageModel
+public class Create : PageModel
 {
     public void OnGet()
     {
