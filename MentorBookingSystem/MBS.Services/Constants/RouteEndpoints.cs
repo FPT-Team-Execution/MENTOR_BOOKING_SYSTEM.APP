@@ -24,6 +24,7 @@ public static class RouteEndpoints
 
     // Admin Request Routes
     public const string AdminRequest = "/AdminPage/RequestPage";
+    public const string AdminRequestCreate = "/AdminPage/RequestPage/Create";
 
     // Admin Project Routes
     public const string AdminProject = "/AdminPage/ProjectPage";
@@ -77,4 +78,5 @@ public static class RouteEndpoints
     public const string MentorGroup = "/MentorPage/GroupPage";
     
     #endregion
+    
 }
