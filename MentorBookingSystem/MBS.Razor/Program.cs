@@ -29,7 +29,7 @@ builder.Services.AddAuthentication(options =>
         // Configure cookie options here
         options.Cookie.HttpOnly = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Use 'None' for non-HTTPS environments
-        options.Cookie.SameSite = SameSiteMode.Strict;
+
         options.Cookie.Name = "MBS";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.LoginPath = RouteEndpoints.Login;

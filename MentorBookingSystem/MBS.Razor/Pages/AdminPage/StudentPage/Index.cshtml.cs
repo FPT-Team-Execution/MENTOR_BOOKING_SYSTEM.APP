@@ -1,4 +1,5 @@
 ﻿using MBS.Razor.Pages.AdminPage.StudentPage.Models;
+using MBS.Services.Constants;
 using MBS.Services.Models.Responses.Student;
 using MBS.Services.Services.Implements;
 using MBS.Services.Services.Interfaces;
@@ -79,6 +80,6 @@ public class Index : PageModel
             TempData["ErrorMessage"] = "Student not found";
         else
             ChosenStudent = chosenStudent;
-        return RedirectToPage();
+        return Page();
     }
 }
