@@ -15,7 +15,7 @@ namespace MBS.Razor.Pages
         private readonly IMajorService _majorService;
 
         public BaseModel<Pagination<GetMajorRequest>>? MajorData { get; set; }
-        
+
         public RegisterModel(IAuthService authService, IMajorService majorService)
         {
             _authService = authService;
@@ -33,11 +33,20 @@ namespace MBS.Razor.Pages
         {
             if (!ModelState.IsValid)
             {
+                MajorData = await _majorService.GetMajorsAsync(1, 100) as BaseModel<Pagination<GetMajorRequest>>;
                 return Page();
             }
 
             var response = await _authService.RegisterAsync(RegisterRequest);
-            
+
+            if (response.StatusCode != StatusCodes.Status200OK)
+            {
+                TempData["ErrorMessage"] = response.Message;
+                MajorData = await _majorService.GetMajorsAsync(1, 100) as BaseModel<Pagination<GetMajorRequest>>;
+                return Page();
+            }
+
+            TempData["SuccessMessage"] = response.Message;
             return Redirect(RouteEndpoints.Login);
         }
     }
