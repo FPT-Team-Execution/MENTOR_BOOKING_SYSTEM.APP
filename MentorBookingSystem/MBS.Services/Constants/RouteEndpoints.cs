@@ -7,6 +7,7 @@ public static class RouteEndpoints
     public const string Login = "/Login";
     public const string Logout = "/Logout";
     public const string Register = "/Register";
+    public const string AccessDenied = "/DeniedPage";
 
     #endregion
 
