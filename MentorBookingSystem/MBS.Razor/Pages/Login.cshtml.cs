@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using MBS.Services.Constants;
 using MBS.Services.Models.Requests.Auth;
@@ -12,6 +13,7 @@ namespace MBS.Razor.Pages
 {
     public class LoginModel : PageModel
     {
+        private readonly IClaimService _claimService;
         private IAuthService _authService;
         private IConfiguration _configuration;
 
@@ -79,8 +81,26 @@ namespace MBS.Razor.Pages
         /// </summary>
         public async void OnGetCallback(string code, string state, string scopes)
         {
+            //take token
             var response = await _authService.LoginWithGoogleAsync(code);
-            Response.Redirect("/Login");
+ 
+            var token = response.ResponseRequestModel.jwtModel.AccessToken; 
+            var tokenGoogle = response.ResponseRequestModel.googleToken;
+            // Decode the token to extract claims
+            var handler = new JwtSecurityTokenHandler();
+            var jwtInfo = handler.ReadJwtToken(token);
+            var claims = new List<Claim>
+            {
+                //User Name
+                new Claim(ClaimTypes.Name, jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value.ToString()),
+                //Role
+                new Claim(ClaimTypes.Role, jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)!.Value.ToString()),
+                //User Id
+                new Claim(ClaimTypes.Role, jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value.ToString())
+            };
+            //save it to cookie
+            await _claimService.SignInAsync(claims);
+            Response.Redirect(RouteEndpoints.MentorMeeting);
         }
     }
 }

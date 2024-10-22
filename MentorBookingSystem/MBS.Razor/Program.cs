@@ -1,28 +1,40 @@
+using System.Security.Claims;
+using MBS.Services.Constants;
 using MBS.Services.Services.Implements;
 using MBS.Services.Services.Interfaces;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
+// Register IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+//add Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
-// builder.Services.AddAuthentication(options =>
-//     {
-//         options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-//         options.DefaultChallengeScheme = "Google"; // Use the name you specify below
-//     })
-//     .AddCookie()
-//     .AddGoogle(options =>
-//     {
-//         options.ClientId = "1096581745243-bj51g3cd4rq13codonsoftbk8h7tq4mi.apps.googleusercontent.com";
-//         options.ClientSecret = "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";
-//         // options.CallbackPath = "/api/auth/signin-google"; // Set the callback path
-//     });
+
+builder.Services.AddScoped<IClaimService, ClaimService>();
+
+builder.Services.AddAuthentication(options =>
+    {
+        // Set the default authentication scheme to Cookie
+        options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    })
+    .AddCookie(options =>
+    {
+        // Configure cookie options here
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // Use 'None' for non-HTTPS environments
+        options.Cookie.SameSite = SameSiteMode.Strict;
+        options.Cookie.Name = "MBS";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+        options.LoginPath = RouteEndpoints.Login;
+        options.AccessDeniedPath = RouteEndpoints.Login; 
+    });
+
 
 builder.Services.AddSession();
 
