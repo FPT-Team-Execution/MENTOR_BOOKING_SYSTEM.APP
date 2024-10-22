@@ -1,5 +1,5 @@
 ﻿@page
-@model MBS.Razor.Pages.RegisterModel
+@model MBS.Razor.Pages.RegisterModel;
 @{
     Layout = "_Layout";
 }
@@ -67,6 +67,21 @@
                             </div>
 
                             <div class="form-group">
+                                <select style="font-size: .8rem; height: 48px" class="form-control rounded-pill" asp-for="RegisterRequest.MajorId">
+
+                                    @if (Model.MajorData != null)
+                                    {
+                                        foreach (var item in Model.MajorData.ResponseRequestModel.Items)
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    }
+
+                                </select>
+                                <span class="text-danger" asp-validation-for="RegisterRequest.MajorId"></span>
+                            </div>
+
+                            <div class="form-group">
 
                                 <select style="font-size: .8rem; height: 48px" class="form-control rounded-pill" asp-for="RegisterRequest.Gender">
                                     <option selected disabled>Select Gender</option>
@@ -81,7 +96,7 @@
                                 <select style="font-size: .8rem; height: 48px" class="form-control rounded-pill" asp-for="RegisterRequest.Role">
                                     <option disabled selected value="">Select Role</option>
                                     <option value="Student">Student</option>
-                                    <option value="Mentor">Mentor</option>
+                                    <option disabled value="Mentor">Mentor</option>
                                 </select>
                                 <span class="text-danger" asp-validation-for="RegisterRequest.Role"></span>
                             </div>

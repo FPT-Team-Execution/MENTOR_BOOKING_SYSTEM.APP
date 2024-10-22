@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IMajorService, MajorService>();
 // builder.Services.AddAuthentication(options =>
 //     {
 //         options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
