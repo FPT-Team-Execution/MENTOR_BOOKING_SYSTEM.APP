@@ -1,35 +1,38 @@
-@* @page *@
-@model MBS.Razor.Pages.AdminPage.UserPage.StudentPage.StudentDetailPartial
-
+@using MBS.Services.Utils
+@model Models.StudentModel
 @{
-    Layout = null;
+    var chosenStudent = Model;
 }
-
 <div>
     <form>
-        <div class="d-flex mb-3 position-relative">
-            <div class="mx-2 align-self-start">
-                <img src="https://via.placeholder.com/150" class="img-fluid rounded-start" alt="mentor image"/>
+        <div class="d-flex mb-3 position-relative" >
+            <div class="mx-2 align-self-center" style="width: 150px; height: 150px; background-color: #f0f0f0;">
+                <img src="@(chosenStudent.AvatarUrl ?? "https://via.placeholder.com/150")"
+                     class="img-fluid"
+                     style="max-width: 100%; max-height: 100%; object-fit: cover;"  alt="mentor image"/>
             </div>
+
+
             <div class="position-absolute" style="top: 0; right: 0; text-align: right;">
                 <span class="d-block font-weight-bold" style="font-size: 1rem;">
                     Point Balance
                 </span>
                 <span class="badge bg-warning p-2" style="font-size: 1.2rem;">
-                    1500 <i class="fas fa-coins"></i>
+                    @chosenStudent!.WalletPoint <i class="fas fa-coins"></i>
                 </span>
             </div>
         </div>
 
 
         <div class="mb-3">
-            <label for="mentorName" class="form-label">Full Name</label>
-            <input type="email" class="form-control" id="mentorName" aria-describedby="emailHelp">
+            <label for="studentName" class="form-label">Full Name</label>
+            <input type="hidden" class="form-control" id="id" value="@chosenStudent.Id" aria-describedby="emailHelp">
+            <input type="email" class="form-control" id="studentName" value="@chosenStudent.FullName" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
-            <label for="mentorPoint" class="form-label">Point</label>
+            <label for="modifyPoint" class="form-label">Point</label>
             <div class="d-inline-flex flex-nowrap w-100">
-                <input placeholder="0" type="text" class="form-control mr-2" id="mentorPoint" aria-describedby="emailHelp">
+                <input placeholder="0" type="text" class="form-control mr-2" id="modifyPoint" aria-describedby="emailHelp">
                 <button class="btn btn-success mr-2" title="credit">
                     <i class="fas fa-solid fa-arrow-up"></i>
                 </button>
@@ -44,15 +47,11 @@
         </div>
         <div class="mb-3">
             <label for="mentorEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="mentorEmail" aria-describedby="emailHelp">
-        </div>
-        <div class="mb-3">
-            <label for="mentorPw" class="form-label">Password</label>
-            <input type="password" class="form-control" id="mentorPw">
+            <input type="email" class="form-control" id="studentEmail" value="@chosenStudent.Email" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
             <label for="studentUni" class="form-label">University</label>
-            <input type="password" class="form-control" id="studentUni">
+            <input type="text" class="form-control" id="studentUni" value="@chosenStudent.University">
         </div>
         <div class="mb-3">
             <label for="studentMajor" class="form-label">Major</label>
@@ -63,14 +62,28 @@
                 <option value="university3">Software Engineer</option>
             </select>
         </div>
-
-        <div class="mb-3 mr-2 w-25">
-            <label for="mentorStatus" class="form-label">Status</label>
-            <select id="mentorStatus" class="form-control" aria-describedby="statusHelp">
-                <option value="active">Active</option>
-                <option value="inactive">UnActive</option>
-            </select>
+        <div class="mb-3">
+            <label for="studentMajor" class="form-label">Birthday</label>
+            <input type="date" class="form-control" id="studentBirthday" value="@ConvertUtils.FormatDateTimeToString(chosenStudent.Birthday)">
         </div>
+        <div class="mb-3 d-flex justify-content-start">
+            <div class="mr-2 w-25">
+                <label for="studentStatus" class="form-label">Status</label>
+                <select id="studentStatus" class="form-control" aria-describedby="statusHelp">
+                    <option value="active">Active</option>
+                    <option value="inactive">UnActive</option>
+                </select>
+            </div>
+            <div class=" mr-2 w-25">
+                <label for="studentGender" class="form-label">Gender</label>
+                <select id="studentGender" class="form-control" aria-describedby="statusHelp" asp-for="@chosenStudent.Gender">
+                    <option value="Male">Male</option>
+                    <option value="Female" >Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+        
         <div class="d-flex justify-content-start ">
             <button type="submit" class="btn btn-primary mr-2">Update</button>
             <button type="submit" class="btn btn-danger mr-2">Delete</button>

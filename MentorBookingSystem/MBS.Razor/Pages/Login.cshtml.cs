@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using MBS.Services.Constants;
+using MBS.Services.Constants.Enums;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Models.Sessions;
 using MBS.Services.Services.Interfaces;
