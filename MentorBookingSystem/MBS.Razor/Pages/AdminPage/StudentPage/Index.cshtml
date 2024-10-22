@@ -37,59 +37,69 @@
             <div class="table-responsive">
                 <table class="table table-hover ">
                     <thead>
-                    <tr>
-                        <th scope="col">Id</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Email</th>
-                        <th scope="col">University</th>
-                        <th scope="col">Major</th>
-                        <th scope="col">Balance</th>
-                        <th scope="col">Avatar</th>
-                        <th scope="col">Gender</th>
-                        <th scope="col">Birthday</th>
-                        <th scope="col">Status</th>
-                    </tr>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">University</th>
+                            <th scope="col">Major</th>
+                            <th scope="col">Balance</th>
+                            <th scope="col">Avatar</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Birthday</th>
+                            <th scope="col">Status</th>
+                        </tr>
                     </thead>
                     <tbody>
 
-                    @{
-                        for (int i = 0; i < Model.Students.Count; i++)
-                        {
-                            var student = Model.Students[i];
-
-                            <tr id="@student.Id" role="button" onclick="location.href='@Url.Page(pageName, @PageHandlers.ShowStudentDetails, new { studentId = @student.Id})'">
-                                <th scope="row">@i</th>
-                                <td>@student.FullName</td>
-                                <td>@student.Email</td>
-                                <td>@student.University</td>
-                                <td>@student.MajorName</td>
-                                <td>@student.WalletPoint</td>
-                                <td>
-                                    <div class="dropdown no-arrow text-center">
-                                        <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-solid fa-image"></i>
-                                        </a>
-                                        <!-- Dropdown - Alerts -->
-                                        <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                                             aria-labelledby="alertsDropdown">
-                                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                                <div class="me-3">
-                                                    <img src="@(student.AvatarUrl ?? "https://via.placeholder.com/150")"
-                                                         alt="Transaction Image" width="150" height="150">
-                                                </div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>@student.Gender</td>
-                                <td>@student.Birthday?.ToString("MM/dd/yyyy")</td> <!-- Format the date as needed -->
-                                <td>
-                                    <span class="badge bg-success text-white">@(student.LockoutEnabled ? "Locked" : "Active")</span>
-                                </td>
+                        @{
+                            if (!Model.Students.Any())
+                            {
+                                <tr>
+                                    <td colspan="8">No students available</td>
                                 </tr>
-
                             }
+                            else
+                            {
+                                for (int i = 0; i < Model.Students.Count; i++)
+                                {
+                                    var student = Model.Students[i];
+
+                                    <tr id="@student.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowStudentDetails, new { studentId = @student.Id })'">
+                                        <th scope="row">@i</th>
+                                        <td>@student.FullName</td>
+                                        <td>@student.Email</td>
+                                        <td>@student.University</td>
+                                        <td>@student.MajorName</td>
+                                        <td>@student.WalletPoint</td>
+                                        <td>
+                                            <div class="dropdown no-arrow text-center">
+                                                <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    <i class="fas fa-solid fa-image"></i>
+                                                </a>
+                                                <!-- Dropdown - Alerts -->
+                                                <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
+                                                     aria-labelledby="alertsDropdown">
+                                                    <a class="dropdown-item d-flex align-items-center" href="#">
+                                                        <div class="me-3">
+                                                            <img src="@(student.AvatarUrl ?? "https://via.placeholder.com/150")"
+                                                                 alt="Transaction Image" width="150" height="150">
+                                                        </div>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>@student.Gender</td>
+                                        <td>@student.Birthday?.ToString("MM/dd/yyyy")</td> <!-- Format the date as needed -->
+                                        <td>
+                                            <span class="badge bg-success text-white">@(student.LockoutEnabled ? "Locked" : "Active")</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+
+
                         }
                     </tbody>
                 </table>

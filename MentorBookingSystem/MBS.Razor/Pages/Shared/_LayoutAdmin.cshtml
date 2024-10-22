@@ -1,8 +1,7 @@
 ﻿@using System.Security.Claims
 @using MBS.Services.Constants.Enums
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using Microsoft.AspNetCore.Authorization
-@attribute [Authorize(Roles = UserRole.Admin)]
+
 @{
     // var roleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
     // if (roleClaim != UserRole.Admin  || string.IsNullOrEmpty(roleClaim))

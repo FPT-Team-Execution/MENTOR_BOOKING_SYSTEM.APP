@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using MBS.Services.Constants;
+using MBS.Services.Models.Responses.Student;
 using MBS.Services.Services.Implements;
 using MBS.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,6 +15,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 
 builder.Services.AddAuthentication(options =>
     {

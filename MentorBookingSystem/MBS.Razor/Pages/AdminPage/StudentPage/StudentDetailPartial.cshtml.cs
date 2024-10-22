@@ -11,8 +11,11 @@ public class StudentDetailPartial : PageModel
     //{
     //    ChosenStudent = chosenStudent;
     //}
-    //public void OnGet()
-    //{
-        
-    //}
+    public void OnGet(string studentId)
+    {
+        if (string.IsNullOrEmpty(studentId))
+        {
+            return;
+        }
+    }
 }
