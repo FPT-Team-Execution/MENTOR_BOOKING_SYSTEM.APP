@@ -13,7 +13,6 @@ builder.Services.AddHttpContextAccessor();
 //add Services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
-
 builder.Services.AddScoped<IClaimService, ClaimService>();
 
 builder.Services.AddAuthentication(options =>
