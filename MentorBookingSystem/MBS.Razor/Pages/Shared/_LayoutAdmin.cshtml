@@ -1,22 +1,21 @@
-﻿﻿@using MBS.Services.Models.Sessions
-@using MBS.Services.Models.Sessions
-@using Microsoft.AspNetCore.Mvc.TagHelpers
-@using Newtonsoft.Json
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize(Roles = "Admin")]
 @{
-    var userSessionString = Context.Session.GetString("UserSession");
-    UserSession? userSessionObject = null;
-    if (userSessionString is null)
-    {
-        Context.Response.Redirect(RouteEndpoints.Logout);
-    }
-    else
-    {
-        userSessionObject = JsonConvert.DeserializeObject<UserSession?>(userSessionString)!;
-        if (userSessionObject.Role != UserRole.Admin)
-        {
-            Context.Response.Redirect(RouteEndpoints.Logout);
-        }
-    }
+    // var userSessionString = Context.Session.GetString("UserSession");
+    // UserSession? userSessionObject = null;
+    // if (userSessionString is null)
+    // {
+    //     Context.Response.Redirect(RouteEndpoints.Logout);
+    // }
+    // else
+    // {
+    //     userSessionObject = JsonConvert.DeserializeObject<UserSession?>(userSessionString)!;
+    //     if (userSessionObject.Role != UserRole.Admin)
+    //     {
+    //         Context.Response.Redirect(RouteEndpoints.Logout);
+    //     }
+    // }
 }
 
 
@@ -57,7 +56,7 @@
             <a class="nav-link collapsed d-flex flex-column justify-content-center align-items-center" href="#" id="userDropdown" role="button"
                data-toggle="collapse" data-target="#collapseUser" aria-expanded="true" aria-controls="collapseUser">
                 <img class="img-profile img-fluid rounded-circle" src="https://via.placeholder.com/150" alt="User profile picture"/>
-                <span class="mt-2">@userSessionObject?.Email</span>
+                @* <span class="mt-2">@userSessionObject?.Email</span> *@
             </a>
 
             <!-- User Information Collapse -->

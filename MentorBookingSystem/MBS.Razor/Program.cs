@@ -1,17 +1,19 @@
+using System.Security.Claims;
 using MBS.Services.Constants;
 using MBS.Services.Services.Implements;
 using MBS.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
+// Register IHttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+//add Services
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IClaimService, ClaimService>();
+
 builder.Services.AddAuthentication(options =>
     {
         // Set the default authentication scheme to Cookie
