@@ -1,16 +1,11 @@
-using System;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using MBS.Services.Constants;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Models.Sessions;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace MBS.Razor.Pages
@@ -75,31 +70,16 @@ namespace MBS.Razor.Pages
         /// </summary>
         public void OnGetLoginWithGoogle()
         {
-            var clientId = "1096581745243-bj51g3cd4rq13codonsoftbk8h7tq4mi.apps.googleusercontent.com";
-            // var redirectUrl = "https://localhost:7102/AuthCallBack";
-            //better solution
-            var redirectUrl = $"https://localhost:7102/Login?handler={RouteEndpointHandlers.Callback}";
-            // var redirectUrl = "https://localhost:7554/api/auth/signin-google";
-
-            // var state = Guid.NewGuid().ToString();
-            // var scope = "openid email profile";
-            var scope = $"{Uri.EscapeDataString("https://www.googleapis.com/auth/calendar")} {Uri.EscapeDataString("https://www.googleapis.com/auth/userinfo.profile")} {Uri.EscapeDataString("https://www.googleapis.com/auth/userinfo.email")}";
-            var responseType = "code";
-            // var googleAuthUrl =
-            //     $"https://accounts.google.com/o/oauth2/v2/auth?redirect_uri={redirectUrl}&prompt=consent&response_type={responseType}&" +
-            //     $"client_id={clientId}&scope={scope}&access_type=offline&state={state}";
-            var googleAuthUrl =
-                $"https://accounts.google.com/o/oauth2/v2/auth?redirect_uri={redirectUrl}&response_type={responseType}&" +
-                $"client_id={clientId}&scope={scope}&access_type=offline";
-            Response.Redirect(googleAuthUrl);
+            var googleRedirectUrl = _authService.GetGoogleRedirectUrl();
+            Response.Redirect(googleRedirectUrl);
         }
 
         /// <summary>
         /// Google Callback uri by name handler
         /// </summary>
-        public void OnGetCallback(string code, string state, string scopes)
+        public async void OnGetCallback(string code, string state, string scopes)
         {
-            
+            var response = await _authService.LoginWithGoogleAsync(code);
             Response.Redirect("/Login");
         }
     }
