@@ -1,8 +1,8 @@
 ﻿using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
-using MBS.Services.Models.Requests.Major;
 using MBS.Services.Models.Responses;
+using MBS.Services.Models.Responses.Major;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
 
@@ -21,7 +21,7 @@ public class MajorService : IMajorService
                 { "size", size.ToString() }
             }
         );
-        var response = WebUtils.HandleResponse<BaseModel<Pagination<GetMajorRequest>>>(result);
+        var response = WebUtils.HandleResponse<BaseModel<Pagination<GetMajorResponse>>>(result);
         return response;
     }
 }
