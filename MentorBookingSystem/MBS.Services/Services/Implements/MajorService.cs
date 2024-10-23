@@ -21,7 +21,7 @@ public class MajorService : IMajorService
                 { "size", size.ToString() }
             }
         );
-        var response = WebUtils.HandleResponse<BaseModel<Pagination<GetMajorResponse>>>(result);
+        var response = WebUtils.HandleResponse<BaseModel<Pagination<MajorResponse>>>(result);
         return response;
     }
 }
