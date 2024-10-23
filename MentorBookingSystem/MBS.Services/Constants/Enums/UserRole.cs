@@ -1,4 +1,4 @@
-namespace MBS.Services.Constants;
+namespace MBS.Services.Constants.Enums;
 
 public class UserRole
 {

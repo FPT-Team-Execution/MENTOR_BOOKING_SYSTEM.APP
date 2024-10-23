@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using MBS.Services.Constants;
+using MBS.Services.Constants.Enums;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Models.Sessions;
 using MBS.Services.Services.Interfaces;
@@ -92,7 +93,6 @@ namespace MBS.Razor.Pages
             Response.Redirect(RouteEndpoints.Login);
 
         }
-
         private List<Claim> GetClaims(string token)
         {
             // var tokenGoogle = response.ResponseRequestModel.googleToken;
@@ -106,7 +106,7 @@ namespace MBS.Razor.Pages
                 //Role
                 new Claim(ClaimTypes.Role, jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)!.Value.ToString()),
                 //User Id
-                new Claim(ClaimTypes.Role, jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value.ToString())
+                new Claim(ClaimTypes.NameIdentifier, jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value.ToString())
             };
             return claims;
         }
