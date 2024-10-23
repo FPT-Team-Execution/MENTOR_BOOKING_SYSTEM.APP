@@ -25,14 +25,22 @@ public class Index : PageModel
 
     public async Task<IActionResult> OnGetShowStudentDetail(string studentId)
     {
-        await LoadStudents();
+        try
+        {
+            await LoadStudents();
 
-        var chosenStudent = Students.FirstOrDefault(x => x.Id == studentId);
-        if (chosenStudent == null)
-            TempData["ErrorMessage"] = "Student not found";
-        else
-            ChosenStudent = chosenStudent;
-
+            var chosenStudent = Students.FirstOrDefault(x => x.Id == studentId);
+            if (chosenStudent == null)
+                TempData["ErrorMessage"] = "Student not found";
+            else
+                ChosenStudent = chosenStudent;
+            
+        }
+        catch (Exception)
+        {
+            TempData["ErrorMessage"] = "Some error occure";
+            Redirect(RouteEndpoints.Login);
+        }
         return Page();
     }
 
