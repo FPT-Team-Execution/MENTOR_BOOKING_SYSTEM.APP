@@ -47,6 +47,15 @@ namespace MBS.Razor.Pages
                 TempData["ErrorMessage"] = response.Message;
                 return Page();
             }
+
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true, // Chỉ server mới có thể truy cập cookie
+                Secure = true,   // Cookie chỉ được gửi qua HTTPS
+                Expires = DateTime.UtcNow.AddHours(1) // Thời gian sống của token
+            };
+            
+            WebUtils.AccessToken = response.ResponseModel.JwtToken.AccessToken;
             var claims = GetClaims(response.ResponseModel.JwtToken.AccessToken);
             await _claimService.SignInAsync(claims);
             TempData["SuccessMessage"] = response.Message;

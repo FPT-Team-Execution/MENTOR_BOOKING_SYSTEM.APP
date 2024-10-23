@@ -5,12 +5,16 @@ namespace MBS.Services.Utils
 {
     public class WebUtils
     {
+        public static string? AccessToken { get; set; }
+
         // GET Request
-        public static async Task<HttpResponseMessage> GetAsync(string url, Dictionary<string, string>? headers = null, string? token = null, Dictionary<string, string?>? queryParams = null)
+        public static async Task<HttpResponseMessage> GetAsync(string url, Dictionary<string, string>? headers = null,
+            string? token = null, Dictionary<string, string?>? queryParams = null)
         {
             if (queryParams != null && queryParams.Any())
             {
-                var query = string.Join("&", queryParams.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
+                var query = string.Join("&",
+                    queryParams.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
                 url = $"{url}?{query}";
             }
 
@@ -28,18 +32,22 @@ namespace MBS.Services.Utils
             // Add authorization token if provided
             if (!string.IsNullOrEmpty(token))
             {
-                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             }
 
             return await httpClient.GetAsync(url);
         }
 
         // POST Request
-        public static async Task<HttpResponseMessage> PostAsync(string url, object? data = null, Dictionary<string, string>? headers = null, string? token = null, Dictionary<string, string>? queryParams = null)
+        public static async Task<HttpResponseMessage> PostAsync(string url, object? data = null,
+            Dictionary<string, string>? headers = null, string? token = null,
+            Dictionary<string, string>? queryParams = null)
         {
             if (queryParams != null && queryParams.Any())
             {
-                var query = string.Join("&", queryParams.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
+                var query = string.Join("&",
+                    queryParams.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
                 url = $"{url}?{query}";
             }
 
@@ -60,18 +68,22 @@ namespace MBS.Services.Utils
             // Add authorization token if provided
             if (!string.IsNullOrEmpty(token))
             {
-                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             }
 
             return await httpClient.PostAsync(url, content);
         }
 
         // PUT Request
-        public static async Task<HttpResponseMessage> PutAsync(string url, object? data = null, Dictionary<string, string>? headers = null, string? token = null, Dictionary<string, string>? queryParams = null)
+        public static async Task<HttpResponseMessage> PutAsync(string url, object? data = null,
+            Dictionary<string, string>? headers = null, string? token = null,
+            Dictionary<string, string>? queryParams = null)
         {
             if (queryParams != null && queryParams.Any())
             {
-                var query = string.Join("&", queryParams.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
+                var query = string.Join("&",
+                    queryParams.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
                 url = $"{url}?{query}";
             }
 
@@ -92,18 +104,22 @@ namespace MBS.Services.Utils
             // Add authorization token if provided
             if (!string.IsNullOrEmpty(token))
             {
-                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             }
 
             return await httpClient.PutAsync(url, content);
         }
 
         // DELETE Request
-        public static async Task<HttpResponseMessage> DeleteAsync(string url, Dictionary<string, string>? headers = null, string? token = null, Dictionary<string, string>? queryParams = null)
+        public static async Task<HttpResponseMessage> DeleteAsync(string url,
+            Dictionary<string, string>? headers = null, string? token = null,
+            Dictionary<string, string>? queryParams = null)
         {
             if (queryParams != null && queryParams.Any())
             {
-                var query = string.Join("&", queryParams.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
+                var query = string.Join("&",
+                    queryParams.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
                 url = $"{url}?{query}";
             }
 
@@ -121,7 +137,8 @@ namespace MBS.Services.Utils
             // Add authorization token if provided
             if (!string.IsNullOrEmpty(token))
             {
-                httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                httpClient.DefaultRequestHeaders.Authorization =
+                    new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
             }
 
             return await httpClient.DeleteAsync(url);

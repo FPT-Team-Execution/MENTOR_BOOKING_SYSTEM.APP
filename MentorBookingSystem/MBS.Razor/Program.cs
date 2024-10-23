@@ -16,6 +16,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IMajorService, MajorService>();
 builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IMentorService, MentorService>();
 
 builder.Services.AddAuthentication(options =>
     {

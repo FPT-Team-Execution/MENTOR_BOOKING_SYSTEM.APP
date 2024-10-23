@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace MBS.Services.Models.Requests.Major
 {
-    internal class GetMentorRequest
+    internal class GetMajorsRequest
     {
+        public int Page { get; set; }
+        public int Size { get; set; }
     }
 }
