@@ -3,11 +3,13 @@
 @using Microsoft.AspNetCore.Authorization
 @attribute [Authorize(Roles = UserRole.Mentor)]
 @{
+    var name = string.Empty;
     var roleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
     if (roleClaim != UserRole.Mentor  || string.IsNullOrEmpty(roleClaim))
     {
         Context.Response.Redirect(RouteEndpoints.AccessDenied);
     }
+    name = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 }
 
 <!DOCTYPE html>

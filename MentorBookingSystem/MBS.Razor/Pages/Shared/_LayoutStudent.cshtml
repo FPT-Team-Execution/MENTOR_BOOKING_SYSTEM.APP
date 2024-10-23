@@ -5,11 +5,13 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @attribute [Authorize(Roles = UserRole.Student)]
 @{
+    var name = string.Empty;
     var roleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
     if (roleClaim != UserRole.Student || string.IsNullOrEmpty(roleClaim))
     {
         Context.Response.Redirect(RouteEndpoints.AccessDenied);
     }
+    name = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 }
 
 <!DOCTYPE html>
@@ -57,7 +59,7 @@
             <a class="nav-link collapsed d-flex flex-column justify-content-center align-items-center" href="#" id="userDropdown" role="button"
                data-toggle="collapse" data-target="#collapseUser" aria-expanded="true" aria-controls="collapseUser">
                 <img class="img-profile img-fluid rounded-circle" src="https://via.placeholder.com/150" alt="User profile picture"/>
-                @* <span class="mt-2">@userSessionObject?.Email</span> *@
+                <span class="mt-2">@name</span>
             </a>
 
             <!-- User Information Collapse -->
