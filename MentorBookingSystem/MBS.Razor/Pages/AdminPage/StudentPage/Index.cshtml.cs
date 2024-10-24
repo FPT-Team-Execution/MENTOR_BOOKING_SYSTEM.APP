@@ -82,8 +82,13 @@ public class Index : BaseAdminPage
     }
     public async Task<IActionResult> OnPostSearch(string searchName, string sortOrder)
     {
-        StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination, isKeep: false)!;
-        // SaveTempData(TempDataKeys.StudentPagination, StudentPagination);
+        StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!;
+        if (!string.IsNullOrEmpty(searchName))
+        {
+            var query = StudentPagination.Items.Where(s => s.FullName.Contains(searchName));
+            query = sortOrder == "asc" ? query.OrderBy(x => x.FullName) : query.OrderByDescending(x => x.FullName);
+            SaveTempData(TempDataKeys.StudentPagination, query.ToList());
+        }
         return Page();
     }
     

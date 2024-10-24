@@ -1,11 +1,14 @@
 ﻿@page
 @using MBS.Razor.Pages.AdminPage.StudentPage.Models
+@using MBS.Services.Models
+@using MBS.Services.Utils
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model Index
 
 @{
     Layout = "Shared/_LayoutAdmin";
     string pageName = "Index";
-    var students = Model.StudentPagination.Items.ToArray();
+    var students = Model.GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination, isKeep: false).Items.ToArray() ?? [];
 }
 
 
