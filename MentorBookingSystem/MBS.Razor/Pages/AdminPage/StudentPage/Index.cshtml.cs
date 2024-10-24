@@ -13,7 +13,7 @@ public class Index : BaseAdminPage
 {
     public Pagination<StudentModel> StudentPagination { get; set; } = new();
     [BindProperty] public StudentModel ChosenStudent { get; set; } = new();
-    //public List<StudentModel> Students { get; set; } = new(); 
+
     public string SortOrder { get; set; } = "asc";
     public string SearchName { get; set; }
 
@@ -25,36 +25,8 @@ public class Index : BaseAdminPage
     private async Task LoadStudents()
     {
         var data = await _studentService.GetStudentsAsync(page: 1, size: 10, "asc");
-        var studentModels = data.Items.Adapt<IEnumerable<StudentModel>>();
-        // var studentModels = data.Items.Select(s => new StudentModel()
-        // {
-        //     Id = s.Id,
-        //     FullName = s.FullName,
-        //     Email = s.Email,
-        //     University = s.University,
-        //     MajorName = s.MajorId,
-        //     WalletPoint = s.WalletPoint,
-        //     AvatarUrl = s.AvatarUrl,
-        //     Gender = s.Gender,
-        //     Birthday = s.Birthday,
-        //     LockoutEnabled = s.LockoutEnabled,
-        //     UserName = s.UserName,
-        //     PhoneNumber = s.PhoneNumber,
-        //     EmailConfirmed = s.EmailConfirmed,
-        //     LockoutEnd = s.LockoutEnd,
-        //     CreatedBy = s.CreatedBy,
-        //     CreatedOn = s.CreatedOn,
-        //     UpdatedBy = s.UpdatedBy,
-        //     UpdatedOn = s.UpdatedOn
-        // })
-        // .OrderBy(s => s.FullName)
-        // .ToList();
-
-        //set pagination list
-        StudentPagination.PageIndex = data.PageIndex;
-        StudentPagination.PageSize = data.PageSize;
-        StudentPagination.TotalPages = data.TotalPages;
-        StudentPagination.Items = studentModels;
+        var studentModels = data.Adapt<Pagination<StudentModel>>();
+        StudentPagination = studentModels;
         
         SaveTempData("StudentsPagination", StudentPagination);
     }
