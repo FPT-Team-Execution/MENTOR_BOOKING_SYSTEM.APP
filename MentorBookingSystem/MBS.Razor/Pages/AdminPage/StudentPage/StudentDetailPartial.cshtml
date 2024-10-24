@@ -1,38 +1,39 @@
 @using MBS.Services.Utils
-@model Models.StudentModel
+@model MBS.Razor.Pages.AdminPage.StudentPage.Models.StudentModel
 @{
-    var chosenStudent = Model;
+
 }
 <div>
-    <form>
-        <div class="d-flex mb-3 position-relative" >
+    <form method="post">
+        <div class="d-flex mb-3 position-relative">
             <div class="mx-2 align-self-center" style="width: 150px; height: 150px; background-color: #f0f0f0;">
-                <img src="@(chosenStudent.AvatarUrl ?? "https://via.placeholder.com/150")"
+                <img src="@(Model.AvatarUrl ?? "https://via.placeholder.com/150")"
                      class="img-fluid"
-                     style="max-width: 100%; max-height: 100%; object-fit: cover;"  alt="mentor image"/>
+                     style="max-width: 100%; max-height: 100%; object-fit: cover;" alt="mentor image"/>
+                <input asp-for="AvatarUrl" type="hidden" />
             </div>
-
 
             <div class="position-absolute" style="top: 0; right: 0; text-align: right;">
                 <span class="d-block font-weight-bold" style="font-size: 1rem;">
                     Point Balance
                 </span>
                 <span class="badge bg-warning p-2" style="font-size: 1.2rem;">
-                    @chosenStudent!.WalletPoint <i class="fas fa-coins"></i>
+                    @Model.WalletPoint <i class="fas fa-coins"></i>
                 </span>
+                <input asp-for="WalletPoint" type="hidden" />
             </div>
         </div>
 
+        <div class="mb-3">
+            <label asp-for="FullName" class="form-label">Full Name</label>
+            <input type="hidden" class="form-control" asp-for="Id">
+            <input type="text" class="form-control" asp-for="FullName">
+        </div>
 
         <div class="mb-3">
-            <label for="studentName" class="form-label">Full Name</label>
-            <input type="hidden" class="form-control" id="id" value="@chosenStudent.Id" aria-describedby="emailHelp">
-            <input type="email" class="form-control" id="studentName" value="@chosenStudent.FullName" aria-describedby="emailHelp">
-        </div>
-        <div class="mb-3">
-            <label for="modifyPoint" class="form-label">Point</label>
+            <label asp-for="WalletPoint" class="form-label">Point</label>
             <div class="d-inline-flex flex-nowrap w-100">
-                <input placeholder="0" type="text" class="form-control mr-2" id="modifyPoint" aria-describedby="emailHelp">
+                <input placeholder="0" type="text" class="form-control mr-2" asp-for="WalletPoint">
                 <button class="btn btn-success mr-2" title="credit">
                     <i class="fas fa-solid fa-arrow-up"></i>
                 </button>
@@ -42,54 +43,56 @@
                 <button class="btn btn-primary mr-2" title="edit point balance">
                     <i class="fas fa-solid fa-pen"></i>
                 </button>
-
             </div>
         </div>
+
         <div class="mb-3">
-            <label for="mentorEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="studentEmail" value="@chosenStudent.Email" aria-describedby="emailHelp">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input type="email" class="form-control" asp-for="Email">
         </div>
+
         <div class="mb-3">
-            <label for="studentUni" class="form-label">University</label>
-            <input type="text" class="form-control" id="studentUni" value="@chosenStudent.University">
+            <label asp-for="University" class="form-label">University</label>
+            <input type="text" class="form-control" asp-for="University">
         </div>
+
         <div class="mb-3">
-            <label for="studentMajor" class="form-label">Major</label>
-            <select class="form-control" id="studentMajor">
+            <label asp-for="MajorName" class="form-label">Major</label>
+            <select class="form-control" asp-for="MajorName">
                 <option value="" disabled selected>Select a major</option>
-                <option value="university1">Global Business</option>
-                <option value="university2">AI</option>
-                <option value="university3">Software Engineer</option>
+                <option value="Global Business">Global Business</option>
+                <option value="AI">AI</option>
+                <option value="Software Engineer">Software Engineer</option>
             </select>
         </div>
+
         <div class="mb-3">
-            <label for="studentMajor" class="form-label">Birthday</label>
-            <input type="date" class="form-control" id="studentBirthday" value="@ConvertUtils.FormatDateTimeToString(chosenStudent.Birthday)">
+            <label asp-for="Birthday" class="form-label">Birthday</label>
+            <input type="date" class="form-control" asp-for="Birthday" value="@ConvertUtils.FormatDateTimeToString(Model.Birthday)">
         </div>
+
         <div class="mb-3 d-flex justify-content-start">
             <div class="mr-2 w-25">
-                <label for="studentStatus" class="form-label">Status</label>
-                <select id="studentStatus" class="form-control" aria-describedby="statusHelp">
+                <label asp-for="LockoutEnabled" class="form-label">Status</label>
+                <select asp-for="LockoutEnabled" class="form-control">
                     <option value="active">Active</option>
                     <option value="inactive">UnActive</option>
                 </select>
             </div>
-            <div class=" mr-2 w-25">
-                <label for="studentGender" class="form-label">Gender</label>
-                <select id="studentGender" class="form-control" aria-describedby="statusHelp" asp-for="@chosenStudent.Gender">
+            <div class="mr-2 w-25">
+                <label asp-for="Gender" class="form-label">Gender</label>
+                <select asp-for="Gender" class="form-control">
                     <option value="Male">Male</option>
-                    <option value="Female" >Female</option>
+                    <option value="Female">Female</option>
                     <option value="Other">Other</option>
                 </select>
             </div>
         </div>
-        
-        <div class="d-flex justify-content-start ">
-            <button class="btn btn-primary mr-2" type="submit">
-                Create
-            </button>
-            <button type="submit" class="btn btn-primary mr-2">Update</button>
-            <button type="submit" class="btn btn-danger mr-2">Delete</button>
+
+        <div class="d-flex justify-content-start">
+            <button class="btn btn-primary mr-2" type="submit" name="action" value="create">Create</button>
+            <button class="btn btn-primary mr-2" type="submit" name="action" value="update">Update</button>
+            <button class="btn btn-danger mr-2" type="submit" name="action" value="delete">Delete</button>
         </div>
     </form>
 </div>

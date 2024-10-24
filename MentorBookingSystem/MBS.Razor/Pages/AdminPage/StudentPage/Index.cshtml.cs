@@ -1,7 +1,5 @@
 ﻿using MBS.Razor.Pages.AdminPage.StudentPage.Models;
 using MBS.Services.Constants;
-using MBS.Services.Models.Responses.Student;
-using MBS.Services.Services.Implements;
 using MBS.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -28,7 +26,6 @@ public class Index : PageModel
         try
         {
             await LoadStudents();
-
             var chosenStudent = Students.FirstOrDefault(x => x.Id == studentId);
             if (chosenStudent == null)
                 TempData["ErrorMessage"] = "Student not found";
@@ -46,7 +43,7 @@ public class Index : PageModel
 
     private async Task LoadStudents()
     {
-        var data = await _studentService.GetStudentsAsync(page: 1, size: 10);
+        var data = await _studentService.GetStudentsAsync(page: 1, size: 10, "asc");
         Students = data.Items.Select(s => new StudentModel()
         {
             Id = s.Id,
@@ -70,8 +67,44 @@ public class Index : PageModel
         })
         .OrderBy(s => s.FullName)
         .ToList();
-
+        ViewData["Students"] = Students;
         // Store students in session
         //HttpContext.Session.SetString("Students", JsonSerializer.Serialize(Students));
+    }
+    public IActionResult OnPostCreate()
+    {
+        // Thực hiện logic tạo sinh viên mới
+        return RedirectToPage("/Success");
+    }
+    
+    public IActionResult OnPostUpdate()
+    {
+        // Thực hiện logic cập nhật sinh viên
+        return RedirectToPage("/Success");
+    }
+    
+    public IActionResult OnPostDelete()
+    {
+        // Thực hiện logic xóa sinh viên
+        return RedirectToPage("/Success");
+    }
+
+    public IActionResult OnPost(StudentModel chosenStudent, string action)
+    {
+        var action2 = Request.Form["action"];
+        if (action == "create")
+        {
+            return OnPostCreate();
+        }
+        if (action == "update")
+        {
+            return OnPostUpdate();
+        }
+        if (action == "delete")
+        {
+            return OnPostDelete();
+        }
+        var demo = "something";
+        return Page();
     }
 }
