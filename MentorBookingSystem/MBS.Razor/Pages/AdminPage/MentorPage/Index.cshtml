@@ -49,7 +49,7 @@
                     <tbody>
 
                     @{
-                        if (Model.MentorData.Items is null)
+                        if (!Model.MentorData.Items.Any())
                         {
                             <tr>
                                 <td colspan="8">No mentors available</td>
@@ -166,7 +166,7 @@
     <div class="col-lg-4 mb-4 h-100">
         <div class="card">
             <div class="card-body">
-                <partial name="MentorDetailPartial" model="@Model.SelectedMentor"/>
+                @await Html.PartialAsync("MentorDetailPartial",  Model.SelectedMentor)
             </div>
         </div>
     </div>
