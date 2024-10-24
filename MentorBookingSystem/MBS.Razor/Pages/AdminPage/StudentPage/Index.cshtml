@@ -8,7 +8,7 @@
 @{
     Layout = "Shared/_LayoutAdmin";
     string pageName = "Index";
-    var students = Model.GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination, isKeep: false).Items.ToArray() ?? [];
+    var students = Model.GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!.Items.ToArray() ?? [];
 }
 
 

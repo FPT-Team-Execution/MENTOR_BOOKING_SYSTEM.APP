@@ -21,6 +21,7 @@ public class Index : BaseAdminPage
 
     private readonly IStudentService _studentService;
     private readonly IMajorService _majorService;
+
     public Index(IStudentService studentService, IMajorService majorService)
     {
         _studentService = studentService;
@@ -29,11 +30,13 @@ public class Index : BaseAdminPage
 
     private async Task LoadMajors()
     {
-        var data = (await _majorService.GetMajorsAsync(1, 100) as BaseModel<Pagination<MajorResponse>>).ResponseRequestModel.Items;
+        var data = (await _majorService.GetMajorsAsync(1, 100) as BaseModel<Pagination<MajorResponse>>)
+            .ResponseRequestModel.Items;
         var majorModels = data.Adapt<IEnumerable<MajorResponse>>();
         Majors = majorModels.ToList();
         SaveTempData(TempDataKeys.Majors, Majors);
     }
+
     private async Task LoadStudents()
     {
         var data = await _studentService.GetStudentsAsync(page: 1, size: 10, "asc");
@@ -48,7 +51,6 @@ public class Index : BaseAdminPage
         {
             await LoadStudents();
             await LoadMajors();
-
         }
         catch
         {
@@ -56,7 +58,7 @@ public class Index : BaseAdminPage
             return RedirectToPage(RouteEndpoints.AdminStudent);
         }
 
-        return Page(); 
+        return Page();
     }
 
 
@@ -71,27 +73,41 @@ public class Index : BaseAdminPage
                 SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
             else
                 ChosenStudent = chosenStudent;
-
         }
         catch (Exception)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
             Redirect(RouteEndpoints.AdminStudent);
         }
+
         return Page();
     }
+
     public async Task<IActionResult> OnPostSearch(string searchName, string sortOrder)
     {
-        StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!;
+        await LoadStudents();
+        
+        var query = StudentPagination.Items.AsQueryable();
+
         if (!string.IsNullOrEmpty(searchName))
         {
-            var query = StudentPagination.Items.Where(s => s.FullName.Contains(searchName));
-            query = sortOrder == "asc" ? query.OrderBy(x => x.FullName) : query.OrderByDescending(x => x.FullName);
-            SaveTempData(TempDataKeys.StudentPagination, query.ToList());
+            var words = searchName.Split(" ");
+            //* All() => all condition true from words in order to return true for where
+            query = query.Where(s => words.All(c => s.FullName.ToLower().Contains(c.ToString().ToLower())));
         }
+
+        query = sortOrder == "asc" ? query.OrderBy(x => x.FullName) : query.OrderByDescending(x => x.FullName);
+        StudentPagination.Items = query.ToList();
+        //* modify total pages based on item
+        StudentPagination.PageIndex = 1;
+        StudentPagination.PageSize = 5;
+        StudentPagination.TotalPages =
+            (int)Math.Ceiling((double)(StudentPagination.TotalItems / StudentPagination.PageSize));
+        SaveTempData(TempDataKeys.StudentPagination, StudentPagination);
+
         return Page();
     }
-    
+
     public IActionResult OnPostCreate()
     {
         // Thực hiện logic tạo sinh viên mới
@@ -117,15 +133,17 @@ public class Index : BaseAdminPage
         {
             return OnPostCreate();
         }
+
         if (action == "update")
         {
             return OnPostUpdate();
         }
+
         if (action == "delete")
         {
             return OnPostDelete(chosenStudent.Id);
         }
+
         return Page();
     }
-    
 }
