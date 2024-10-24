@@ -5,6 +5,7 @@
 @{
     Layout = "Shared/_LayoutAdmin";
     string pageName = "Index";
+    var students = Model.StudentPagination.Items.ToArray();
 }
 
 
@@ -15,20 +16,25 @@
                 <div class="col">
                     <h5>Students</h5>
                 </div>
-                <div class="col-auto ml-auto d-flex">
-                    <form class="form-inline border rounded mw-100 navbar-search shadow-sm mr-2">
+                <div class="col-auto ml-auto d-flex align-items-center">
+                    <form class="form-inline border rounded navbar-search shadow-sm" method="post" asp-page-handler="Search">
                         <div class="input-group">
+                            <select class="form-control bg-light border-0 small" name="sortOrder" asp-for="SortOrder">
+                                <option value="asc" selected>Sort Ascending</option>
+                                <option value="desc">Sort Descending</option>
+                            </select>
+
                             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                   aria-label="Search" aria-describedby="basic-addon2">
+                                   aria-label="Search" aria-describedby="basic-addon2" asp-for="SearchName">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i>
                                 </button>
                             </div>
                         </div>
                     </form>
-                    
                 </div>
+
             </div>
 
 
@@ -50,7 +56,7 @@
                     </thead>
                     <tbody>
                         @{
-                            if (!Model.Students.Any())
+                            if (!students.Any())
                             {
                                 <tr>
                                     <td colspan="8">No students available</td>
@@ -58,12 +64,12 @@
                             }
                             else
                             {
-                                for (int i = 0; i < Model.Students.Count; i++)
+                                for (int i = 0; i < students.Count(); i++)
                                 {
-                                    var student = Model.Students[i];
-
+                                    var student = students[i];
+                                    var index = i + 1;
                                     <tr id="@student.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowStudentDetails, new { studentId = @student.Id })'">
-                                        <th scope="row">@i</th>
+                                        <th scope="row">@index</th>
                                         <td>@student.FullName</td>
                                         <td>@student.Email</td>
                                         <td>@student.University</td>
@@ -142,7 +148,7 @@
     <div class="col-lg-4 mb-4 h-100">
         <div class="card">
             <div class="card-body">
-                 @await Html.PartialAsync("StudentDetailPartial",  Model.ChosenStudent) 
+                @await Html.PartialAsync("StudentDetailPartial", Model.ChosenStudent)
             </div>
         </div>
     </div>

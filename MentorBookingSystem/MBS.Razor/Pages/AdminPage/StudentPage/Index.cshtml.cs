@@ -1,58 +1,30 @@
 ﻿using MBS.Razor.Pages.AdminPage.StudentPage.Models;
 using MBS.Services.Constants;
+using MBS.Services.Models;
 using MBS.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Newtonsoft.Json;
 
 namespace MBS.Razor.Pages.AdminPage.StudentPage;
 
-public class Index : PageModel
+public class Index : BaseAdminPage
 {
-    public StudentModel ChosenStudent { get; set; } = new();
-    [BindProperty] public List<StudentModel> Students { get; set; } = new();
+    public Pagination<StudentModel> StudentPagination { get; set; } = new();
+    [BindProperty] public StudentModel ChosenStudent { get; set; } = new();
+    //public List<StudentModel> Students { get; set; } = new(); 
+    public string SortOrder { get; set; } = "asc";
+    public string SearchName { get; set; }
+
     private readonly IStudentService _studentService;
     public Index(IStudentService studentService)
     {
         _studentService = studentService;
     }
-
-    public async Task OnGet()
-    {
-        try
-        {
-            await LoadStudents();
-        }
-        catch
-        {
-            TempData["ErrorMessage"] = "Some error occure";
-            Redirect(RouteEndpoints.Login);
-        }
-    }
-
-    public async Task<IActionResult> OnGetShowStudentDetail(string studentId)
-    {
-        try
-        {
-            await LoadStudents();
-            var chosenStudent = Students.FirstOrDefault(x => x.Id == studentId);
-            if (chosenStudent == null)
-                TempData["ErrorMessage"] = "Student not found";
-            else
-                ChosenStudent = chosenStudent;
-
-        }
-        catch (Exception)
-        {
-            TempData["ErrorMessage"] = "Some error occure";
-            Redirect(RouteEndpoints.Login);
-        }
-        return Page();
-    }
-
     private async Task LoadStudents()
     {
         var data = await _studentService.GetStudentsAsync(page: 1, size: 10, "asc");
-        Students = data.Items.Select(s => new StudentModel()
+        var studentModels = data.Items.Select(s => new StudentModel()
         {
             Id = s.Id,
             FullName = s.FullName,
@@ -75,9 +47,60 @@ public class Index : PageModel
         })
         .OrderBy(s => s.FullName)
         .ToList();
-        // Store students in session
-        //HttpContext.Session.SetString("Students", JsonSerializer.Serialize(Students));
+
+        //set pagination list
+        StudentPagination.PageIndex = data.PageIndex;
+        StudentPagination.PageSize = data.PageSize;
+        StudentPagination.TotalPages = data.TotalPages;
+        StudentPagination.Items = studentModels;
+        
+        SaveTempData("StudentsPagination", StudentPagination);
     }
+
+    public async Task<IActionResult> OnGetAsync()
+    {
+        try
+        {
+            await LoadStudents();
+            
+        }
+        catch
+        {
+            SaveTempData("ErrorMessage", "Some error occurred");
+            return RedirectToPage(RouteEndpoints.Login);
+        }
+
+        return Page(); 
+    }
+
+
+    public async Task<IActionResult> OnGetShowStudentDetail(string studentId)
+    {
+        try
+        {
+            var studentsPagination = GetTempData<Pagination<StudentModel>>("studentsPagination");
+            StudentPagination = studentsPagination;
+            var chosenStudent = studentsPagination.Items.FirstOrDefault(x => x.Id == studentId);
+            if (chosenStudent == null)
+                SaveTempData("ErrorMessage", "Student not found");
+            else
+                ChosenStudent = chosenStudent;
+
+        }
+        catch (Exception)
+        {
+            SaveTempData("ErrorMessage", "Some error occurred");
+            Redirect(RouteEndpoints.Login);
+        }
+        return Page();
+    }
+    public async Task<IActionResult> OnPostSearch(string searchName, string sortOrder)
+    {
+        await LoadStudents();
+        StudentPagination.Items = StudentPagination.Items.Where(x => x.FullName.Contains(searchName));
+        return Page();
+    }
+    
     public IActionResult OnPostCreate()
     {
         // Thực hiện logic tạo sinh viên mới
@@ -113,4 +136,5 @@ public class Index : PageModel
         }
         return Page();
     }
+    
 }
