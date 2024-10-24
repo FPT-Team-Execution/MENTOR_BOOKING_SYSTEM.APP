@@ -14,7 +14,7 @@
     {
         Context.Response.Redirect(RouteEndpoints.AccessDenied);
     }
-    name = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+    name = roleClaim;
 }
 
 <!DOCTYPE html>
