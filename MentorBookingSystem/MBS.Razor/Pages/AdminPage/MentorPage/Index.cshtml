@@ -1,9 +1,11 @@
 ﻿@page
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+
 @model Index
 
 @{
     Layout = "Shared/_LayoutAdmin";
+    string pageName = "Index";
 }
 
 <div class="row h-100 my-4">
@@ -45,63 +47,79 @@
                     </tr>
                     </thead>
                     <tbody>
-                    @for (var i = 0; i < @Model.MentorData.Items.Count(); i++)
-                    {
-                        <tr role="button">
-                            <th scope="row"></th>
-                            <td>E</td>
-                            <td>HostingPressHTML@gmail.com</td>
-                            <td>
-                                <div class="dropdown no-arrow text-center">
-                                    <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-solid fa-list"></i>
-                                    </a>
-                                    <!-- Dropdown - Alerts -->
-                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                         aria-labelledby="alertsDropdown">
-                                        <small class="dropdown-item d-flex align-items-center text-muted me-3">Project Manager</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="dropdown no-arrow text-center">
-                                    <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-solid fa-list"></i>
-                                    </a>
-                                    <!-- Dropdown - Alerts -->
-                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                         aria-labelledby="alertsDropdown">
-                                        <small class="dropdown-item d-flex align-items-center text-muted me-3">Project Manager</small>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>150</td>
-                            <td>
-                                <div class="dropdown no-arrow text-center">
-                                    <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-solid fa-image"></i>
-                                    </a>
-                                    <!-- Dropdown - Alerts -->
-                                    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                         aria-labelledby="alertsDropdown">
-                                        <a class="dropdown-item d-flex align-items-center" href="#">
-                                            <div class="me-3">
-                                                <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
+
+                    @{
+                        if (Model.MentorData.Items is null)
+                        {
+                            <tr>
+                                <td colspan="8">No mentors available</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            var mentors = Model.MentorData.Items.ToList();
+                            @for (var i = 0; i < mentors.Count; i++)
+                            {
+                                var mentor = mentors[i];
+
+                                <tr id="@mentor.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowMentorDetails, new { mentorId = @mentor.Id })'">
+                                    <th scope="row">@(i + 1)</th>
+                                    <td>@mentor.FullName</td>
+                                    <td>@mentor.Email</td>
+                                    <td>
+                                        <div class="dropdown no-arrow text-center">
+                                            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-solid fa-list"></i>
+                                            </a>
+                                            <!-- Dropdown - Alerts -->
+                                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                                 aria-labelledby="alertsDropdown">
+                                                <small class="dropdown-item d-flex align-items-center text-muted me-3">Project Manager</small>
                                             </div>
-                                        </a>
-                                    </div>
-                                </div>
-                            </td>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown no-arrow text-center">
+                                            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-solid fa-list"></i>
+                                            </a>
+                                            <!-- Dropdown - Alerts -->
+                                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                                 aria-labelledby="alertsDropdown">
+                                                <small class="dropdown-item d-flex align-items-center text-muted me-3">Project Manager</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@mentor.ConsumePoint</td>
+                                    <td>
+                                        <div class="dropdown no-arrow text-center">
+                                            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-solid fa-image"></i>
+                                            </a>
+                                            <!-- Dropdown - Alerts -->
+                                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                                 aria-labelledby="alertsDropdown">
+                                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                                    <div class="me-3">
+                                                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
 
-                            <td>
-                                <span class="badge bg-success text-white">Active</span>
-                            </td>
+                                    <td>
+                                        <span class="badge bg-success text-white">@(mentor.LockoutEnd is null ? "Active" : "Inactive")</span>
+                                    </td>
 
-                        </tr>
+                                </tr>
+                            }
+                        }
                     }
+
                     </tbody>
                 </table>
             </div>
@@ -148,7 +166,7 @@
     <div class="col-lg-4 mb-4 h-100">
         <div class="card">
             <div class="card-body">
-                <partial name="MentorDetailPartial" model="@null"/>
+                <partial name="MentorDetailPartial" model="@Model.SelectedMentor"/>
             </div>
         </div>
     </div>
