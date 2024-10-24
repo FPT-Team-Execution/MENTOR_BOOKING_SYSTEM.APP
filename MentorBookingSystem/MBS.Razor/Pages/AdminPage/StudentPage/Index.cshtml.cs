@@ -3,9 +3,8 @@ using MBS.Razor.Pages.AdminPage.StudentPage.Models;
 using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Services.Interfaces;
+using MBS.Services.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 
 namespace MBS.Razor.Pages.AdminPage.StudentPage;
 
@@ -27,8 +26,7 @@ public class Index : BaseAdminPage
         var data = await _studentService.GetStudentsAsync(page: 1, size: 10, "asc");
         var studentModels = data.Adapt<Pagination<StudentModel>>();
         StudentPagination = studentModels;
-        
-        SaveTempData("StudentsPagination", StudentPagination);
+        SaveTempData(TempDataKeys.StudentPagination, StudentPagination);
     }
 
     public async Task<IActionResult> OnGetAsync()
@@ -40,8 +38,8 @@ public class Index : BaseAdminPage
         }
         catch
         {
-            SaveTempData("ErrorMessage", "Some error occurred");
-            return RedirectToPage(RouteEndpoints.Login);
+            SaveTempData(TempDataKeys.ErrorMessage, "Some error occurred");
+            return RedirectToPage(RouteEndpoints.AdminStudent);
         }
 
         return Page(); 
@@ -52,24 +50,24 @@ public class Index : BaseAdminPage
     {
         try
         {
-            StudentPagination = GetTempData<Pagination<StudentModel>>("StudentsPagination")!;
+            StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!;
             var chosenStudent = StudentPagination.Items.FirstOrDefault(x => x.Id == studentId);
             if (chosenStudent == null)
-                SaveTempDataString("ErrorMessage", "Student not found");
+                SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
             else
                 ChosenStudent = chosenStudent;
 
         }
         catch (Exception)
         {
-            SaveTempDataString("ErrorMessage", "Some error occurred");
-            Redirect(RouteEndpoints.Login);
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            Redirect(RouteEndpoints.AdminStudent);
         }
         return Page();
     }
     public async Task<IActionResult> OnPostSearch(string searchName, string sortOrder)
     {
-        await LoadStudents();
+        StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!;
         StudentPagination.Items = StudentPagination.Items.Where(x => x.FullName.Contains(searchName));
         return Page();
     }
@@ -86,7 +84,7 @@ public class Index : BaseAdminPage
         return RedirectToPage("/Success");
     }
 
-    public IActionResult OnPostDelete()
+    public IActionResult OnPostDelete(string studentId)
     {
         // Thực hiện logic xóa sinh viên
         return RedirectToPage("/Success");
@@ -105,7 +103,7 @@ public class Index : BaseAdminPage
         }
         if (action == "delete")
         {
-            return OnPostDelete();
+            return OnPostDelete(chosenStudent.Id);
         }
         return Page();
     }
