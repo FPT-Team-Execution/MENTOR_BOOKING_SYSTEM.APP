@@ -9,7 +9,7 @@
 @{
     var name = string.Empty;
     var claims = _claimService.GetClaims();
-    var roleClaim = claims[ClaimTypes.Role] ?? "";
+    var roleClaim = claims.ContainsKey(ClaimTypes.Role) ? claims[ClaimTypes.Role] : "";
     if (roleClaim != UserRole.Student || string.IsNullOrEmpty(roleClaim))
     {
         Context.Response.Redirect(RouteEndpoints.AccessDenied);

@@ -16,7 +16,7 @@ public class DeniedPage : PageModel
     public void OnGetGoBack()
     {
         var claims = _claimService.GetClaims();
-        var roleClaim = claims[ClaimTypes.Role] ?? "";
+        var roleClaim = claims.ContainsKey(ClaimTypes.Role) ? claims[ClaimTypes.Role] : "";
         switch (roleClaim)
         {
             case UserRole.Admin:
