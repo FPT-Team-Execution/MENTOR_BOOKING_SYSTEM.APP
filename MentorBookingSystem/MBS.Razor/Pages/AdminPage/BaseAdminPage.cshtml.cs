@@ -11,12 +11,13 @@ public class BaseAdminPage : PageModel
     /// <param name="key">key of saved temp data</param>
     /// <typeparam name="T">cast result</typeparam>
     /// <returns>return object in case success, null in case exception</returns>
-    public T? GetTempData<T>(string key) where T : class
+    public T? GetTempData<T>(string key, bool isKeep = true) where T : class
     {
         try
         {
             var data = JsonConvert.DeserializeObject<T>((string)(TempData[key] ?? ""));
-            TempData.Keep(key);
+            if(isKeep)
+                TempData.Keep(key);
             return data;
         }
         catch (Exception e)

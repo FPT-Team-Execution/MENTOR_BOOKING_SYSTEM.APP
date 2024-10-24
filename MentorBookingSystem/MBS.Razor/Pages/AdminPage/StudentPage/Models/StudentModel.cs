@@ -8,7 +8,7 @@ public class StudentModel
     public string FullName { get; set; }  = String.Empty;
     public string? Email { get; set; } = string.Empty;
     public string? University { get; set; } = string.Empty;
-    public string MajorName { get; set; } = string.Empty;
+    public string MajorId { get; set; } = string.Empty;
     public int WalletPoint { get; set; } = 0;
     public string? AvatarUrl { get; set; } = string.Empty;
     public string Gender { get; set; } = UserGender.Male;

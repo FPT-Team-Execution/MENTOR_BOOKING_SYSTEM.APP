@@ -2,6 +2,8 @@
 using MBS.Razor.Pages.AdminPage.StudentPage.Models;
 using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Responses.Major;
+using MBS.Services.Models.Responses.Student;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -11,15 +13,26 @@ namespace MBS.Razor.Pages.AdminPage.StudentPage;
 public class Index : BaseAdminPage
 {
     public Pagination<StudentModel> StudentPagination { get; set; } = new();
+    public List<MajorResponse> Majors { get; set; } = new();
     [BindProperty] public StudentModel ChosenStudent { get; set; } = new();
 
     public string SortOrder { get; set; } = "asc";
-    public string SearchName { get; set; }
+    public string SearchName { get; set; } = string.Empty;
 
     private readonly IStudentService _studentService;
-    public Index(IStudentService studentService)
+    private readonly IMajorService _majorService;
+    public Index(IStudentService studentService, IMajorService majorService)
     {
         _studentService = studentService;
+        _majorService = majorService;
+    }
+
+    private async Task LoadMajors()
+    {
+        var data = (await _majorService.GetMajorsAsync(1, 100) as BaseModel<Pagination<MajorResponse>>).ResponseRequestModel.Items;
+        var majorModels = data.Adapt<IEnumerable<MajorResponse>>();
+        Majors = majorModels.ToList();
+        SaveTempData(TempDataKeys.Majors, Majors);
     }
     private async Task LoadStudents()
     {
@@ -34,7 +47,8 @@ public class Index : BaseAdminPage
         try
         {
             await LoadStudents();
-            
+            await LoadMajors();
+
         }
         catch
         {
@@ -52,6 +66,7 @@ public class Index : BaseAdminPage
         {
             StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!;
             var chosenStudent = StudentPagination.Items.FirstOrDefault(x => x.Id == studentId);
+            SaveTempData(TempDataKeys.ChosenStudent, chosenStudent);
             if (chosenStudent == null)
                 SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
             else
@@ -67,8 +82,8 @@ public class Index : BaseAdminPage
     }
     public async Task<IActionResult> OnPostSearch(string searchName, string sortOrder)
     {
-        StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!;
-        StudentPagination.Items = StudentPagination.Items.Where(x => x.FullName.Contains(searchName));
+        StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination, isKeep: false)!;
+        // SaveTempData(TempDataKeys.StudentPagination, StudentPagination);
         return Page();
     }
     

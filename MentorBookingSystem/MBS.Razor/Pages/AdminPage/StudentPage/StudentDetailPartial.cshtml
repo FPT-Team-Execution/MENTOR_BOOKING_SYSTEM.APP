@@ -1,16 +1,18 @@
+@using MBS.Razor.Pages.AdminPage.StudentPage.Models
 @using MBS.Services.Utils
-@model MBS.Razor.Pages.AdminPage.StudentPage.Models.StudentModel
+@model MBS.Razor.Pages.AdminPage.BaseAdminPage
 @{
-
+    var chosenStudent = Model.GetTempData<StudentModel>(TempDataKeys.ChosenStudent, isKeep: false) ?? new StudentModel();
+    var majors = Model.GetTempData<IEnumerable<MajorModel>>(TempDataKeys.Majors) ?? [];
 }
 <div>
     <form method="post">
         <div class="d-flex mb-3 position-relative">
             <div class="mx-2 align-self-center" style="width: 150px; height: 150px; background-color: #f0f0f0;">
-                <img src="@(Model.AvatarUrl ?? "https://via.placeholder.com/150")"
+                <img src="@(chosenStudent.AvatarUrl ?? "https://via.placeholder.com/150")"
                      class="img-fluid"
                      style="max-width: 100%; max-height: 100%; object-fit: cover;" alt="mentor image"/>
-                <input asp-for="AvatarUrl" type="hidden" />
+                <input asp-for="@chosenStudent.AvatarUrl" type="hidden"/>
             </div>
 
             <div class="position-absolute" style="top: 0; right: 0; text-align: right;">
@@ -18,22 +20,22 @@
                     Point Balance
                 </span>
                 <span class="badge bg-warning p-2" style="font-size: 1.2rem;">
-                    @Model.WalletPoint <i class="fas fa-coins"></i>
+                    @chosenStudent.WalletPoint <i class="fas fa-coins"></i>
                 </span>
-                <input asp-for="WalletPoint" type="hidden" />
+                <input asp-for="@chosenStudent.WalletPoint" type="hidden"/>
             </div>
         </div>
 
         <div class="mb-3">
-            <label asp-for="FullName" class="form-label">Full Name</label>
-            <input type="hidden" class="form-control" asp-for="Id">
-            <input type="text" class="form-control" asp-for="FullName">
+            <label asp-for="@chosenStudent.FullName" class="form-label">Full Name</label>
+            <input type="hidden" class="form-control" asp-for="@chosenStudent.Id">
+            <input type="text" class="form-control" asp-for="@chosenStudent.FullName">
         </div>
 
         <div class="mb-3">
-            <label asp-for="WalletPoint" class="form-label">Point</label>
+            <label asp-for="@chosenStudent.WalletPoint" class="form-label">Point</label>
             <div class="d-inline-flex flex-nowrap w-100">
-                <input placeholder="0" type="text" class="form-control mr-2" asp-for="WalletPoint">
+                <input placeholder="0" type="text" class="form-control mr-2" asp-for="@chosenStudent.WalletPoint">
                 <button class="btn btn-success mr-2" title="credit">
                     <i class="fas fa-solid fa-arrow-up"></i>
                 </button>
@@ -47,44 +49,47 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="Email" class="form-label">Email</label>
-            <input type="email" class="form-control" asp-for="Email">
+            <label asp-for="@chosenStudent.Email" class="form-label">Email</label>
+            <input type="email" class="form-control" asp-for="@chosenStudent.Email">
         </div>
 
         <div class="mb-3">
-            <label asp-for="University" class="form-label">University</label>
-            <input type="text" class="form-control" asp-for="University">
+            <label asp-for="@chosenStudent.University" class="form-label">University</label>
+            <input type="text" class="form-control" asp-for="@chosenStudent.University">
         </div>
 
         <div class="mb-3">
-            <label asp-for="MajorName" class="form-label">Major</label>
-            <select class="form-control" asp-for="MajorName">
+            <label asp-for="@chosenStudent.MajorId" class="form-label">Major</label>
+            <select class="form-control" asp-for="@chosenStudent.MajorId">
                 <option value="" disabled selected>Select a major</option>
-                <option value="Global Business">Global Business</option>
-                <option value="AI">AI</option>
-                <option value="Software Engineer">Software Engineer</option>
+                @{
+                    foreach (var major in majors)
+                    {
+                        <option value="@major.Id">@major.Name</option>
+                    }
+                }
             </select>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Birthday" class="form-label">Birthday</label>
-            <input type="date" class="form-control" asp-for="Birthday" value="@ConvertUtils.FormatDateTimeToString(Model.Birthday)">
+            <label asp-for="@chosenStudent.Birthday" class="form-label">Birthday</label>
+            <input type="date" class="form-control" asp-for="@chosenStudent.Birthday" value="@ConvertUtils.FormatDateTimeToString(chosenStudent.Birthday)">
         </div>
 
         <div class="mb-3 d-flex justify-content-start">
             <div class="mr-2 w-25">
-                <label asp-for="LockoutEnabled" class="form-label">Status</label>
-                <select asp-for="LockoutEnabled" class="form-control">
+                <label asp-for="@chosenStudent.LockoutEnabled" class="form-label">Status</label>
+                <select asp-for="@chosenStudent.LockoutEnabled" class="form-control">
                     <option value="false">Active</option>
                     <option value="true">Locked</option>
                 </select>
             </div>
             <div class="mr-2 w-25">
-                <label asp-for="Gender" class="form-label">Gender</label>
-                <select asp-for="Gender" class="form-control">
+                <label asp-for="@chosenStudent.Gender" class="form-label">Gender</label>
+                <select asp-for="@chosenStudent.Gender" class="form-control">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
-                    <option value="Other">Other</option>
+                    @* <option value="Other">Other</option> *@
                 </select>
             </div>
         </div>

@@ -46,7 +46,6 @@
                             <th scope="col">Name</th>
                             <th scope="col">Email</th>
                             <th scope="col">University</th>
-                            <th scope="col">Major</th>
                             <th scope="col">Balance</th>
                             <th scope="col">Avatar</th>
                             <th scope="col">Gender</th>
@@ -73,7 +72,6 @@
                                         <td>@student.FullName</td>
                                         <td>@student.Email</td>
                                         <td>@student.University</td>
-                                        <td>@student.MajorName</td>
                                         <td>@student.WalletPoint</td>
                                         <td>
                                             <div class="dropdown no-arrow text-center">
@@ -148,7 +146,7 @@
     <div class="col-lg-4 mb-4 h-100">
         <div class="card">
             <div class="card-body">
-                @await Html.PartialAsync("StudentDetailPartial", Model.ChosenStudent)
+                @await Html.PartialAsync("StudentDetailPartial", Model)
             </div>
         </div>
     </div>
