@@ -18,7 +18,15 @@ public class Index : PageModel
 
     public async Task OnGet()
     {
-        await LoadStudents();
+        try
+        {
+            await LoadStudents();
+        }
+        catch
+        {
+            TempData["ErrorMessage"] = "Some error occure";
+            Redirect(RouteEndpoints.Login);
+        }
     }
 
     public async Task<IActionResult> OnGetShowStudentDetail(string studentId)
@@ -31,7 +39,7 @@ public class Index : PageModel
                 TempData["ErrorMessage"] = "Student not found";
             else
                 ChosenStudent = chosenStudent;
-            
+
         }
         catch (Exception)
         {
@@ -67,7 +75,6 @@ public class Index : PageModel
         })
         .OrderBy(s => s.FullName)
         .ToList();
-        ViewData["Students"] = Students;
         // Store students in session
         //HttpContext.Session.SetString("Students", JsonSerializer.Serialize(Students));
     }
@@ -76,13 +83,13 @@ public class Index : PageModel
         // Thực hiện logic tạo sinh viên mới
         return RedirectToPage("/Success");
     }
-    
+
     public IActionResult OnPostUpdate()
     {
         // Thực hiện logic cập nhật sinh viên
         return RedirectToPage("/Success");
     }
-    
+
     public IActionResult OnPostDelete()
     {
         // Thực hiện logic xóa sinh viên
@@ -104,7 +111,6 @@ public class Index : PageModel
         {
             return OnPostDelete();
         }
-        var demo = "something";
         return Page();
     }
 }
