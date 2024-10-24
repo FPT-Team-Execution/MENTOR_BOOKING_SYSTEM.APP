@@ -1,7 +1,4 @@
-@model MentorDetailPartial
-@{
-    var selectedMentor = Model.SelectedMentor;
-}
+@model MBS.Razor.Pages.AdminPage.MentorPage.Models.MentorModel
 
 <div>
     <form>
@@ -57,12 +54,12 @@
             </div>
         </div>
         <div class="mb-3">
-            <label for="mentorName" class="form-label">Full Name</label>
-            <input value="@(selectedMentor is null ? "" : selectedMentor.FullName)" type="email" class="form-control" id="mentorName" aria-describedby="emailHelp">
+            <label asp-for="FullName" class="form-label">Full Name</label>
+            <input asp-for="FullName" type="email" class="form-control" id="mentorName" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
-            <label for="mentorEmail" class="form-label">Email</label>
-            <input value="@selectedMentor.Email" type="email" class="form-control" id="mentorEmail" aria-describedby="emailHelp">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" type="email" class="form-control" id="mentorEmail" aria-describedby="emailHelp">
         </div>
         @* <div class="mb-3"> *@
         @*     <label for="mentorPw" class="form-label">Password</label> *@
@@ -121,28 +118,20 @@
 
 
         <div class="mb-3">
-            <label for="mentorIndustry" class="form-label">Industry</label>
-            <input value="@selectedMentor.Industry" type="text" class="form-control" id="mentorIndustry">
+            <label asp-for="Industry" class="form-label">Industry</label>
+            <input asp-for="Industry" type="text" class="form-control" id="mentorIndustry">
         </div>
         <div class="mb-3 pl-0 form-check d-flex justify-content-start">
             <div class="w-auto mr-2">
-                <label for="mentorStatus" class="form-label">Status</label>
-                <select id="mentorStatus" class="form-control" aria-describedby="statusHelp">
-                    @if (@selectedMentor.LockoutEnd is null)
-                    {
-                        <option selected="" value="active">Active</option>
-                        <option value="inactive">UnActive</option>
-                    }
-                    else
-                    {
-                        <option value="active">Active</option>
-                        <option selected="" value="inactive">UnActive</option>
-                    }
+                <label asp-for="LockoutEnabled" class="form-label">Status</label>
+                <select asp-for="LockoutEnabled" class="form-control">
+                    <option value="active">Active</option>
+                    <option value="inactive">UnActive</option>
                 </select>
             </div>
             <div class="w-75">
-                <label for="mentorPoint" class="form-label">Point</label>
-                <input value="@selectedMentor.ConsumePoint" type="number" class="form-control" id="mentorPoint" aria-describedby="emailHelp">
+                <label asp-for="ConsumePoint" class="form-label">Point</label>
+                <input asp-for="ConsumePoint" type="number" class="form-control" id="mentorPoint" aria-describedby="emailHelp">
             </div>
         </div>
         <div class="d-flex justify-content-start ">

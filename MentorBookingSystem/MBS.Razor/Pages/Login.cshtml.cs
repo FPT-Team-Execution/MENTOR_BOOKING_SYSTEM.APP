@@ -48,6 +48,7 @@ namespace MBS.Razor.Pages
                 return Page();
             }
             var accessToken = response.ResponseModel.JwtToken.AccessToken;
+            WebUtils.AccessToken = accessToken;
             var claims = GetClaims(accessToken);
             //save it to cookie
             await _claimService.SignInAsync(claims);

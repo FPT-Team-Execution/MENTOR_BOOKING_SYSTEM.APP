@@ -1,4 +1,6 @@
-﻿using MBS.Services.Models;
+﻿using Mapster;
+using MBS.Razor.Pages.AdminPage.MentorPage.Models;
+using MBS.Services.Models;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
@@ -17,7 +19,7 @@ public class Index : PageModel
     }
 
     public Pagination<MentorResponse>? MentorData { get; set; }
-    public MentorResponse? SelectedMentor { get; set; }
+    public MentorModel? SelectedMentor { get; set; }
 
     public async Task<ActionResult> OnGet(int page = 1, int size = 10)
     {
@@ -32,7 +34,7 @@ public class Index : PageModel
         return Page();
     }
 
-    public async Task<ActionResult> OnGetShowMentorDetails(string mentorId)
+    public async Task<ActionResult> OnGetShowMentorDetail(string mentorId)
     {
         try
         {
@@ -45,7 +47,8 @@ public class Index : PageModel
 
             MentorData = response.ResponseRequestModel;
 
-            SelectedMentor = MentorData?.Items.FirstOrDefault(x => x.Id == mentorId);
+            var mentor = MentorData?.Items.FirstOrDefault(x => x.Id == mentorId);
+            SelectedMentor = mentor.Adapt<MentorModel>();
             return Page();
         }
         catch (Exception e)
