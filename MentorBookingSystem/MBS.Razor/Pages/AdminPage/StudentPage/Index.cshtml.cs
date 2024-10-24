@@ -1,4 +1,5 @@
-﻿using MBS.Razor.Pages.AdminPage.StudentPage.Models;
+﻿using Mapster;
+using MBS.Razor.Pages.AdminPage.StudentPage.Models;
 using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Services.Interfaces;
@@ -24,29 +25,30 @@ public class Index : BaseAdminPage
     private async Task LoadStudents()
     {
         var data = await _studentService.GetStudentsAsync(page: 1, size: 10, "asc");
-        var studentModels = data.Items.Select(s => new StudentModel()
-        {
-            Id = s.Id,
-            FullName = s.FullName,
-            Email = s.Email,
-            University = s.University,
-            MajorName = s.MajorId,
-            WalletPoint = s.WalletPoint,
-            AvatarUrl = s.AvatarUrl,
-            Gender = s.Gender,
-            Birthday = s.Birthday,
-            LockoutEnabled = s.LockoutEnabled,
-            UserName = s.UserName,
-            PhoneNumber = s.PhoneNumber,
-            EmailConfirmed = s.EmailConfirmed,
-            LockoutEnd = s.LockoutEnd,
-            CreatedBy = s.CreatedBy,
-            CreatedOn = s.CreatedOn,
-            UpdatedBy = s.UpdatedBy,
-            UpdatedOn = s.UpdatedOn
-        })
-        .OrderBy(s => s.FullName)
-        .ToList();
+        var studentModels = data.Items.Adapt<IEnumerable<StudentModel>>();
+        // var studentModels = data.Items.Select(s => new StudentModel()
+        // {
+        //     Id = s.Id,
+        //     FullName = s.FullName,
+        //     Email = s.Email,
+        //     University = s.University,
+        //     MajorName = s.MajorId,
+        //     WalletPoint = s.WalletPoint,
+        //     AvatarUrl = s.AvatarUrl,
+        //     Gender = s.Gender,
+        //     Birthday = s.Birthday,
+        //     LockoutEnabled = s.LockoutEnabled,
+        //     UserName = s.UserName,
+        //     PhoneNumber = s.PhoneNumber,
+        //     EmailConfirmed = s.EmailConfirmed,
+        //     LockoutEnd = s.LockoutEnd,
+        //     CreatedBy = s.CreatedBy,
+        //     CreatedOn = s.CreatedOn,
+        //     UpdatedBy = s.UpdatedBy,
+        //     UpdatedOn = s.UpdatedOn
+        // })
+        // .OrderBy(s => s.FullName)
+        // .ToList();
 
         //set pagination list
         StudentPagination.PageIndex = data.PageIndex;
@@ -82,14 +84,14 @@ public class Index : BaseAdminPage
             StudentPagination = studentsPagination;
             var chosenStudent = studentsPagination.Items.FirstOrDefault(x => x.Id == studentId);
             if (chosenStudent == null)
-                SaveTempData("ErrorMessage", "Student not found");
+                SaveTempDataString("ErrorMessage", "Student not found");
             else
                 ChosenStudent = chosenStudent;
 
         }
         catch (Exception)
         {
-            SaveTempData("ErrorMessage", "Some error occurred");
+            SaveTempDataString("ErrorMessage", "Some error occurred");
             Redirect(RouteEndpoints.Login);
         }
         return Page();
