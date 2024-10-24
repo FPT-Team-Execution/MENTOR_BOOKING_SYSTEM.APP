@@ -15,7 +15,7 @@ public class BaseAdminPage : PageModel
     {
         try
         {
-            var data = JsonConvert.DeserializeObject<T>(TempData[key] as string);
+            var data = JsonConvert.DeserializeObject<T>((string)(TempData[key] ?? ""));
             TempData.Keep(key);
             return data;
         }
@@ -23,6 +23,15 @@ public class BaseAdminPage : PageModel
         {
             return null;
         }
+    }
+    /// <summary>
+    /// Save value to temp data as string
+    /// </summary>
+    /// <param name="key">key</param>
+    /// <param name="data">object</param>
+    public void SaveTempDataString(string key, string data)
+    {
+        TempData[key] = data;
     }
     /// <summary>
     /// Save value to temp data as string
