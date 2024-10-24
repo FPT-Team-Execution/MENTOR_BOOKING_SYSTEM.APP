@@ -1,10 +1,10 @@
-﻿using MBS.Razor.Pages.AdminPage.StudentPage.Models;
+﻿using Mapster;
+using MBS.Razor.Pages.AdminPage.StudentPage.Models;
 using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Services.Interfaces;
+using MBS.Services.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using Newtonsoft.Json;
 
 namespace MBS.Razor.Pages.AdminPage.StudentPage;
 
@@ -12,7 +12,7 @@ public class Index : BaseAdminPage
 {
     public Pagination<StudentModel> StudentPagination { get; set; } = new();
     [BindProperty] public StudentModel ChosenStudent { get; set; } = new();
-    //public List<StudentModel> Students { get; set; } = new(); 
+
     public string SortOrder { get; set; } = "asc";
     public string SearchName { get; set; }
 
@@ -24,37 +24,9 @@ public class Index : BaseAdminPage
     private async Task LoadStudents()
     {
         var data = await _studentService.GetStudentsAsync(page: 1, size: 10, "asc");
-        var studentModels = data.Items.Select(s => new StudentModel()
-        {
-            Id = s.Id,
-            FullName = s.FullName,
-            Email = s.Email,
-            University = s.University,
-            MajorName = s.MajorId,
-            WalletPoint = s.WalletPoint,
-            AvatarUrl = s.AvatarUrl,
-            Gender = s.Gender,
-            Birthday = s.Birthday,
-            LockoutEnabled = s.LockoutEnabled,
-            UserName = s.UserName,
-            PhoneNumber = s.PhoneNumber,
-            EmailConfirmed = s.EmailConfirmed,
-            LockoutEnd = s.LockoutEnd,
-            CreatedBy = s.CreatedBy,
-            CreatedOn = s.CreatedOn,
-            UpdatedBy = s.UpdatedBy,
-            UpdatedOn = s.UpdatedOn
-        })
-        .OrderBy(s => s.FullName)
-        .ToList();
-
-        //set pagination list
-        StudentPagination.PageIndex = data.PageIndex;
-        StudentPagination.PageSize = data.PageSize;
-        StudentPagination.TotalPages = data.TotalPages;
-        StudentPagination.Items = studentModels;
-        
-        SaveTempData("StudentsPagination", StudentPagination);
+        var studentModels = data.Adapt<Pagination<StudentModel>>();
+        StudentPagination = studentModels;
+        SaveTempData(TempDataKeys.StudentPagination, StudentPagination);
     }
 
     public async Task<IActionResult> OnGetAsync()
@@ -66,8 +38,8 @@ public class Index : BaseAdminPage
         }
         catch
         {
-            SaveTempData("ErrorMessage", "Some error occurred");
-            return RedirectToPage(RouteEndpoints.Login);
+            SaveTempData(TempDataKeys.ErrorMessage, "Some error occurred");
+            return RedirectToPage(RouteEndpoints.AdminStudent);
         }
 
         return Page(); 
@@ -78,25 +50,24 @@ public class Index : BaseAdminPage
     {
         try
         {
-            var studentsPagination = GetTempData<Pagination<StudentModel>>("studentsPagination");
-            StudentPagination = studentsPagination;
-            var chosenStudent = studentsPagination.Items.FirstOrDefault(x => x.Id == studentId);
+            StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!;
+            var chosenStudent = StudentPagination.Items.FirstOrDefault(x => x.Id == studentId);
             if (chosenStudent == null)
-                SaveTempData("ErrorMessage", "Student not found");
+                SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
             else
                 ChosenStudent = chosenStudent;
 
         }
         catch (Exception)
         {
-            SaveTempData("ErrorMessage", "Some error occurred");
-            Redirect(RouteEndpoints.Login);
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            Redirect(RouteEndpoints.AdminStudent);
         }
         return Page();
     }
     public async Task<IActionResult> OnPostSearch(string searchName, string sortOrder)
     {
-        await LoadStudents();
+        StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!;
         StudentPagination.Items = StudentPagination.Items.Where(x => x.FullName.Contains(searchName));
         return Page();
     }
@@ -113,7 +84,7 @@ public class Index : BaseAdminPage
         return RedirectToPage("/Success");
     }
 
-    public IActionResult OnPostDelete()
+    public IActionResult OnPostDelete(string studentId)
     {
         // Thực hiện logic xóa sinh viên
         return RedirectToPage("/Success");
@@ -132,7 +103,7 @@ public class Index : BaseAdminPage
         }
         if (action == "delete")
         {
-            return OnPostDelete();
+            return OnPostDelete(chosenStudent.Id);
         }
         return Page();
     }
