@@ -52,9 +52,8 @@ public class Index : BaseAdminPage
     {
         try
         {
-            var studentsPagination = GetTempData<Pagination<StudentModel>>("studentsPagination");
-            StudentPagination = studentsPagination;
-            var chosenStudent = studentsPagination.Items.FirstOrDefault(x => x.Id == studentId);
+            StudentPagination = GetTempData<Pagination<StudentModel>>("StudentsPagination")!;
+            var chosenStudent = StudentPagination.Items.FirstOrDefault(x => x.Id == studentId);
             if (chosenStudent == null)
                 SaveTempDataString("ErrorMessage", "Student not found");
             else
