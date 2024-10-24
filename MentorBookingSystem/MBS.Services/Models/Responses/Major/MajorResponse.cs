@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MBS.Services.Models.Requests.Major;
+namespace MBS.Services.Models.Responses.Major;
 
-public class GetMajorRequest
+public class MajorResponse
 {
     public Guid Id { get; set; }
     public required string Name { get; set; }

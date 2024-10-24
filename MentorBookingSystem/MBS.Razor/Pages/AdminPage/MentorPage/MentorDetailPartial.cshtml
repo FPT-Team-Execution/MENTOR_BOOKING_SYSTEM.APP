@@ -1,6 +1,7 @@
-@* @page *@
 @model MentorDetailPartial
-
+@{
+    var selectedMentor = Model.SelectedMentor;
+}
 
 <div>
     <form>
@@ -57,16 +58,16 @@
         </div>
         <div class="mb-3">
             <label for="mentorName" class="form-label">Full Name</label>
-            <input type="email" class="form-control" id="mentorName" aria-describedby="emailHelp">
+            <input value="@(selectedMentor is null ? "" : selectedMentor.FullName)" type="email" class="form-control" id="mentorName" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
             <label for="mentorEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="mentorEmail" aria-describedby="emailHelp">
+            <input value="@selectedMentor.Email" type="email" class="form-control" id="mentorEmail" aria-describedby="emailHelp">
         </div>
-        <div class="mb-3">
-            <label for="mentorPw" class="form-label">Password</label>
-            <input type="password" class="form-control" id="mentorPw">
-        </div>
+        @* <div class="mb-3"> *@
+        @*     <label for="mentorPw" class="form-label">Password</label> *@
+        @*     <input value="@selectedMentor" type="password" class="form-control" id="mentorPw"> *@
+        @* </div> *@
         <div class="mb-3">
 
             <div class="mb-3 d-flex align-items-center justify-content-between">
@@ -121,19 +122,27 @@
 
         <div class="mb-3">
             <label for="mentorIndustry" class="form-label">Industry</label>
-            <input type="password" class="form-control" id="mentorIndustry">
+            <input value="@selectedMentor.Industry" type="text" class="form-control" id="mentorIndustry">
         </div>
         <div class="mb-3 pl-0 form-check d-flex justify-content-start">
             <div class="w-auto mr-2">
                 <label for="mentorStatus" class="form-label">Status</label>
                 <select id="mentorStatus" class="form-control" aria-describedby="statusHelp">
-                    <option value="active">Active</option>
-                    <option value="inactive">UnActive</option>
+                    @if (@selectedMentor.LockoutEnd is null)
+                    {
+                        <option selected="" value="active">Active</option>
+                        <option value="inactive">UnActive</option>
+                    }
+                    else
+                    {
+                        <option value="active">Active</option>
+                        <option selected="" value="inactive">UnActive</option>
+                    }
                 </select>
             </div>
             <div class="w-75">
                 <label for="mentorPoint" class="form-label">Point</label>
-                <input type="email" class="form-control" id="mentorPoint" aria-describedby="emailHelp">
+                <input value="@selectedMentor.ConsumePoint" type="number" class="form-control" id="mentorPoint" aria-describedby="emailHelp">
             </div>
         </div>
         <div class="d-flex justify-content-start ">

@@ -11,5 +11,6 @@ public class ApiEndPoints
 
     public static string MajorUrl = $"{baseUrl}/majors";
     public static string StudentUrl = $"{baseUrl}/students";
+    public static string MentorUrl = $"{baseUrl}/mentors";
 
 }

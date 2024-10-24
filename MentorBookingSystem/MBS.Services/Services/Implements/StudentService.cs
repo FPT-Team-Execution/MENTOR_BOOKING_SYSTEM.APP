@@ -1,6 +1,6 @@
 using MBS.Services.Constants;
 using MBS.Services.Models;
-using MBS.Services.Models.Requests.Major;
+using MBS.Services.Models.Responses.Major;
 using MBS.Services.Models.Responses.Student;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
