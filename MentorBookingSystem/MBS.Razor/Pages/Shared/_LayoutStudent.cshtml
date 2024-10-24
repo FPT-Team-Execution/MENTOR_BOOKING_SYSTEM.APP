@@ -1,12 +1,15 @@
 @using System.Security.Claims
 @using MBS.Services.Constants.Enums
 @using MBS.Services.Models.Sessions
+@using MBS.Services.Services.Interfaces
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@inject IClaimService _claimService
 @attribute [Authorize(Roles = UserRole.Student)]
 @{
     var name = string.Empty;
-    var roleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+    var claims = _claimService.GetClaims();
+    var roleClaim = claims[ClaimTypes.Role] ?? "";
     if (roleClaim != UserRole.Student || string.IsNullOrEmpty(roleClaim))
     {
         Context.Response.Redirect(RouteEndpoints.AccessDenied);

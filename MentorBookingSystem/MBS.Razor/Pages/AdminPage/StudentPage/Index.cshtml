@@ -5,6 +5,7 @@
 @{
     Layout = "Shared/_LayoutAdmin";
     string pageName = "Index";
+    var demo = ViewData["Students"];
 }
 
 
@@ -96,8 +97,6 @@
                                     </tr>
                                 }
                             }
-
-
                         }
                     </tbody>
                 </table>
@@ -145,10 +144,8 @@
     <div class="col-lg-4 mb-4 h-100">
         <div class="card">
             <div class="card-body">
-                <partial name="StudentDetailPartial" model="@Model.ChosenStudent" />
-
+                 @await Html.PartialAsync("StudentDetailPartial",  Model.ChosenStudent) 
             </div>
-
         </div>
     </div>
 </div>

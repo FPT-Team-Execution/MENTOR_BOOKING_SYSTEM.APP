@@ -4,11 +4,11 @@
 
 @{
     var name = string.Empty;
-    var roleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-    if (roleClaim != UserRole.Admin  || string.IsNullOrEmpty(roleClaim))
-    {
-        Context.Response.Redirect(RouteEndpoints.AccessDenied);
-    } 
+    // var roleClaim = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+    // if (roleClaim != UserRole.Admin  || string.IsNullOrEmpty(roleClaim))
+    // {
+    //     Context.Response.Redirect(RouteEndpoints.AccessDenied);
+    // } 
     name = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 }
 

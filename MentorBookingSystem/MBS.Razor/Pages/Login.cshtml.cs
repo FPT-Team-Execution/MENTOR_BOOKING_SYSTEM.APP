@@ -47,8 +47,14 @@ namespace MBS.Razor.Pages
                 TempData["ErrorMessage"] = response.Message;
                 return Page();
             }
-            var claims = GetClaims(response.ResponseModel.JwtToken.AccessToken);
+            var accessToken = response.ResponseModel.JwtToken.AccessToken;
+            var claims = GetClaims(accessToken);
+            //save it to cookie
             await _claimService.SignInAsync(claims);
+            //append access token
+            _claimService.AppendCookie("MBS", accessToken);
+            //var claims = GetClaims(response.ResponseModel.JwtToken.AccessToken);
+            //await _claimService.SignInAsync(claims);
             TempData["SuccessMessage"] = response.Message;
 
             return claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)!.Value.ToString() switch
@@ -76,10 +82,12 @@ namespace MBS.Razor.Pages
         {
             //take token
             var response = await _authService.LoginWithGoogleAsync(code);
-
-            var claims = GetClaims(response.ResponseRequestModel.jwtModel.AccessToken);
+            var accessToken = response.ResponseRequestModel.jwtModel.AccessToken;
+            var claims = GetClaims(accessToken);
             //save it to cookie
             await _claimService.SignInAsync(claims);
+            //append access token
+            _claimService.AppendCookie("MBS", accessToken);
             return Redirect(RouteEndpoints.Mentor);
         }
         /// <summary>

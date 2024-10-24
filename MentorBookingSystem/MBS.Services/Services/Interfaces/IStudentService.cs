@@ -5,5 +5,5 @@ namespace MBS.Services.Services.Interfaces;
 
 public interface IStudentService
 {
-    Task<Pagination<StudentResponse>> GetStudentsAsync(int page, int size);
+    Task<Pagination<StudentResponse>> GetStudentsAsync(int page, int size, string sortOrder);
 }
