@@ -93,59 +93,72 @@ public class Index : BaseAdminPage
 
     public async Task<IActionResult> OnPostSearch(string searchName, string sortOrder)
     {
-        //Set Sort variables
-        SearchName = searchName;
-        SortOrder = sortOrder;
-        //Get Page Size and Page Index (if exist)
-        var pageSizeData = GetTempData<string>(TempDataKeys.PageSize);
-        if (pageSizeData != null && int.TryParse(pageSizeData, out int pageSize))
-            Size = pageSize;
-        var pageIndexData = GetTempData<string>(TempDataKeys.PageIndex);
-        if (pageIndexData != null && int.TryParse(pageIndexData, out int pageIndex))
-            PageIndex = pageIndex;
-        //Load data
-         await LoadStudents();
-        
-        var query = StudentPagination.Items.AsQueryable();
-
-        if (!string.IsNullOrEmpty(SearchName))
+        try
         {
-            var words = searchName.Split(" ");
-            //* All() => all condition true from words in order to return true for where
-            query = query.Where(s => words.All(c => s.FullName.ToLower().Contains(c.ToString().ToLower())));
+            //Set Sort variables
+            SearchName = searchName;
+            SortOrder = sortOrder;
+            //Get Page Size and Page Index (if exist)
+            var pageSizeData = GetTempData<string>(TempDataKeys.PageSize);
+            if (pageSizeData != null && int.TryParse(pageSizeData, out int pageSize))
+                Size = pageSize;
+            var pageIndexData = GetTempData<string>(TempDataKeys.PageIndex);
+            if (pageIndexData != null && int.TryParse(pageIndexData, out int pageIndex))
+                PageIndex = pageIndex;
+            //Load data
+            await LoadStudents();
+        
+            var query = StudentPagination.Items.AsQueryable();
+
+            if (!string.IsNullOrEmpty(SearchName))
+            {
+                var words = searchName.Split(" ");
+                //* All() => all condition true from words in order to return true for where
+                query = query.Where(s => words.All(c => s.FullName.ToLower().Contains(c.ToString().ToLower())));
+            }
+            StudentPagination.Items = query.ToList();
+            //* modify total pages based on item
+            StudentPagination.PageSize = Size;
+            StudentPagination.PageIndex = StudentPagination.TotalPages < PageIndex ? 1 : PageIndex;
+            //Save temp data to next use
+            SaveTempData(TempDataKeys.SortOrder, SortOrder);
+            SaveTempData(TempDataKeys.SearchName, SearchName);
+            SaveTempData(TempDataKeys.AdminKeys.StudentPagination, StudentPagination);
         }
-        // if(query.Count() > 1)
-        //     query = SortOrder == "asc" ? query.OrderBy(x => x.FullName) : query.OrderByDescending(x => x.FullName);
-        StudentPagination.Items = query.ToList();
-        //* modify total pages based on item
-        StudentPagination.PageSize = Size;
-        // StudentPagination.TotalPages = (int)Math.Ceiling((double)StudentPagination.TotalItems / StudentPagination.PageSize);
-        // StudentPagination.TotalPages = (int)Math.Ceiling(StudentPagination.Items.Count() / (double)Size);
-        StudentPagination.PageIndex = StudentPagination.TotalPages < PageIndex ? 1 : PageIndex;
-        //Save temp data to next use
-        SaveTempData(TempDataKeys.SortOrder, SortOrder);
-        SaveTempData(TempDataKeys.SearchName, SearchName);
-        SaveTempData(TempDataKeys.AdminKeys.StudentPagination, StudentPagination);
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            Redirect(RouteEndpoints.AdminStudent);
+        }
+        
 
         return Page();
     }
 
     public async Task<IActionResult> OnPostPageNavigate(string pageIndex, string size)
     {
-        var studentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!;
-       
-        //set pageIndex and page Size
-        Size = int.Parse(size);
-        //if total item from previous load * previous total pages is lower or equal then new size -> pageIndex = 1
-        if((studentPagination.TotalItems * studentPagination.TotalItems) <= Size)
-            PageIndex = 1;
-        else
-            PageIndex = int.Parse(pageIndex);
-        //Save temp data to next use
-        SaveTempData(TempDataKeys.PageIndex, PageIndex);
-        SaveTempData(TempDataKeys.PageSize, Size);
-        //Load data pagination from api
-        await LoadStudents();
+        try
+        {
+            var studentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!;
+            //set pageIndex and page Size
+            Size = int.Parse(size);
+            //if total item from previous load * previous total pages is lower or equal then new size -> pageIndex = 1
+            if((studentPagination.TotalItems * studentPagination.TotalItems) <= Size)
+                PageIndex = 1;
+            else
+                PageIndex = int.Parse(pageIndex);
+            //Save temp data to next use
+            SaveTempData(TempDataKeys.PageIndex, PageIndex);
+            SaveTempData(TempDataKeys.PageSize, Size);
+            //Load data pagination from api
+            await LoadStudents();
+          
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            Redirect(RouteEndpoints.AdminStudent);
+        }
         return Page();
     }
 
