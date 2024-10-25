@@ -132,9 +132,15 @@ public class Index : BaseAdminPage
 
     public async Task<IActionResult> OnPostPageNavigate(string pageIndex, string size)
     {
+        var studentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!;
+       
         //set pageIndex and page Size
-        PageIndex = int.Parse(pageIndex);
         Size = int.Parse(size);
+        //if total item from previous load * previous total pages is lower or equal then new size -> pageIndex = 1
+        if((studentPagination.TotalItems * studentPagination.TotalItems) <= Size)
+            PageIndex = 1;
+        else
+            PageIndex = int.Parse(pageIndex);
         //Save temp data to next use
         SaveTempData(TempDataKeys.PageIndex, PageIndex);
         SaveTempData(TempDataKeys.PageSize, Size);
