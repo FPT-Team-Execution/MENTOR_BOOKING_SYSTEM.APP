@@ -1,8 +1,12 @@
-@model MBS.Razor.Pages.AdminPage.MentorPage.Models.MentorModel
+@using MBS.Razor.Pages.AdminPage.MentorPage.Models
+@using MBS.Services.Utils
+@model MBS.Razor.Pages.AdminPage.BaseAdminPage
+@{
+    var chosenMentor = Model.GetTempData<MentorModel>(TempDataKeys.AdminKeys.ChosenMentor, isKeep: false) ?? new MentorModel();
+}
 
 <div>
-    <form>
-        <div class=" mb-3">
+    <form>Mentor  <div class=" mb-3">
             <div class="row g-0">
                 <div class="col-md-4">
                     <img src="https://via.placeholder.com/150" class="img-fluid rounded-start" alt="mentor image"/>
@@ -54,12 +58,12 @@
             </div>
         </div>
         <div class="mb-3">
-            <label asp-for="FullName" class="form-label">Full Name</label>
-            <input asp-for="FullName" type="email" class="form-control" id="mentorName" aria-describedby="emailHelp">
+            <label asp-for="@chosenMentor.FullName" class="form-label">Full Name</label>
+            <input asp-for="@chosenMentor.FullName" type="text" class="form-control" id="mentorName" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
-            <label asp-for="Email" class="form-label">Email</label>
-            <input asp-for="Email" type="email" class="form-control" id="mentorEmail" aria-describedby="emailHelp">
+            <label asp-for="@chosenMentor.Email" class="form-label">Email</label>
+            <input asp-for="@chosenMentor.Email" type="email" class="form-control" id="mentorEmail" aria-describedby="emailHelp">
         </div>
         @* <div class="mb-3"> *@
         @*     <label for="mentorPw" class="form-label">Password</label> *@
@@ -116,22 +120,27 @@
 
         </div>
 
-
         <div class="mb-3">
-            <label asp-for="Industry" class="form-label">Industry</label>
-            <input asp-for="Industry" type="text" class="form-control" id="mentorIndustry">
+            <label asp-for="@chosenMentor.Birthday" class="form-label">Birthday</label>
+            <input asp-for="@chosenMentor.Birthday" value="@ConvertUtils.FormatDateTimeToString(chosenMentor.Birthday)" type="date" class="form-control" id="mentorIndustry">
         </div>
+        
+        <div class="mb-3">
+            <label asp-for="@chosenMentor.Industry" class="form-label">Industry</label>
+            <input asp-for="@chosenMentor.Industry" type="text" class="form-control" id="mentorIndustry">
+        </div>
+        
         <div class="mb-3 pl-0 form-check d-flex justify-content-start">
             <div class="w-auto mr-2">
-                <label asp-for="LockoutEnabled" class="form-label">Status</label>
-                <select asp-for="LockoutEnabled" class="form-control">
+                <label asp-for="@chosenMentor.LockoutEnabled" class="form-label">Status</label>
+                <select asp-for="@chosenMentor.LockoutEnabled" class="form-control">
                     <option value="active">Active</option>
-                    <option value="inactive">UnActive</option>
+                    <option value="inactive">Locked</option>
                 </select>
             </div>
             <div class="w-75">
-                <label asp-for="ConsumePoint" class="form-label">Point</label>
-                <input asp-for="ConsumePoint" type="number" class="form-control" id="mentorPoint" aria-describedby="emailHelp">
+                <label asp-for="@chosenMentor.ConsumePoint" class="form-label">Point</label>
+                <input asp-for="@chosenMentor.ConsumePoint" type="number" class="form-control" id="mentorPoint" aria-describedby="emailHelp">
             </div>
         </div>
         <div class="d-flex justify-content-start ">
