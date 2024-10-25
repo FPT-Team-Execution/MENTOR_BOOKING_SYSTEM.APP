@@ -15,7 +15,7 @@ public static class RouteEndpoints
 
     // Admin routes
     public const string Admin = "/AdminPage";
-    public const string AdminDashboard = "/AdminPage/Dashboard";
+    public const string AdminDashboard = "/AdminPage/DashboardPage";
 
     // Admin Mentor Routes
     public const string AdminMentor = "/AdminPage/MentorPage";
