@@ -45,7 +45,12 @@ public class Index : BaseAdminPage
         var data = await _studentService.GetStudentsAsync(page: PageIndex, size: Size, SortOrder);
         var studentModels = data.Adapt<Pagination<StudentModel>>();
         StudentPagination = studentModels;
+        
         SaveTempData(TempDataKeys.AdminKeys.StudentPagination, StudentPagination);
+        SaveTempData(TempDataKeys.PageIndex, PageIndex);
+        SaveTempData(TempDataKeys.PageSize, Size);
+        SaveTempData(TempDataKeys.SortOrder, SortOrder);
+
     }
 
     public async Task<IActionResult> OnGetAsync()
@@ -114,7 +119,8 @@ public class Index : BaseAdminPage
         StudentPagination.Items = query.ToList();
         //* modify total pages based on item
         StudentPagination.PageSize = Size;
-        StudentPagination.TotalPages = (int)Math.Ceiling((double)StudentPagination.TotalItems / StudentPagination.PageSize);
+        // StudentPagination.TotalPages = (int)Math.Ceiling((double)StudentPagination.TotalItems / StudentPagination.PageSize);
+        // StudentPagination.TotalPages = (int)Math.Ceiling(StudentPagination.Items.Count() / (double)Size);
         StudentPagination.PageIndex = StudentPagination.TotalPages < PageIndex ? 1 : PageIndex;
         //Save temp data to next use
         SaveTempData(TempDataKeys.SortOrder, SortOrder);

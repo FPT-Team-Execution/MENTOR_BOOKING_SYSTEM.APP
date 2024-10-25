@@ -81,7 +81,7 @@
                             for (int i = 0; i < students.Count(); i++)
                             {
                                 var student = students[i];
-                                var index = studentPagination.PageSize * (studentPagination.PageIndex - 1) + (i + 1);
+                                var index = studentPagination.PageSize * (pageIndex - 1) + (i + 1);
                                 <tr id="@student.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowStudentDetails, new { studentId = @student.Id })'">
                                     <th scope="row">@index</th>
                                     <td>@student.FullName</td>
