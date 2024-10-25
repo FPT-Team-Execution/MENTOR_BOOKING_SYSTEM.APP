@@ -7,8 +7,20 @@
 
 @{
     Layout = "Shared/_LayoutAdmin";
-    string pageName = "Index";
-    var students = Model.GetTempData<Pagination<StudentModel>>(TempDataKeys.StudentPagination)!.Items.ToArray() ?? [];
+    string pageName = "Index";  
+    //* get temp data
+    //Student Pagination 
+    var studentPagination = Model.GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)! ?? Model.StudentPagination;
+    var students = studentPagination.Items.ToArray();
+    //Get search & sort Order
+    string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
+    string sortOrder = Model.GetTempData<string>(TempDataKeys.SortOrder) ?? Model.SortOrder;
+    
+    //Get size and index
+    int pageSize =  int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString()) ;
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString()) ;
+    
+    
 }
 
 
@@ -22,7 +34,7 @@
                 <div class="col-auto ml-auto d-flex align-items-center">
                     <form class="form-inline border rounded navbar-search shadow-sm" method="post" asp-page-handler="Search">
                         <div class="input-group">
-                            <select class="form-control bg-light border-0 small" name="sortOrder" asp-for="SortOrder">
+                            <select class="form-control bg-light border-0 small" name="sortOrder" asp-for="@sortOrder" >
                                 <option value="asc" selected>Sort Ascending</option>
                                 <option value="desc">Sort Descending</option>
                             </select>
@@ -44,104 +56,104 @@
             <div class="table-responsive">
                 <table class="table table-hover ">
                     <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">University</th>
-                            <th scope="col">Balance</th>
-                            <th scope="col">Avatar</th>
-                            <th scope="col">Gender</th>
-                            <th scope="col">Birthday</th>
-                            <th scope="col">Status</th>
-                        </tr>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">University</th>
+                        <th scope="col">Balance</th>
+                        <th scope="col">Avatar</th>
+                        <th scope="col">Gender</th>
+                        <th scope="col">Birthday</th>
+                        <th scope="col">Status</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @{
-                            if (!students.Any())
+                    @{
+                        if (!students.Any())
+                        {
+                            <tr>
+                                <td colspan="8">No students available</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            for (int i = 0; i < students.Count(); i++)
                             {
-                                <tr>
-                                    <td colspan="8">No students available</td>
+                                var student = students[i];
+                                var index = studentPagination.PageSize * (studentPagination.PageIndex - 1) + (i + 1);
+                                <tr id="@student.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowStudentDetails, new { studentId = @student.Id })'">
+                                    <th scope="row">@index</th>
+                                    <td>@student.FullName</td>
+                                    <td>@student.Email</td>
+                                    <td>@student.University</td>
+                                    <td>@student.WalletPoint</td>
+                                    <td>
+                                        <div class="dropdown no-arrow text-center">
+                                            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-solid fa-image"></i>
+                                            </a>
+                                            <!-- Dropdown - Alerts -->
+                                            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
+                                                 aria-labelledby="alertsDropdown">
+                                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                                    <div class="me-3">
+                                                        <img src="@(student.AvatarUrl ?? "https://via.placeholder.com/150")"
+                                                             alt="Transaction Image" width="150" height="150">
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>@student.Gender</td>
+                                    <td>@student.Birthday?.ToString("MM/dd/yyyy")</td> <!-- Format the date as needed -->
+                                    <td>
+                                        <span class="badge bg-success text-white">@(student.LockoutEnabled ? "Locked" : "Active")</span>
+                                    </td>
                                 </tr>
                             }
-                            else
-                            {
-                                for (int i = 0; i < students.Count(); i++)
-                                {
-                                    var student = students[i];
-                                    var index = i + 1;
-                                    <tr id="@student.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowStudentDetails, new { studentId = @student.Id })'">
-                                        <th scope="row">@index</th>
-                                        <td>@student.FullName</td>
-                                        <td>@student.Email</td>
-                                        <td>@student.University</td>
-                                        <td>@student.WalletPoint</td>
-                                        <td>
-                                            <div class="dropdown no-arrow text-center">
-                                                <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <i class="fas fa-solid fa-image"></i>
-                                                </a>
-                                                <!-- Dropdown - Alerts -->
-                                                <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                                                     aria-labelledby="alertsDropdown">
-                                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                                        <div class="me-3">
-                                                            <img src="@(student.AvatarUrl ?? "https://via.placeholder.com/150")"
-                                                                 alt="Transaction Image" width="150" height="150">
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>@student.Gender</td>
-                                        <td>@student.Birthday?.ToString("MM/dd/yyyy")</td> <!-- Format the date as needed -->
-                                        <td>
-                                            <span class="badge bg-success text-white">@(student.LockoutEnabled ? "Locked" : "Active")</span>
-                                        </td>
-                                    </tr>
-                                }
-                            }
                         }
+                    }
                     </tbody>
                 </table>
             </div>
             @* Pagination Navigaion *@
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center mb-4">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">Prev</span>
-                        </a>
-                    </li>
+            <form id="paginationForm" method="post" asp-page-handler="PageNavigate" class="d-flex justify-content-center">
+                <!-- Input hidden để lưu giá trị pageIndex hiện tại -->
+                <input type="hidden" id="hiddenPageIndex" name="pageIndex" value="@studentPagination.PageIndex"/>
 
-                    <li class="page-item active">
-                        <a class="page-link" href="#">1</a>
-                    </li>
+                <!-- Page Size Dropdown -->
+                <nav aria-label="page size" class="me-3 mr-2">
+                    <select class="form-control" name="size" asp-for="@Model.Size" onchange="onChangeSubmit()">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </nav>
 
-                    <li class="page-item">
-                        <a class="page-link" href="#">2</a>
-                    </li>
-
-                    <li class="page-item">
-                        <a class="page-link" href="#">3</a>
-                    </li>
-
-                    <li class="page-item">
-                        <a class="page-link" href="#">4</a>
-                    </li>
-
-                    <li class="page-item">
-                        <a class="page-link" href="#">5</a>
-                    </li>
-
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+                <!-- Pagination Controls -->
+                <nav aria-label="Pagination">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <button type="button" class="page-link @(studentPagination.TotalItems <= pageSize ? "disable" : "") " aria-label="Previous" @(studentPagination.PageIndex == 1 ? "disabled" : "") onclick="updatePageIndex(@(studentPagination.PageIndex - 1))">
+                                <span aria-hidden="true">Prev</span>
+                            </button>
+                        </li>
+                        @for (int i = 1; i <= studentPagination.TotalPages; i++)
+                        {
+                            <li class="page-item @(studentPagination.PageIndex == i ? "active" : "")">
+                                <button type="button" class="page-link" onclick="updatePageIndex(@i)">@i</button>
+                            </li>
+                        }
+                        <li class="page-item">
+                            <button type="button" class="page-link @(studentPagination.TotalItems <= pageSize ? "disable" : "")" aria-label="Next" @(studentPagination.PageIndex == studentPagination.TotalPages ? "disabled" : "") onclick="updatePageIndex(@(studentPagination.PageIndex + 1))">
+                                <span aria-hidden="true">Next</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </form>
         </div>
 
 
@@ -154,3 +166,20 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function updatePageIndex(newIndex) {
+            document.getElementById('hiddenPageIndex').value = newIndex;
+            document.getElementById('paginationForm').submit();
+        }
+
+        function onChangeSubmit() {
+            document.getElementById('paginationForm').submit();
+        }
+        
+
+
+
+    </script>
+}

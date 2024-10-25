@@ -1,3 +1,5 @@
+using MBS.Services.Constants;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
 
@@ -16,7 +18,7 @@ public class BaseAdminPage : PageModel
         try
         {
             var data = JsonConvert.DeserializeObject<T>((string)(TempData[key] ?? ""));
-            if(isKeep)
+            if (isKeep)
                 TempData.Keep(key);
             return data;
         }
@@ -25,6 +27,7 @@ public class BaseAdminPage : PageModel
             return null;
         }
     }
+
     /// <summary>
     /// Save value to temp data as string
     /// </summary>
@@ -34,6 +37,7 @@ public class BaseAdminPage : PageModel
     {
         TempData[key] = data;
     }
+
     /// <summary>
     /// Save value to temp data as string
     /// </summary>
@@ -41,8 +45,9 @@ public class BaseAdminPage : PageModel
     /// <param name="data">object</param>
     public void SaveTempData(string key, object? data)
     {
-        TempData[key] = JsonConvert.SerializeObject(data); 
+        TempData[key] = JsonConvert.SerializeObject(data);
     }
+
     /// <summary>
     /// Keep data of key list
     /// </summary>
@@ -54,6 +59,7 @@ public class BaseAdminPage : PageModel
             TempData.Keep(key);
         }
     }
+
     /// <summary>
     /// Keep All data
     /// </summary>
@@ -61,4 +67,24 @@ public class BaseAdminPage : PageModel
     {
         TempData.Keep();
     }
+
+    /// <summary>
+    /// Remove Temop Data
+    /// </summary>
+    public void RemoveTempData(params string[] keys)
+    {
+        if (keys.Any())
+        {
+            foreach (var key in keys)
+            {
+                TempData.Remove(key);
+            }
+
+            return;
+        }
+
+        TempData.Clear();
+    }
+    
+   
 }

@@ -2,8 +2,8 @@
 @using MBS.Services.Utils
 @model MBS.Razor.Pages.AdminPage.BaseAdminPage
 @{
-    var chosenStudent = Model.GetTempData<StudentModel>(TempDataKeys.ChosenStudent, isKeep: false) ?? new StudentModel();
-    var majors = Model.GetTempData<IEnumerable<MajorModel>>(TempDataKeys.Majors) ?? [];
+    var chosenStudent = Model.GetTempData<StudentModel>(TempDataKeys.AdminKeys.ChosenStudent, isKeep: false) ?? new StudentModel();
+    var majors = Model.GetTempData<IEnumerable<MajorModel>>(TempDataKeys.AdminKeys.Majors) ?? [];
 }
 <div>
     <form method="post">
