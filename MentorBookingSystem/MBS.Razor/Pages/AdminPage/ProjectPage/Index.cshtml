@@ -66,7 +66,57 @@
                     }
                 </tbody>
             </table>
+            @* Pagination Navigaion *@
+            <form id="paginationForm" method="post" asp-page-handler="PageNavigate" class="d-flex justify-content-center">
+                <!-- Input hidden để lưu giá trị pageIndex hiện tại -->
+                <input type="hidden" id="hiddenPageIndex" name="pageIndex" value="@projectPagination.PageIndex" />
+
+                <!-- Page Size Dropdown -->
+                <nav aria-label="page size" class="me-3 mr-2">
+                    <select class="form-control" name="size" asp-for="@Model.Size" onchange="onChangeSubmit()">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </nav>
+
+                <!-- Pagination Controls -->
+                <nav aria-label="Pagination">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <button type="button" class="page-link @(projectPagination.TotalItems <= pageSize ? "disable" : "") " aria-label="Previous" @(projectPagination.PageIndex == 1 ? "disabled" : "") onclick="updatePageIndex(@(projectPagination.PageIndex - 1))">
+                                <span aria-hidden="true">Prev</span>
+                            </button>
+                        </li>
+                        @for (int i = 1; i <= projectPagination.TotalPages; i++)
+                        {
+                            <li class="page-item @(projectPagination.PageIndex == i ? "active" : "")">
+                                <button type="button" class="page-link" onclick="updatePageIndex(@i)">@i</button>
+                            </li>
+                        }
+                        <li class="page-item">
+                            <button type="button" class="page-link @(projectPagination.TotalItems <= pageSize ? "disable" : "")" aria-label="Next" @(projectPagination.PageIndex == projectPagination.TotalPages ? "disabled" : "") onclick="updatePageIndex(@(projectPagination.PageIndex + 1))">
+                                <span aria-hidden="true">Next</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </form>
         </div>
     </div>
 </body>
 </html>
+
+@section Scripts {
+    <script>
+        function updatePageIndex(newIndex) {
+            document.getElementById('hiddenPageIndex').value = newIndex;
+            document.getElementById('paginationForm').submit();
+        }
+
+        function onChangeSubmit() {
+            document.getElementById('paginationForm').submit();
+        }
+    </script>
+
+}

@@ -10,6 +10,7 @@ using MBS.Services.Services.Implements;
 using MBS.Services.Utils;
 using MBS.Services.Models.Responses.Project;
 using Mapster;
+using MBS.Razor.Pages.AdminPage.MentorPage.Models;
 
 namespace MBS.Razor.Pages.AdminPage.ProjectPage;
 
@@ -54,6 +55,33 @@ public class Index : BaseAdminPage
         {
             SaveTempData(TempDataKeys.ErrorMessage, "Some error occurred");
             return RedirectToPage(RouteEndpoints.AdminProject);
+        }
+
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostPageNavigate(string pageIndex, string size)
+    {
+        try
+        {
+            var projectPagination = GetTempData<Pagination<MentorModel>>(TempDataKeys.AdminKeys.ProjectPagination)!;
+            //set pageIndex and page Size
+            Size = int.Parse(size);
+            //if total item from previous load * previous total pages is lower or equal then new size -> pageIndex = 1
+            if ((projectPagination.TotalItems * projectPagination.TotalItems) <= Size)
+                PageIndex = 1;
+            else
+                PageIndex = int.Parse(pageIndex);
+            //Save temp data to next use
+            SaveTempData(TempDataKeys.PageIndex, PageIndex);
+            SaveTempData(TempDataKeys.PageSize, Size);
+            //Load data pagination from api
+            await LoadProject();
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            Redirect(RouteEndpoints.AdminStudent);
         }
 
         return Page();
