@@ -86,4 +86,25 @@ public class Index : BaseAdminPage
 
         return Page();
     }
+
+    public async Task<IActionResult> OnPostSearch(string search)
+    {
+        try
+        {
+            this.search = search;
+            SaveTempData("search", search);
+            //Save temp data to next use
+            SaveTempData(TempDataKeys.PageIndex, 1);
+            SaveTempData(TempDataKeys.PageSize, 2);
+            //Load data pagination from api
+            await LoadProject();
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            Redirect(RouteEndpoints.AdminStudent);
+        }
+
+        return Page();
+    }
 }

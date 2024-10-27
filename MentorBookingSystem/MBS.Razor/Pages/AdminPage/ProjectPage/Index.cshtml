@@ -27,6 +27,24 @@
 </head>
 <body>
     <div>
+        <div class="row align-items-center m-2">
+            <div class="col">
+                <h5>Projects</h5>
+            </div>
+            <div class="col-auto ml-auto d-flex">
+                <form class="form-inline border rounded navbar-search shadow-sm" method="post" asp-page-handler="Search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                               aria-label="Search" aria-describedby="basic-addon2" asp-for="search">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-hover ">
                 <thead>
