@@ -14,5 +14,7 @@ public class ApiEndPoints
     public static string MentorUrl = $"{baseUrl}/mentors";
 
     public static string ProjectUrl = baseUrl + "/projects?search={search}&page={page}&pageSize={pageSize}";
+    public static string Meeting = baseUrl + "/meetings?page={page}&size={size}";
+
 
 }

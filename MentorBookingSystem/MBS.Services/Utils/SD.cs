@@ -28,10 +28,17 @@ public class TempDataKeys
 
         #endregion
 
-        #region  Project Page
+        #region Project Page
 
-        public const string ProjectPagination = "MentorPagination";
-        public const string ChosenProject = "ChosenMentor";
+        public const string ProjectPagination = "ProjectPagination";
+        public const string ChosenProject = "ChosenProject";
+
+        #endregion
+
+        #region Meeting Page
+
+        public const string MeetingPagination = "MeetingPagination";
+        public const string ChosenMeeting = "ChosenMeeting";
 
         #endregion
 

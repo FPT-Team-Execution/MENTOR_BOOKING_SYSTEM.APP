@@ -1,8 +1,21 @@
 ﻿@page
 @model MBS.Razor.Pages.AdminPage.MeetingPage.Index
+@using MBS.Razor.Pages.AdminPage.MeetingPage.Model
+@using MBS.Services.Models
+@using MBS.Services.Utils
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     Layout = "Shared/_LayoutAdmin";
+    string pageName = "Index";
+    //Student Pagination
+    var meetingPagination = Model.GetTempData<Pagination<MeetingModel>>(TempDataKeys.AdminKeys.MeetingPagination)! ?? Model.MeetingPagination;
+    var meetings = meetingPagination.Items.ToArray();
+    //Get search & sort Order
+
+    //Get size and index
+    int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
 }
 
 <!DOCTYPE html>
@@ -12,8 +25,115 @@
     <title></title>
 </head>
 <body>
-<div>
-    <h1>This is Meeting Index Page</h1>
-</div>
+    <div>
+        <div class="row align-items-center m-2">
+            <div class="col">
+                <h5>Meetings</h5>
+            </div>
+            <div class="col-auto ml-auto d-flex">
+                <form class="form-inline border rounded navbar-search shadow-sm" method="post" asp-page-handler="Search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                               aria-label="Search" aria-describedby="basic-addon2" asp-for="search">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover ">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Request ID</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Location</th>
+                        <th scope="col">Meet Up</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (!meetings.Any())
+                        {
+                            <tr>
+                                <td colspan="8">No meetings available</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            for (int i = 0; i < meetings.Count(); i++)
+                            {
+                                var meeting = meetings[i];
+                                var index = meetingPagination.PageSize * (pageIndex - 1) + (i + 1);
+                                <tr id="@meeting.Id" role="button">
+                                    <th scope="row">@index</th>
+                                    <td>@meeting.RequestId</td>
+                                    <td>@meeting.Description</td>
+                                    <td>@meeting.Location</td>
+                                    <td>@meeting.MeetUp</td>
+                                    <td>@meeting.Status</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            @* Pagination Navigaion *@
+            <form id="paginationForm" method="post" asp-page-handler="PageNavigate" class="d-flex justify-content-center">
+                <!-- Input hidden để lưu giá trị pageIndex hiện tại -->
+                <input type="hidden" id="hiddenPageIndex" name="pageIndex" value="@meetingPagination.PageIndex" />
+
+                <!-- Page Size Dropdown -->
+                <nav aria-label="page size" class="me-3 mr-2">
+                    <select class="form-control" name="size" asp-for="@Model.Size" onchange="onChangeSubmit()">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </nav>
+
+                <!-- Pagination Controls -->
+                <nav aria-label="Pagination">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <button type="button" class="page-link @(meetingPagination.TotalItems <= pageSize ? "disable" : "") " aria-label="Previous" @(meetingPagination.PageIndex == 1 ? "disabled" : "") onclick="updatePageIndex(@(meetingPagination.PageIndex - 1))">
+                                <span aria-hidden="true">Prev</span>
+                            </button>
+                        </li>
+                        @for (int i = 1; i <= meetingPagination.TotalPages; i++)
+                        {
+                            <li class="page-item @(meetingPagination.PageIndex == i ? "active" : "")">
+                                <button type="button" class="page-link" onclick="updatePageIndex(@i)">@i</button>
+                            </li>
+                        }
+                        <li class="page-item">
+                            <button type="button" class="page-link @(meetingPagination.TotalItems <= pageSize ? "disable" : "")" aria-label="Next" @(meetingPagination.PageIndex == meetingPagination.TotalPages ? "disabled" : "") onclick="updatePageIndex(@(meetingPagination.PageIndex + 1))">
+                                <span aria-hidden="true">Next</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
+
+@section Scripts {
+    <script>
+        function updatePageIndex(newIndex) {
+            document.getElementById('hiddenPageIndex').value = newIndex;
+            document.getElementById('paginationForm').submit();
+        }
+
+        function onChangeSubmit() {
+            document.getElementById('paginationForm').submit();
+        }
+    </script>
+
+}

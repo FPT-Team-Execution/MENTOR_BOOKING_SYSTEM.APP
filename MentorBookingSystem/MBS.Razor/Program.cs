@@ -18,6 +18,7 @@ builder.Services.AddScoped<IClaimService, ClaimService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IMentorService, MentorService>();
 builder.Services.AddScoped<IProjectService, ProjectService>();
+builder.Services.AddScoped<IMeetingService, MeetingService>();
 
 builder.Services.AddAuthentication(options =>
     {

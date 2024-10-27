@@ -64,7 +64,7 @@ public class Index : BaseAdminPage
     {
         try
         {
-            var projectPagination = GetTempData<Pagination<MentorModel>>(TempDataKeys.AdminKeys.ProjectPagination)!;
+            var projectPagination = GetTempData<Pagination<ProjectModel>>(TempDataKeys.AdminKeys.ProjectPagination)!;
             //set pageIndex and page Size
             Size = int.Parse(size);
             //if total item from previous load * previous total pages is lower or equal then new size -> pageIndex = 1
