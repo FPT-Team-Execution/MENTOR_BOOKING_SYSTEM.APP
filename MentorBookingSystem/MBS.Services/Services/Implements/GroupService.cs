@@ -1,5 +1,6 @@
 ﻿using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Requests.Group;
 using MBS.Services.Models.Responses.Group;
 using MBS.Services.Models.Responses.Major;
 using MBS.Services.Services.Interfaces;
@@ -30,5 +31,18 @@ namespace MBS.Services.Services.Implements
             var response = WebUtils.HandleResponse<BaseModel<Pagination<GroupResponse>>>(result);
             return response;
         }
+
+        public async Task<IResponse> CreateNewGroupAsync(CreateNewGroupRequestModel request)
+        {
+            var result = await WebUtils.PostAsync(
+                ApiEndPoints.GroupUrl,
+                request,
+                token: WebUtils.AccessToken
+            );
+
+            var response = WebUtils.HandleResponse<BaseModel<GroupResponse>>(result);
+            return response;
+        }
+
     }
 }

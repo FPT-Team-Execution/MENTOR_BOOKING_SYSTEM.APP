@@ -2,6 +2,7 @@
 using MBS.Razor.Pages.AdminPage.GroupPage.Model;
 using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Requests.Group;
 using MBS.Services.Models.Responses.Group;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
@@ -35,13 +36,15 @@ namespace MBS.Razor.Pages.AdminPage.GroupPage
             var groupModels = data.ResponseRequestModel.Adapt<Pagination<GroupModel>>();
             GroupPagination = groupModels;
             SaveTempData(TempDataKeys.AdminKeys.GroupPagination, GroupPagination);
+            SaveTempData(TempDataKeys.SearchName, SearchName);
+
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
             try
             {
-                await LoadGroups();
+                 await LoadGroups();
             }
             catch
             {
@@ -57,14 +60,15 @@ namespace MBS.Razor.Pages.AdminPage.GroupPage
             try
             {
                 SearchName = searchName;
-                await LoadGroups();
+                var query = GroupPagination.Items.AsQueryable();
 
                 if (!string.IsNullOrEmpty(SearchName))
                 {
-                    GroupPagination.Items = GroupPagination.Items
-                        .Where(g => g.Name.ToLower().Contains(SearchName.ToLower()))
-                        .ToList();
+                    var words = searchName.Split(" ");
+                    query = query.Where(s => words.All(c => s.ProjectName.ToLower().Contains(c.ToString().ToLower())));
                 }
+                GroupPagination.Items = query.ToList();
+
             }
             catch
             {
@@ -72,14 +76,36 @@ namespace MBS.Razor.Pages.AdminPage.GroupPage
                 return RedirectToPage(RouteEndpoints.AdminGroup);
             }
 
-            return Page();
+            return RedirectToPage("Index");
         }
 
         public async Task<IActionResult> OnPostCreate()
         {
-            // Logic to create a new group
-            // Save the new group using _groupService
-            return RedirectToPage("/Success");
+            if (!ModelState.IsValid)
+            {
+                SaveTempData(TempDataKeys.ErrorMessage, "Please check the input data.");
+                return Page();
+            }
+
+            var request = new CreateNewGroupRequestModel
+            {
+                ProjectId = ChosenGroup.ProjectId,
+                StudentId = ChosenGroup.StudentId,
+                PositionId = ChosenGroup.PositionId
+            };
+
+            var response = await _groupService.CreateNewGroupAsync(request) as BaseModel<GroupResponse>;
+
+            if (response != null && response.IsSuccess)
+            {
+                SaveTempData(TempDataKeys.SuccessMessage, "Group created successfully.");
+                return RedirectToPage("Index"); // Hoặc trang bạn muốn chuyển đến sau khi tạo nhóm thành công
+            }
+            else
+            {
+                SaveTempData(TempDataKeys.ErrorMessage, response?.Message ?? "Failed to create group.");
+                return Page();
+            }
         }
 
         public async Task<IActionResult> OnPostUpdate()

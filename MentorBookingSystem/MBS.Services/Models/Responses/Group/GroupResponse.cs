@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MBS.Services.Models.Responses.Position;
+using MBS.Services.Models.Responses.Project;
+using MBS.Services.Models.Responses.Student;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -9,11 +12,14 @@ namespace MBS.Services.Models.Responses.Group
 {
     public class GroupResponse
     {
-        public Guid ProjectId { get; set; }
+        public string ProjectName { get; set; }
 
-        public string StudentId { get; set; }
 
-        public Guid PositionId { get; set; }
+        public string StudentName{ get; set; }
+
+
+        public string PositionName { get; set; }
+
 
     }
 }

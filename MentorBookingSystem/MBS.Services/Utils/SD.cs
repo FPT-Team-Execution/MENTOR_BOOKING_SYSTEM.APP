@@ -31,7 +31,7 @@ public class TempDataKeys
         #region  Group Page
 
         public const string GroupPagination = "GroupPagination";
-        //public const string ChosenGroup = "ChosenGroup";
+        public const string ChosenGroup = "ChosenGroup";
 
         #endregion
     }
