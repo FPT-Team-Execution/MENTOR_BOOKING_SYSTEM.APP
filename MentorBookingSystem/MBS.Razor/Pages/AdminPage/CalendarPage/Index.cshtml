@@ -13,7 +13,22 @@
 </head>
 <body>
 <div>
-    <h1>This is Calendar Index Page</h1>
+   @*  <h1>This is Calendar Index Page</h1> *@
+        <div id="calendar"></div>
+
 </div>
 </body>
 </html>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: '/MentorPage/CalendarPage/Index?handler=GoogleCalendarEvents' // Event source endpoint
+            });
+            calendar.render();
+        });
+    </script>
+}
