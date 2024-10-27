@@ -12,5 +12,6 @@ public class PageHandlers
     #region Admin
     public const string ShowStudentDetails = "showStudentDetail";
     public const string ShowMentorDetails = "showMentorDetail";
+    public const string ShowGroupDetails = "showGroupDetail";
     #endregion
 }

@@ -1,19 +1,144 @@
 ﻿@page
-@model MBS.Razor.Pages.AdminPage.GroupPage.Index
+@using MBS.Razor.Pages.AdminPage.GroupPage.Model
+@using MBS.Services.Models
+@using MBS.Services.Utils
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Index
 
 @{
     Layout = "Shared/_LayoutAdmin";
+    string pageName = "Index";
+    //* get temp data
+    // Group Pagination
+    var groupPagination = Model.GetTempData<Pagination<GroupModel>>(TempDataKeys.AdminKeys.GroupPagination)! ?? Model.GroupPagination;
+    var groups = groupPagination.Items.ToArray();
+
+    //Get search & sort Order
+    string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
+    string sortOrder = Model.GetTempData<string>(TempDataKeys.SortOrder) ?? Model.SortOrder;
+
+    //Get size and index
+    int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
 }
 
-<!DOCTYPE html>
+<div class="row h-100 my-4">
+    <div class="col-lg-8">
+        <div class="card h-auto">
+            <div class="row align-items-center m-2">
+                <div class="col">
+                    <h5>Groups</h5>
+                </div>
+                <div class="col-auto ml-auto d-flex align-items-center">
+                    <form class="form-inline border rounded navbar-search shadow-sm" method="post" asp-page-handler="Search">
+                        <div class="input-group">
+                            <select class="form-control bg-light border-0 small" name="sortOrder" asp-for="@sortOrder">
+                                <option value="asc" selected>Sort Ascending</option>
+                                <option value="desc">Sort Descending</option>
+                            </select>
 
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    <h1>This is Group Index Page</h1>
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                                   aria-label="Search" aria-describedby="basic-addon2" asp-for="SearchName">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">StudentId</th>
+                            <th scope="col">ProjectId</th>
+                            <th scope="col">PositionId</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (!groups.Any())
+                            {
+                                <tr>
+                                    <td colspan="5">No groups available</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                for (int i = 0; i < groups.Count(); i++)
+                                {
+                                    var group = groups[i];
+                                    var index = groupPagination.PageSize * (pageIndex - 1) + (i + 1);
+                                    <tr id="@group.id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowGroupDetails, new { groupId = @group.id })'">
+                                        <th scope="row">@index</th>
+                                        <td>@group.StudentId</td>
+                                        <td>@group.ProjectId</td>
+                                        <td>@group.PositionId</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @* Pagination Navigation *@
+            <form id="paginationForm" method="post" asp-page-handler="PageNavigate" class="d-flex justify-content-center">
+                <input type="hidden" id="hiddenPageIndex" name="pageIndex" value="@groupPagination.PageIndex" />
+
+                <!-- Page Size Dropdown -->
+                <nav aria-label="page size" class="me-3 mr-2">
+                    <select class="form-control" name="size" asp-for="@Model.Size" onchange="onChangeSubmit()">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </nav>
+
+                <!-- Pagination Controls -->
+                <nav aria-label="Pagination">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <button type="button" class="page-link @(groupPagination.TotalItems <= pageSize ? "disable" : "")" aria-label="Previous" @(groupPagination.PageIndex == 1 ? "disabled" : "") onclick="updatePageIndex(@(groupPagination.PageIndex - 1))">
+                                <span aria-hidden="true">Prev</span>
+                            </button>
+                        </li>
+                        @for (int i = 1; i <= groupPagination.TotalPages; i++)
+                        {
+                            <li class="page-item @(groupPagination.PageIndex == i ? "active" : "")">
+                                <button type="button" class="page-link" onclick="updatePageIndex(@i)">@i</button>
+                            </li>
+                        }
+                        <li class="page-item">
+                            <button type="button" class="page-link @(groupPagination.TotalItems <= pageSize ? "disable" : "")" aria-label="Next" @(groupPagination.PageIndex == groupPagination.TotalPages ? "disabled" : "") onclick="updatePageIndex(@(groupPagination.PageIndex + 1))">
+                                <span aria-hidden="true">Next</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-4 mb-4 h-100">
+        <div class="card">
+            <div class="card-body">
+                @* @await Html.PartialAsync("GroupDetailPartial", Model) *@
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+@section Scripts {
+    <script>
+        function updatePageIndex(newIndex) {
+            document.getElementById('hiddenPageIndex').value = newIndex;
+            document.getElementById('paginationForm').submit();
+        }
+
+        function onChangeSubmit() {
+            document.getElementById('paginationForm').submit();
+        }
+    </script>
+}
