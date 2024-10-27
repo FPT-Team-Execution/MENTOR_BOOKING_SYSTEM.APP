@@ -34,5 +34,12 @@ public class TempDataKeys
         public const string ChosenGroup = "ChosenGroup";
 
         #endregion
+
+        #region  Major Page
+
+        public const string MajorPagination = "MajorPagination";
+        public const string ChosenMajor = "ChosenMajor";
+
+        #endregion
     }
 }

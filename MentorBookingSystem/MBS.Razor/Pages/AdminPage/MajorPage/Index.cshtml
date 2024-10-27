@@ -1,19 +1,149 @@
 ﻿@page
-@model MBS.Razor.Pages.AdminPage.MajorPage.Index
+@using MBS.Razor.Pages.AdminPage.MajorPage.Model
+@using MBS.Services.Models
+@using MBS.Services.Utils
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Index
 
 @{
     Layout = "Shared/_LayoutAdmin";
+    string pageName = "Index";
+    var majorPagination = Model.GetTempData<Pagination<MajorModel>>(TempDataKeys.AdminKeys.MajorPagination) ?? Model.MajorPagination;
+    var majors = majorPagination.Items.ToArray();
+    string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
+    string sortOrder = Model.GetTempData<string>(TempDataKeys.SortOrder) ?? Model.SortOrder;
+    int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    <h1>This is Major Index Page</h1>
+<div class="row h-100 my-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-lg h-auto">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Majors</h5>
+                <div class="d-flex">
+                    <form class="form-inline mr-2" method="post" asp-page-handler="Search">
+                        <div class="input-group">
+                            <select class="form-control" name="sortOrder" asp-for="@sortOrder">
+                                <option value="asc" selected>Sort Ascending</option>
+                                <option value="desc">Sort Descending</option>
+                            </select>
+                            <input type="text" class="form-control ml-2" placeholder="Search for..." aria-label="Search" asp-for="SearchName">
+                            <div class="input-group-append">
+                                <button class="btn btn-light" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <button class="btn btn-success" id="createMajorButton">Create Major</button>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Major Name</th>
+                            <th scope="col">Department</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            if (!majors.Any())
+                            {
+                                <tr>
+                                    <td colspan="3" class="text-center">No majors available</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                for (int i = 0; i < majors.Length; i++)
+                                {
+                                    var major = majors[i];
+                                    var index = majorPagination.PageSize * (pageIndex - 1) + (i + 1);
+                                    <tr id="@major.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowMajorDetails, new { majorId = @major.Id })'">
+                                        <th scope="row">@index</th>
+                                        <td>@major.MajorName</td>
+                                        <td>@major.ParentName</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <form id="paginationForm" method="post" asp-page-handler="PageNavigate" class="d-flex justify-content-center my-3">
+                <input type="hidden" id="hiddenPageIndex" name="pageIndex" value="@majorPagination.PageIndex" />
+                <div class="d-flex align-items-center">
+                    <label class="mr-2 mb-0" for="pageSize">Page Size:</label>
+                    <select id="pageSize" class="form-control" name="size" asp-for="@Model.Size" onchange="onChangeSubmit()">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </div>
+                <nav aria-label="Pagination" class="ml-3">
+                    <ul class="pagination mb-0">
+                        <li class="page-item @(majorPagination.PageIndex == 1 ? "disabled" : "")">
+                            <button type="button" class="page-link" aria-label="Previous" onclick="updatePageIndex(@(majorPagination.PageIndex - 1))">
+                                <span aria-hidden="true">Prev</span>
+                            </button>
+                        </li>
+                        @for (int i = 1; i <= majorPagination.TotalPages; i++)
+                        {
+                            <li class="page-item @(majorPagination.PageIndex == i ? "active" : "")">
+                                <button type="button" class="page-link" onclick="updatePageIndex(@i)">@i</button>
+                            </li>
+                        }
+                        <li class="page-item @(majorPagination.PageIndex == majorPagination.TotalPages ? "disabled" : "")">
+                            <button type="button" class="page-link" aria-label="Next" onclick="updatePageIndex(@(majorPagination.PageIndex + 1))">
+                                <span aria-hidden="true">Next</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card shadow-sm border-0 rounded-lg">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Create New Major</h5>
+            </div>
+            <div class="modal-body">
+                <form method="post" asp-page-handler="Create" id="createMajorForm">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="ChosenMajor.MajorName">Major Name</label>
+                        <input type="text" class="form-control" asp-for="ChosenMajor.MajorName" id="majorName" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="ChosenMajor.ParentId">Department</label>
+                        <input type="text" class="form-control" asp-for="ChosenMajor.ParentId" id="departmentName" disabled>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="submitMajor" disabled>Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+
+@section Scripts {
+    <script>
+        document.getElementById('createMajorButton').addEventListener('click', function () {
+            document.getElementById('majorName').disabled = false;
+            document.getElementById('departmentName').disabled = false;
+            document.getElementById('submitMajor').disabled = false;
+        });
+
+        function updatePageIndex(index) {
+            document.getElementById('hiddenPageIndex').value = index;
+            document.getElementById('paginationForm').submit();
+        }
+
+        function onChangeSubmit() {
+            document.getElementById('paginationForm').submit();
+        }
+    </script>
+}
