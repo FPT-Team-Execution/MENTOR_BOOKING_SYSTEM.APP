@@ -27,5 +27,14 @@ public class TempDataKeys
         public const string ChosenMentor= "ChosenMentor";
 
         #endregion
+
+        #region  Project Page
+
+        public const string ProjectPagination = "MentorPagination";
+        public const string ChosenProject = "ChosenMentor";
+
+        #endregion
+
+
     }
 }
