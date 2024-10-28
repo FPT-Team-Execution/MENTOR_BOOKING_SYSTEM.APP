@@ -15,6 +15,8 @@ public class PageHandlers
     public const string ShowGroupDetails = "showGroupDetail";
     public const string ShowMajorDetails = "showMajorDetail";
     public const string ShowPositionDetails = "showMajorDetail";
+    public const string ShowSkillDetails = "showSkillDetail";
+
 
     #endregion
 }

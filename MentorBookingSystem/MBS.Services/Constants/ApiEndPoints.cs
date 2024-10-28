@@ -17,6 +17,8 @@ public class ApiEndPoints
 
     public static string MajorsUrl = $"{baseUrl}/majors";
     public static string PositionsUrl = $"{baseUrl}/positions";
+    public static string SkillUrl = $"{baseUrl}/skills";
+
 
 
 

@@ -48,5 +48,12 @@ public class TempDataKeys
         public const string ChosenPosition = "ChosenPosition";
 
         #endregion
+
+        #region  Skill Page
+
+        public const string SkillPagination = "SkillPagination";
+        public const string ChosenSkill = "ChosenSkill";
+
+        #endregion
     }
 }

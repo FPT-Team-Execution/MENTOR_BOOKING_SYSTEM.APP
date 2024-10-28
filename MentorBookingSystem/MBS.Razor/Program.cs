@@ -19,6 +19,8 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IMentorService, MentorService>();
 builder.Services.AddScoped<IGroupService, GroupService>();
 builder.Services.AddScoped<IPositionService, PositionService>();
+builder.Services.AddScoped<ISkillService, SkillService>();
+
 
 builder.Services.AddAuthentication(options =>
     {
