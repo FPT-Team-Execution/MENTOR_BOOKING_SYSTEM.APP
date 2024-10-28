@@ -16,6 +16,8 @@ public class ApiEndPoints
     public static string GroupUrl = $"{baseUrl}/groups";
 
     public static string MajorsUrl = $"{baseUrl}/majors";
+    public static string PositionsUrl = $"{baseUrl}/positions";
+
 
 
 

@@ -41,5 +41,12 @@ public class TempDataKeys
         public const string ChosenMajor = "ChosenMajor";
 
         #endregion
+
+        #region  Position Page
+
+        public const string PositionPagination = "PositionPagination";
+        public const string ChosenPosition = "ChosenPosition";
+
+        #endregion
     }
 }
