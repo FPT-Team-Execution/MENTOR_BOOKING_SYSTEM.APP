@@ -45,7 +45,11 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Major Name</th>
-                            <th scope="col">Department</th>
+                            <th scope="col">Parent Name</th>
+                            <th scope="col">Create on</th>
+                            <th scope="col">Update on</th>
+
+
                         </tr>
                     </thead>
                     <tbody>
@@ -64,8 +68,11 @@
                                     var index = majorPagination.PageSize * (pageIndex - 1) + (i + 1);
                                     <tr id="@major.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowMajorDetails, new { majorId = @major.Id })'">
                                         <th scope="row">@index</th>
-                                        <td>@major.MajorName</td>
+                                        <td>@major.Name</td>
                                         <td>@major.ParentName</td>
+                                        <td>@major.CreatedOn</td>
+                                        <td>@major.UpdatedOn</td>
+
                                     </tr>
                                 }
                             }
@@ -115,11 +122,11 @@
                 <form method="post" asp-page-handler="Create" id="createMajorForm">
                     <div asp-validation-summary="All" class="text-danger"></div>
                     <div class="form-group">
-                        <label asp-for="ChosenMajor.MajorName">Major Name</label>
-                        <input type="text" class="form-control" asp-for="ChosenMajor.MajorName" id="majorName" disabled>
+                        <label asp-for="ChosenMajor.Name">Major Name</label>
+                        <input type="text" class="form-control" asp-for="ChosenMajor.Name" id="majorName" disabled>
                     </div>
                     <div class="form-group">
-                        <label asp-for="ChosenMajor.ParentId">Department</label>
+                        <label asp-for="ChosenMajor.ParentId">Parent Id</label>
                         <input type="text" class="form-control" asp-for="ChosenMajor.ParentId" id="departmentName" disabled>
                     </div>
                     <button type="submit" class="btn btn-primary" id="submitMajor" disabled>Create</button>
