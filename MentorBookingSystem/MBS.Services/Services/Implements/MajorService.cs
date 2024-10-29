@@ -1,7 +1,9 @@
 ﻿using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
+using MBS.Services.Models.Requests.Major;
 using MBS.Services.Models.Responses;
+using MBS.Services.Models.Responses.Group;
 using MBS.Services.Models.Responses.Major;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
@@ -10,6 +12,18 @@ namespace MBS.Services.Services.Implements;
 
 public class MajorService : IMajorService
 {
+    public async Task<IResponse> CreateNewMajorAsync(CreateNewMajorRequestModel request)
+    {
+        var result = await WebUtils.PostAsync(
+               ApiEndPoints.MajorUrl,
+               request,
+               token: WebUtils.AccessToken
+           );
+
+        var response = WebUtils.HandleResponse<BaseModel<GroupResponse>>(result);
+        return response;
+    }
+
     public async Task<IResponse> GetMajorsAsync(int page, int size)
     {
         var result = await WebUtils.GetAsync
@@ -19,7 +33,8 @@ public class MajorService : IMajorService
             {
                 { "page", page.ToString() },
                 { "size", size.ToString() }
-            }
+            },
+            token: WebUtils.AccessToken
         );
         var response = WebUtils.HandleResponse<BaseModel<Pagination<MajorResponse>>>(result);
         return response;

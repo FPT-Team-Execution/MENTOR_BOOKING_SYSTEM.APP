@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MBS.Services.Models.Requests.Major
+namespace MBS.Services.Models.Requests.Skill
 {
-    public class GetMajorsRequest
+    public class GetSkillsRequest
     {
         public int Page { get; set; }
         public int Size { get; set; }

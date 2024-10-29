@@ -27,5 +27,33 @@ public class TempDataKeys
         public const string ChosenMentor= "ChosenMentor";
 
         #endregion
+
+        #region  Group Page
+
+        public const string GroupPagination = "GroupPagination";
+        public const string ChosenGroup = "ChosenGroup";
+
+        #endregion
+
+        #region  Major Page
+
+        public const string MajorPagination = "MajorPagination";
+        public const string ChosenMajor = "ChosenMajor";
+
+        #endregion
+
+        #region  Position Page
+
+        public const string PositionPagination = "PositionPagination";
+        public const string ChosenPosition = "ChosenPosition";
+
+        #endregion
+
+        #region  Skill Page
+
+        public const string SkillPagination = "SkillPagination";
+        public const string ChosenSkill = "ChosenSkill";
+
+        #endregion
     }
 }

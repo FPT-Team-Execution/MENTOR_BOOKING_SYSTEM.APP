@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MBS.Services.Models.Requests.Major
+namespace MBS.Services.Models.Requests.Position
 {
-    public class GetMajorsRequest
+    public class GetPositionReuqest
     {
         public int Page { get; set; }
         public int Size { get; set; }

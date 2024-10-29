@@ -12,5 +12,11 @@ public class PageHandlers
     #region Admin
     public const string ShowStudentDetails = "showStudentDetail";
     public const string ShowMentorDetails = "showMentorDetail";
+    public const string ShowGroupDetails = "showGroupDetail";
+    public const string ShowMajorDetails = "showMajorDetail";
+    public const string ShowPositionDetails = "showMajorDetail";
+    public const string ShowSkillDetails = "showSkillDetail";
+
+
     #endregion
 }

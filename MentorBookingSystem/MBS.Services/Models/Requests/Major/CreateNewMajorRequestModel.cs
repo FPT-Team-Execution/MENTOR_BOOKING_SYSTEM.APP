@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace MBS.Services.Models.Requests.Major
 {
-    public class GetMajorsRequest
+    public class CreateNewMajorRequestModel
     {
-        public int Page { get; set; }
-        public int Size { get; set; }
+        public string MajorName { get; set; }
+        public Guid ParentId{ get; set; }
+
     }
 }
