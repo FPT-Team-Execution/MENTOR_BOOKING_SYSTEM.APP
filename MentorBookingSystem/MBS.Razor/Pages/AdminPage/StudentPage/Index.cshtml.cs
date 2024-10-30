@@ -2,6 +2,7 @@
 using MBS.Razor.Pages.AdminPage.StudentPage.Models;
 using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Requests.Student;
 using MBS.Services.Models.Responses.Major;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
@@ -162,42 +163,45 @@ public class Index : BaseAdminPage
         return Page();
     }
 
-    public IActionResult OnPostCreate()
+    public async Task<IActionResult> OnPostCreate()
     {
-        // Thực hiện logic tạo sinh viên mới
-        return RedirectToPage("/Success");
+        return await OnGetAsync();
     }
 
-    public IActionResult OnPostUpdate()
+    public async Task<IActionResult> OnPutUpdate(StudentModel student)
     {
-        // Thực hiện logic cập nhật sinh viên
-        return RedirectToPage("/Success");
+        var studentModelRequest = student.Adapt<UpdateStudentRequest>();
+        var data = await _studentService.UpdateStudentAsync(studentModelRequest);
+        if (!data.IsSuccess)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            return await OnGetShowStudentDetail(student.Id);
+        }
+        //Load data
+        await LoadStudents();
+        SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
+        SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
+        return await OnGetShowStudentDetail(student.Id);
     }
-
-    public IActionResult OnPostDelete(string studentId)
+    
+    public async Task<IActionResult> OnPost(StudentModel chosenStudent, string action)
     {
-        // Thực hiện logic xóa sinh viên
-        return RedirectToPage("/Success");
-    }
-
-    public IActionResult OnPost(StudentModel chosenStudent, string action)
-    {
-        var action2 = Request.Form["action"];
-        if (action == "create")
+        try
         {
-            return OnPostCreate();
+            switch (action)
+            {
+                case "create":
+                    return await OnPostCreate();
+                case "update":
+                    return await OnPutUpdate(chosenStudent);
+                default:
+                    return Page();
+            }
         }
-
-        if (action == "update")
+        catch (Exception e)
         {
-            return OnPostUpdate();
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            return Redirect(RouteEndpoints.AdminStudent);
         }
-
-        if (action == "delete")
-        {
-            return OnPostDelete(chosenStudent.Id);
-        }
-
-        return Page();
     }
 }
