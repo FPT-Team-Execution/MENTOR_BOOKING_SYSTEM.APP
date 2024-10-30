@@ -7,20 +7,18 @@
 
 @{
     Layout = "Shared/_LayoutAdmin";
-    string pageName = "Index";  
+    string pageName = "Index";
     //* get temp data
     //Student Pagination 
-    var studentPagination = Model.GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)! ?? Model.StudentPagination;
-    var students = studentPagination.Items.ToArray();
+    var studentPagination = Model.GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination);
+    var students = studentPagination == null ? Array.Empty<StudentModel>() : studentPagination.Items.ToArray();
     //Get search & sort Order
     string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
     string sortOrder = Model.GetTempData<string>(TempDataKeys.SortOrder) ?? Model.SortOrder;
-    
+
     //Get size and index
-    int pageSize =  int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString()) ;
-    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString()) ;
-    
-    
+    int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
 }
 
 
@@ -34,7 +32,7 @@
                 <div class="col-auto ml-auto d-flex align-items-center">
                     <form class="form-inline border rounded navbar-search shadow-sm" method="post" asp-page-handler="Search">
                         <div class="input-group">
-                            <select class="form-control bg-light border-0 small" name="sortOrder" asp-for="@sortOrder" >
+                            <select class="form-control bg-light border-0 small" name="sortOrder" asp-for="@sortOrder">
                                 <option value="asc" selected>Sort Ascending</option>
                                 <option value="desc">Sort Descending</option>
                             </select>
@@ -70,7 +68,7 @@
                     </thead>
                     <tbody>
                     @{
-                        if (!students.Any())
+                        @if (!students.Any())
                         {
                             <tr>
                                 <td colspan="8">No students available</td>
@@ -82,7 +80,7 @@
                             {
                                 var student = students[i];
                                 var index = studentPagination.PageSize * (pageIndex - 1) + (i + 1);
-                                <tr id="@student.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowStudentDetails, new { studentId = @student.Id })'">
+                                <tr id="@student.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowStudentDetails, new { studentId = student.Id })'">
                                     <th scope="row">@index</th>
                                     <td>@student.FullName</td>
                                     <td>@student.Email</td>
@@ -90,17 +88,14 @@
                                     <td>@student.WalletPoint</td>
                                     <td>
                                         <div class="dropdown no-arrow text-center">
-                                            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fas fa-solid fa-image"></i>
                                             </a>
                                             <!-- Dropdown - Alerts -->
-                                            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                                                 aria-labelledby="alertsDropdown">
+                                            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in" aria-labelledby="alertsDropdown">
                                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                                     <div class="me-3">
-                                                        <img src="@(student.AvatarUrl ?? "https://via.placeholder.com/150")"
-                                                             alt="Transaction Image" width="150" height="150">
+                                                        <img src="@(student.AvatarUrl ?? "https://via.placeholder.com/150")" alt="Transaction Image" width="150" height="150">
                                                     </div>
                                                 </a>
                                             </div>
