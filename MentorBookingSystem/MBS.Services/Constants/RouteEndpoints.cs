@@ -2,6 +2,7 @@
 
 public static class RouteEndpoints
 {
+    public const string UnhandledException = "/UnhandledExceptionPage";
     #region Auth Routes
 
     public const string Login = "/Login";
