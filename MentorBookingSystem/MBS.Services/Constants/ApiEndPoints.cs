@@ -10,7 +10,10 @@ public class ApiEndPoints
     public static string RegisterUrl = $"{baseUrl}/auth/sign-up";
 
     public static string MajorUrl = $"{baseUrl}/majors";
+    
     public static string StudentUrl = $"{baseUrl}/students";
+    public static string StudentUpdateUrl = $"{StudentUrl}/profile";
+
     public static string MentorUrl = $"{baseUrl}/mentors";
 
     public static string GroupUrl = $"{baseUrl}/groups";
