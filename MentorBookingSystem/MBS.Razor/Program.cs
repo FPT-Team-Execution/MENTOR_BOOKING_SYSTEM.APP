@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using MBS.Razor.Extensions;
 using MBS.Services.Constants;
 using MBS.Services.Models.Responses.Student;
 using MBS.Services.Services.Implements;
@@ -53,7 +54,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRouting();
 app.UseHttpsRedirection();
 app.UseStaticFiles();

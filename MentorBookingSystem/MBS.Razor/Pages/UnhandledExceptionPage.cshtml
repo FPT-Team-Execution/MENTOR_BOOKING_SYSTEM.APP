@@ -1,0 +1,15 @@
+﻿@page
+@model MBS.Razor.Pages.UnhandledExceptionPageModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="row vh-100 rounded align-items-center justify-content-center mx-0">
+    <div class="col-md-6 text-center p-4">
+        <i class="bi bi-bug-fill display-1 text-danger"></i>
+        <h1 class="mb-4">Some Error Occured</h1>
+        <p class="mb-4">We’re sorry, system has errors that we unhandle</p>
+        <a class="btn btn-danger rounded-pill py-3 px-5" asp-page-handler="goback">Go Back</a>
+    </div>
+</div>
