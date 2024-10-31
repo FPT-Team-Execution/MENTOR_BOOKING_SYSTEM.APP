@@ -170,7 +170,7 @@ public class Index : BaseAdminPage
         var data = await _studentService.CreateStudentAsync(studentModelRequest);
         if (!data.IsSuccess)
         {
-            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Error: " + data.Message);
             return await OnGetShowStudentDetail(student.Id);
         }
         //Load data
