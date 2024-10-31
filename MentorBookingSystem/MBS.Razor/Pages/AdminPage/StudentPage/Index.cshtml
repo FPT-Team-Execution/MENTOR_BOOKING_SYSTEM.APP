@@ -104,7 +104,7 @@
                                     <td>@student.Gender</td>
                                     <td>@student.Birthday?.ToString("MM/dd/yyyy")</td> <!-- Format the date as needed -->
                                     <td>
-                                        <span class="badge bg-success text-white">@(student.LockoutEnabled ? "Locked" : "Active")</span>
+                                        <span class="badge @(student.LockoutEnd == null ? "bg-success" : "bg-danger")  text-white">@(student.LockoutEnd == null ? "Active" : "Locked")</span>
                                     </td>
                                 </tr>
                             }

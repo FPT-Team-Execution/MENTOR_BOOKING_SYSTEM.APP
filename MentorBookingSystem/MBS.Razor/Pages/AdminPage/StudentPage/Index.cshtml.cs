@@ -14,11 +14,12 @@ public class Index : BaseAdminPage
 {
     public Pagination<StudentModel> StudentPagination { get; set; } = new();
     public List<MajorResponse> Majors { get; set; } = new();
+    [BindProperty]public int NewPoint { get; set; } = 0;
+
     [BindProperty] public StudentModel ChosenStudent { get; set; } = new();
 
     public string SortOrder { get; set; } = "asc";
     public string SearchName { get; set; } = string.Empty;
-    
     public int Size { get; set; } = 5;
     public int PageIndex { get; set; } = 1;
     
@@ -163,13 +164,102 @@ public class Index : BaseAdminPage
         return Page();
     }
 
-    public async Task<IActionResult> OnPostCreate()
+    public async Task<IActionResult> OnPostCreate(StudentModel student)
     {
-        return await OnGetAsync();
+        var studentModelRequest = student.Adapt<CreateStudentRequest>();
+        var data = await _studentService.CreateStudentAsync(studentModelRequest);
+        if (!data.IsSuccess)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Error: " + data.Message);
+            return await OnGetShowStudentDetail(student.Id);
+        }
+        //Load data
+        await LoadStudents();
+        SaveTempDataString(TempDataKeys.SuccessMessage, "Create Successful");
+        SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
+        return await OnGetShowStudentDetail(student.Id);
     }
 
     public async Task<IActionResult> OnPutUpdate(StudentModel student)
     {
+        var studentModelRequest = student.Adapt<UpdateStudentRequest>();
+        var data = await _studentService.UpdateStudentAsync(studentModelRequest);
+        if (!data.IsSuccess)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            return await OnGetShowStudentDetail(student.Id);
+        }
+        //Load data
+        await LoadStudents();
+        SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
+        SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
+        return await OnGetShowStudentDetail(student.Id);
+    }
+    public async Task<IActionResult> OnPutDebitPoint(string studentId)
+    {
+        var student = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
+        if (student == null)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
+            return Page();
+        }
+        
+        //debit point
+        student.WalletPoint += NewPoint;
+        //reset new point
+        NewPoint = 0;
+        var studentModelRequest = student.Adapt<UpdateStudentRequest>();
+        var data = await _studentService.UpdateStudentAsync(studentModelRequest);
+        if (!data.IsSuccess)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            return await OnGetShowStudentDetail(student.Id);
+        }
+        //Load data
+        await LoadStudents();
+        SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
+        SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
+        return await OnGetShowStudentDetail(student.Id);
+    }
+    public async Task<IActionResult> OnPutCreditPoint(String studentId)
+    {
+        var student = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
+        if (student == null)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
+            return Page();
+        }
+        
+        //credit point
+        student.WalletPoint -= NewPoint;
+        //reset point
+        NewPoint = 0;
+        var studentModelRequest = student.Adapt<UpdateStudentRequest>();
+        var data = await _studentService.UpdateStudentAsync(studentModelRequest);
+        if (!data.IsSuccess)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            return await OnGetShowStudentDetail(student.Id);
+        }
+        //Load data
+        await LoadStudents();
+        SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
+        SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
+        return await OnGetShowStudentDetail(student.Id);
+    }
+    public async Task<IActionResult> OnPutCreditModify(string studentId)
+    {
+        var student = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
+        if (student == null)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
+            return Page();
+        }
+        
+        //debit point
+        student.WalletPoint = NewPoint;
+        //reset point
+        NewPoint = 0;
         var studentModelRequest = student.Adapt<UpdateStudentRequest>();
         var data = await _studentService.UpdateStudentAsync(studentModelRequest);
         if (!data.IsSuccess)
@@ -191,9 +281,15 @@ public class Index : BaseAdminPage
             switch (action)
             {
                 case "create":
-                    return await OnPostCreate();
+                    return await OnPostCreate(chosenStudent);
                 case "update":
                     return await OnPutUpdate(chosenStudent);
+                case "point-debit":
+                    return await OnPutDebitPoint(chosenStudent.Id);
+                case "point-credit":
+                    return await OnPutCreditPoint(chosenStudent.Id);
+                case "point-modify":
+                    return await OnPutCreditPoint(chosenStudent.Id);
                 default:
                     return Page();
             }

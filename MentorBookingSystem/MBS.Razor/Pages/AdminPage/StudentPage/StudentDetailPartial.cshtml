@@ -1,6 +1,6 @@
 @using MBS.Razor.Pages.AdminPage.StudentPage.Models
 @using MBS.Services.Utils
-@model MBS.Razor.Pages.AdminPage.BaseAdminPage
+@model MBS.Razor.Pages.AdminPage.StudentPage.Index
 @{
     var chosenStudent = Model.GetTempData<StudentModel>(TempDataKeys.AdminKeys.ChosenStudent, isKeep: false) ?? new StudentModel();
     var majors = Model.GetTempData<IEnumerable<MajorModel>>(TempDataKeys.AdminKeys.Majors) ?? [];
@@ -33,16 +33,16 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="@chosenStudent.WalletPoint" class="form-label">Point</label>
+            <label asp-for="@Model.NewPoint" class="form-label">Point</label>
             <div class="d-inline-flex flex-nowrap w-100">
-                <input placeholder="0" type="text" class="form-control mr-2" asp-for="@chosenStudent.WalletPoint">
-                <button class="btn btn-success mr-2" title="credit">
+                <input placeholder="0" type="text" class="form-control mr-2" asp-for="@Model.NewPoint">
+                <button class="btn btn-success mr-2" title="add" type="submit" name="action" value="point-debit">
                     <i class="fas fa-solid fa-arrow-up"></i>
                 </button>
-                <button class="btn btn-danger mr-2" title="debit">
+                <button class="btn btn-danger mr-2" title="subtract" type="submit" name="action" value="point-credit">
                     <i class="fas fa-solid fa-arrow-down"></i>
                 </button>
-                <button class="btn btn-primary mr-2" title="edit point balance">
+                <button class="btn btn-primary mr-2" title="edit point balance" type="submit" name="action" value="point-modify">
                     <i class="fas fa-solid fa-pen"></i>
                 </button>
             </div>
