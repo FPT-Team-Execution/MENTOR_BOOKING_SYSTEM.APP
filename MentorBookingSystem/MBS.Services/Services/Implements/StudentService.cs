@@ -51,7 +51,7 @@ public class StudentService : IStudentService
         return response;
     }
 
-    public async Task<BaseModel<UpdateStudentResponse, CreateStudentRequest>> CreateStudentAsync(CreateStudentRequest student)
+    public async Task<BaseModel<CreateStudentResponse, CreateStudentRequest>> CreateStudentAsync(CreateStudentRequest student)
     {
         var token = WebUtils.AccessToken;
         var result = await WebUtils.PostAsync
@@ -65,7 +65,7 @@ public class StudentService : IStudentService
             },
             token: token
         );
-        var response = WebUtils.HandleResponse<BaseModel<UpdateStudentResponse, CreateStudentRequest>>(result);
+        var response = WebUtils.HandleResponse<BaseModel<CreateStudentResponse, CreateStudentRequest>>(result);
         return response;
     }
 }
