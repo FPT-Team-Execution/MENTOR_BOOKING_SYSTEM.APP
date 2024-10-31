@@ -2,6 +2,7 @@
 using MBS.Razor.Pages.AdminPage.MentorPage.Models;
 using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Requests.Mentor;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
@@ -146,5 +147,43 @@ public class Index : BaseAdminPage
         }
 
         return Page();
+    }
+
+    public async Task<IActionResult> OnPutUpdate(MentorModel mentor)
+    {
+        var mentorModelRequest = mentor.Adapt<UpdateMentorRequest>();
+        var data = await _mentorService.UpdateMentorAsync(mentorModelRequest);
+        if (!data.IsSuccess)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            return await OnGetShowMentorDetail(mentor.Id);
+        }
+
+        //Load data
+        await LoadMentors();
+        SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
+        SaveTempData(TempDataKeys.AdminKeys.ChosenMentor, mentor);
+        return await OnGetShowMentorDetail(mentor.Id);
+    }
+
+    public async Task<IActionResult> OnPost(MentorModel chosenMentor, string action)
+    {
+        try
+        {
+            switch (action)
+            {
+                // case "create":
+                //     return await OnPostCreate();
+                case "update":
+                    return await OnPutUpdate(chosenMentor);
+                default:
+                    return Page();
+            }
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            return Redirect(RouteEndpoints.AdminMentor);
+        }
     }
 }

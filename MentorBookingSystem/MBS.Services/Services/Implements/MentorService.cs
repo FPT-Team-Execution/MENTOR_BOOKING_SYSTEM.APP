@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MBS.Services.Models.Requests.Mentor;
 using MBS.Services.Models.Responses.Mentor;
 
 namespace MBS.Services.Services.Implements
@@ -24,6 +25,24 @@ namespace MBS.Services.Services.Implements
                     { "size", size.ToString() }
                 });
             var response = WebUtils.HandleResponse<BaseModel<Pagination<MentorResponse>>>(result);
+            return response;
+        }
+
+        public async Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request)
+        {
+            var token = WebUtils.AccessToken;
+            var result = await WebUtils.PutAsync
+            (
+                ApiEndPoints.MentorUpdateUrl,
+                data: request,
+                headers: new Dictionary<string, string>
+                {
+                    { "Accept-Charset", "utf-8" },
+                    { "Authorization", $"Bearer {token}" }
+                },
+                token: token
+            );
+            var response = WebUtils.HandleResponse<BaseModel<UpdateMentorResponse>>(result);
             return response;
         }
     }
