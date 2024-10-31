@@ -50,4 +50,22 @@ public class StudentService : IStudentService
         var response = WebUtils.HandleResponse<BaseModel<UpdateStudentResponse>>(result);
         return response;
     }
+
+    public async Task<BaseModel<UpdateStudentResponse, CreateStudentRequest>> CreateStudentAsync(CreateStudentRequest student)
+    {
+        var token = WebUtils.AccessToken;
+        var result = await WebUtils.PostAsync
+        (
+            ApiEndPoints.StudentCreateUrl,
+            data: student,
+            headers: new Dictionary<string, string>
+            {
+                { "Accept-Charset", "utf-8" },
+                { "Authorization", $"Bearer {token}" }
+            },
+            token: token
+        );
+        var response = WebUtils.HandleResponse<BaseModel<UpdateStudentResponse, CreateStudentRequest>>(result);
+        return response;
+    }
 }

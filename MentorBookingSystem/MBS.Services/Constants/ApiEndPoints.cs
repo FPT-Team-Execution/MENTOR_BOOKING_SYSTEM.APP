@@ -13,6 +13,7 @@ public class ApiEndPoints
     
     public static string StudentUrl = $"{baseUrl}/students";
     public static string StudentUpdateUrl = $"{StudentUrl}/profile";
+    public static string StudentCreateUrl = StudentUrl;
 
     public static string MentorUrl = $"{baseUrl}/mentors";
 
