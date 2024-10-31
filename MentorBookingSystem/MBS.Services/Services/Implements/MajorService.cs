@@ -12,13 +12,35 @@ namespace MBS.Services.Services.Implements;
 
 public class MajorService : IMajorService
 {
+    public async Task<IResponse> GetMentorMajorsAsync(GetMentorMajorsRequest request)
+    {
+        var token = WebUtils.AccessToken;
+        var result = await WebUtils.GetAsync
+        (
+            ApiEndPoints.MentorMajorUrl(request.MentorId),
+            queryParams: new Dictionary<string, string?>()
+            {
+                { "page", request.Page.ToString() },
+                { "size", request.Size.ToString() }
+            },
+            headers: new Dictionary<string, string>
+            {
+                { "Accept-Charset", "utf-8" },
+                { "Authorization", $"Bearer {token}" }
+            },
+            token: token
+        );
+        var response = WebUtils.HandleResponse<BaseModel<Pagination<MentorMajorsResponse>>>(result);
+        return response;
+    }
+
     public async Task<IResponse> CreateNewMajorAsync(CreateNewMajorRequestModel request)
     {
         var result = await WebUtils.PostAsync(
-               ApiEndPoints.MajorUrl,
-               request,
-               token: WebUtils.AccessToken
-           );
+            ApiEndPoints.MajorUrl,
+            request,
+            token: WebUtils.AccessToken
+        );
 
         var response = WebUtils.HandleResponse<BaseModel<GroupResponse>>(result);
         return response;

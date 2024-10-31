@@ -2,6 +2,7 @@
 using MBS.Razor.Pages.AdminPage.MentorPage.Models;
 using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Requests.Degree;
 using MBS.Services.Models.Requests.Mentor;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Services.Interfaces;
@@ -62,6 +63,16 @@ public class Index : BaseAdminPage
         {
             MentorPagination = GetTempData<Pagination<MentorModel>>(TempDataKeys.AdminKeys.MentorPagination)!;
             ChosenMentor = MentorPagination.Items.FirstOrDefault(x => x.Id == mentorId);
+
+            var degrees = await _mentorService.GetMentorDegrees(new GetMentorDegreeRequest()
+            {
+                MentorId = mentorId,
+                Page = 1,
+                Size = 100
+            });
+
+            var majors = await _majorService.get
+            
             SaveTempData(TempDataKeys.AdminKeys.ChosenMentor, ChosenMentor);
             if (ChosenMentor == null)
                 SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");

@@ -53,10 +53,9 @@ namespace MBS.Services.Services.Implements
             var token = WebUtils.AccessToken;
             var result = await WebUtils.GetAsync
             (
-                ApiEndPoints.MentorDegreeDisplayUrl,
+                ApiEndPoints.MentorDegreeUrl(request.MentorId),
                 queryParams: new Dictionary<string, string?>()
                 {
-                    { "mentorId", request.MentorId },
                     { "page", request.Page.ToString() },
                     { "size", request.Size.ToString() }
                 },
