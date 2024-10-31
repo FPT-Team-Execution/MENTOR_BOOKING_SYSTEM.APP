@@ -8,7 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MBS.Services.Models.Requests.Degree;
 using MBS.Services.Models.Requests.Mentor;
+using MBS.Services.Models.Responses.Degree;
 using MBS.Services.Models.Responses.Mentor;
 
 namespace MBS.Services.Services.Implements
@@ -43,6 +45,29 @@ namespace MBS.Services.Services.Implements
                 token: token
             );
             var response = WebUtils.HandleResponse<BaseModel<UpdateMentorResponse>>(result);
+            return response;
+        }
+
+        public async Task<IResponse> GetMentorDegrees(GetMentorDegreeRequest request)
+        {
+            var token = WebUtils.AccessToken;
+            var result = await WebUtils.GetAsync
+            (
+                ApiEndPoints.MentorDegreeDisplayUrl,
+                queryParams: new Dictionary<string, string?>()
+                {
+                    { "mentorId", request.MentorId },
+                    { "page", request.Page.ToString() },
+                    { "size", request.Size.ToString() }
+                },
+                headers: new Dictionary<string, string>
+                {
+                    { "Accept-Charset", "utf-8" },
+                    { "Authorization", $"Bearer {token}" }
+                },
+                token: token
+            );
+            var response = WebUtils.HandleResponse<BaseModel<Pagination<DegreesResponse>>>(result);
             return response;
         }
     }

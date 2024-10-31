@@ -16,6 +16,7 @@ public class ApiEndPoints
 
     public static string MentorUrl = $"{baseUrl}/mentors";
     public static string MentorUpdateUrl = $"{MentorUrl}/profile";
+    public static string MentorDegreeDisplayUrl = $"{MentorUrl}/degree-display";
 
     public static string GroupUrl = $"{baseUrl}/groups";
 
