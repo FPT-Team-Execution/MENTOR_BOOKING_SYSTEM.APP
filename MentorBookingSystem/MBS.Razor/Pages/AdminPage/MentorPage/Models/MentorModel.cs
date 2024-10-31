@@ -1,3 +1,4 @@
+using MBS.Services.Models.Responses.Degree;
 using MBS.Services.Models.Responses.Major;
 
 namespace MBS.Razor.Pages.AdminPage.MentorPage.Models;
@@ -5,9 +6,12 @@ namespace MBS.Razor.Pages.AdminPage.MentorPage.Models;
 public class MentorModel
 {
     public string Id { get; set; } = string.Empty;
-    public string? Industry { get; set; }  = string.Empty;
+    public string? Industry { get; set; } = string.Empty;
     public int ConsumePoint { get; set; } = 0;
-    public IEnumerable<MajorResponse>? Major { get; set; }
+
+    public IEnumerable<MajorResponse> Majors { get; set; }
+
+    public IEnumerable<DegreeResponse> Degrees { get; set; }
 
     //inheritant
     public string FullName { get; set; } = string.Empty;

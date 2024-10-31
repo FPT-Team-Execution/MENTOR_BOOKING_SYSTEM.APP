@@ -2,6 +2,11 @@
 using MBS.Razor.Pages.AdminPage.MentorPage.Models;
 using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Requests.Degree;
+using MBS.Services.Models.Requests.Major;
+using MBS.Services.Models.Requests.Mentor;
+using MBS.Services.Models.Responses.Degree;
+using MBS.Services.Models.Responses.Major;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
@@ -60,7 +65,27 @@ public class Index : BaseAdminPage
         try
         {
             MentorPagination = GetTempData<Pagination<MentorModel>>(TempDataKeys.AdminKeys.MentorPagination)!;
-            ChosenMentor = MentorPagination.Items.FirstOrDefault(x => x.Id == mentorId);
+            ChosenMentor = MentorPagination.Items.First(x => x.Id == mentorId);
+
+            var degrees = (BaseModel<Pagination<DegreeResponse>>)await _mentorService.GetMentorDegrees(
+                new GetMentorDegreeRequest()
+                {
+                    MentorId = mentorId,
+                    Page = 1,
+                    Size = 100
+                });
+
+            var majors = (BaseModel<Pagination<MajorResponse>>)await _majorService.GetMentorMajorsAsync(
+                new GetMentorMajorsRequest()
+                {
+                    MentorId = mentorId,
+                    Page = 1,
+                    Size = 100
+                });
+
+            ChosenMentor.Majors = majors.ResponseRequestModel.Items.Adapt<IEnumerable<MajorResponse>>();
+            ChosenMentor.Degrees = degrees.ResponseRequestModel.Items.Adapt<IEnumerable<DegreeResponse>>();
+
             SaveTempData(TempDataKeys.AdminKeys.ChosenMentor, ChosenMentor);
             if (ChosenMentor == null)
                 SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
@@ -146,5 +171,43 @@ public class Index : BaseAdminPage
         }
 
         return Page();
+    }
+
+    public async Task<IActionResult> OnPutUpdate(MentorModel mentor)
+    {
+        var mentorModelRequest = mentor.Adapt<UpdateMentorRequest>();
+        var data = await _mentorService.UpdateMentorAsync(mentorModelRequest);
+        if (!data.IsSuccess)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            return await OnGetShowMentorDetail(mentor.Id);
+        }
+
+        //Load data
+        await LoadMentors();
+        SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
+        SaveTempData(TempDataKeys.AdminKeys.ChosenMentor, mentor);
+        return await OnGetShowMentorDetail(mentor.Id);
+    }
+
+    public async Task<IActionResult> OnPost(MentorModel chosenMentor, string action)
+    {
+        try
+        {
+            switch (action)
+            {
+                // case "create":
+                //     return await OnPostCreate();
+                case "update":
+                    return await OnPutUpdate(chosenMentor);
+                default:
+                    return Page();
+            }
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            return Redirect(RouteEndpoints.AdminMentor);
+        }
     }
 }
