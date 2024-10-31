@@ -30,7 +30,7 @@ public class MajorService : IMajorService
             },
             token: token
         );
-        var response = WebUtils.HandleResponse<BaseModel<Pagination<MentorMajorsResponse>>>(result);
+        var response = WebUtils.HandleResponse<BaseModel<Pagination<MajorResponse>>>(result);
         return response;
     }
 
