@@ -66,6 +66,7 @@ namespace MBS.Services.Services.Implements
                 },
                 token: token
             );
+            
             var response = WebUtils.HandleResponse<BaseModel<Pagination<DegreesResponse>>>(result);
             return response;
         }
