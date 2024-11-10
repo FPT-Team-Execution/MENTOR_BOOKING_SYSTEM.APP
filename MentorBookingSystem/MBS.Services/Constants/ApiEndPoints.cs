@@ -1,4 +1,4 @@
-﻿namespace MBS.Services.Constants;
+namespace MBS.Services.Constants;
 
 public class ApiEndPoints
 {
@@ -19,6 +19,10 @@ public class ApiEndPoints
     public static string MentorUrl = $"{baseUrl}/mentors";
     public static string MentorUpdateUrl = $"{MentorUrl}/profile";
     public static string MentorDegreeUrl(string mentorId) => $"{MentorUrl}/{mentorId}/degrees";
+
+    public static string ProjectUrl = baseUrl + "/projects?search={search}&page={page}&pageSize={pageSize}";
+    public static string Meeting = baseUrl + "/meetings?page={page}&size={size}";
+
 
 
     public static string GroupUrl = $"{baseUrl}/groups";

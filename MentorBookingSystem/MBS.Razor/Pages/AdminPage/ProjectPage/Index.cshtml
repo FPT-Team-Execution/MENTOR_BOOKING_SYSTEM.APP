@@ -1,8 +1,22 @@
 ﻿@page
 @model MBS.Razor.Pages.AdminPage.ProjectPage.Index
+@using MBS.Razor.Pages.AdminPage.ProjectPage.Models
+@using MBS.Services.Models
+@using MBS.Services.Utils
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 
 @{
     Layout = "Shared/_LayoutAdmin";
+    string pageName = "Index";
+    //Student Pagination
+    var projectPagination = Model.GetTempData<Pagination<ProjectModel>>(TempDataKeys.AdminKeys.ProjectPagination)! ?? Model.ProjectPagination;
+    var projects = projectPagination.Items.ToArray();
+    //Get search & sort Order
+    string search = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.search;
+
+    //Get size and index
+    int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
 }
 
 <!DOCTYPE html>
@@ -12,8 +26,115 @@
     <title></title>
 </head>
 <body>
-<div>
-    <h1>This is Project Index Page</h1>
-</div>
+    <div>
+        <div class="row align-items-center m-2">
+            <div class="col">
+                <h5>Projects</h5>
+            </div>
+            <div class="col-auto ml-auto d-flex">
+                <form class="form-inline border rounded navbar-search shadow-sm" method="post" asp-page-handler="Search">
+                    <div class="input-group">
+                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
+                               aria-label="Search" aria-describedby="basic-addon2" asp-for="search">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover ">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Due Date</th>
+                        <th scope="col">Semester</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (!projects.Any())
+                        {
+                            <tr>
+                                <td colspan="8">No projects available</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            for (int i = 0; i < projects.Count(); i++)
+                            {
+                                var project = projects[i];
+                                var index = projectPagination.PageSize * (pageIndex - 1) + (i + 1);
+                                <tr id="@project.Id" role="button">
+                                    <th scope="row">@index</th>
+                                    <td>@project.Title</td>
+                                    <td>@project.Description</td>
+                                    <td>@project.DueDate</td>
+                                    <td>@project.Semester</td>
+                                    <td>@project.Status</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            @* Pagination Navigaion *@
+            <form id="paginationForm" method="post" asp-page-handler="PageNavigate" class="d-flex justify-content-center">
+                <!-- Input hidden để lưu giá trị pageIndex hiện tại -->
+                <input type="hidden" id="hiddenPageIndex" name="pageIndex" value="@projectPagination.PageIndex" />
+
+                <!-- Page Size Dropdown -->
+                <nav aria-label="page size" class="me-3 mr-2">
+                    <select class="form-control" name="size" asp-for="@Model.Size" onchange="onChangeSubmit()">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </nav>
+
+                <!-- Pagination Controls -->
+                <nav aria-label="Pagination">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <button type="button" class="page-link @(projectPagination.TotalItems <= pageSize ? "disable" : "") " aria-label="Previous" @(projectPagination.PageIndex == 1 ? "disabled" : "") onclick="updatePageIndex(@(projectPagination.PageIndex - 1))">
+                                <span aria-hidden="true">Prev</span>
+                            </button>
+                        </li>
+                        @for (int i = 1; i <= projectPagination.TotalPages; i++)
+                        {
+                            <li class="page-item @(projectPagination.PageIndex == i ? "active" : "")">
+                                <button type="button" class="page-link" onclick="updatePageIndex(@i)">@i</button>
+                            </li>
+                        }
+                        <li class="page-item">
+                            <button type="button" class="page-link @(projectPagination.TotalItems <= pageSize ? "disable" : "")" aria-label="Next" @(projectPagination.PageIndex == projectPagination.TotalPages ? "disabled" : "") onclick="updatePageIndex(@(projectPagination.PageIndex + 1))">
+                                <span aria-hidden="true">Next</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
+
+@section Scripts {
+    <script>
+        function updatePageIndex(newIndex) {
+            document.getElementById('hiddenPageIndex').value = newIndex;
+            document.getElementById('paginationForm').submit();
+        }
+
+        function onChangeSubmit() {
+            document.getElementById('paginationForm').submit();
+        }
+    </script>
+
+}

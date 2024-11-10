@@ -55,5 +55,21 @@ public class TempDataKeys
         public const string ChosenSkill = "ChosenSkill";
 
         #endregion
+
+        #region Project Page
+
+        public const string ProjectPagination = "ProjectPagination";
+        public const string ChosenProject = "ChosenProject";
+
+        #endregion
+
+        #region Meeting Page
+
+        public const string MeetingPagination = "MeetingPagination";
+        public const string ChosenMeeting = "ChosenMeeting";
+
+        #endregion
+
+
     }
 }
