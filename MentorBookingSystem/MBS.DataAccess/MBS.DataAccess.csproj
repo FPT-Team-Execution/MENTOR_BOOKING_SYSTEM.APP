@@ -7,10 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="DAO\Implements\" />
     <Folder Include="Migrations\" />
-    <Folder Include="Repositories\" />
     <Folder Include="Persistents\" />
+    <Folder Include="Repositories\Implements\" />
   </ItemGroup>
 
   <ItemGroup>
