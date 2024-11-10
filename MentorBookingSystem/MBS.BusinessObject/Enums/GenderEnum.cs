@@ -1,8 +1,10 @@
-namespace MBS.BusinessObject.Enums;
-
-public enum GenderEnum
+namespace MBS.BusinessObject.Enums
 {
-    Male,
-    Female,
-    Other
+    public enum GenderEnum
+    {
+        Male,
+        Female,
+        Other
+    }
 }
+
