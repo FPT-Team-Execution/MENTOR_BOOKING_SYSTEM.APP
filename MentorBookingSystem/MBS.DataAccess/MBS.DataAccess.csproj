@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DAO\Implements\" />
+    <Folder Include="Migrations\" />
+    <Folder Include="Repositories\" />
+    <Folder Include="Persistents\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MBS.BusinessObject\MBS.BusinessObject.csproj" />
+  </ItemGroup>
+
+</Project>

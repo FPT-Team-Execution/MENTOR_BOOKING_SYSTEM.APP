@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBS.Razor", "MBS.Razor\MBS.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBS.Services", "MBS.Services\MBS.Services.csproj", "{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBS.DataAccess", "MBS.DataAccess\MBS.DataAccess.csproj", "{F73FD886-4581-4D4E-8366-E1B521574952}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBS.BusinessObject", "MBS.BusinessObject\MBS.BusinessObject.csproj", "{63978476-1785-4B0C-9F9A-33B41251F9CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AAB3A31-41F1-4014-8813-5668AB5FDBE7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F73FD886-4581-4D4E-8366-E1B521574952}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F73FD886-4581-4D4E-8366-E1B521574952}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F73FD886-4581-4D4E-8366-E1B521574952}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F73FD886-4581-4D4E-8366-E1B521574952}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63978476-1785-4B0C-9F9A-33B41251F9CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63978476-1785-4B0C-9F9A-33B41251F9CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63978476-1785-4B0C-9F9A-33B41251F9CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63978476-1785-4B0C-9F9A-33B41251F9CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
