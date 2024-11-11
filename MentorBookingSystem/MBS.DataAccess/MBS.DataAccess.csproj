@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MBS.BusinessObject\MBS.BusinessObject.csproj" />
-    <ProjectReference Include="..\ThirdPartyLayer\ThirdPartyLayer.csproj" />
+    <ProjectReference Include="..\ThirdPartyLayer\MBS.Externals.csproj" />
   </ItemGroup>
 
 </Project>
