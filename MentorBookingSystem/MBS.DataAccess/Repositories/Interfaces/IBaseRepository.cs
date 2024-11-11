@@ -17,3 +17,4 @@ namespace MBS.DataAccess.Repositories.Interfaces
         bool Update(T entity);
         bool Delete(T entity);
     }
+}

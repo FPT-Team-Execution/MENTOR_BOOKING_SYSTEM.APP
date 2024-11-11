@@ -8,12 +8,11 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
-    <Folder Include="Persistents\" />
-    <Folder Include="Repositories\Implements\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\MBS.BusinessObject\MBS.BusinessObject.csproj" />
+    <ProjectReference Include="..\ThirdPartyLayer\ThirdPartyLayer.csproj" />
   </ItemGroup>
 
 </Project>
