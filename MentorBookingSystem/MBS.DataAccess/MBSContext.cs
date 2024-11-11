@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using MBS.BusinessObject.Common;
 using MBS.BusinessObject.Entities;
-using ThirdPartyLayer.Services.Interfaces;
+using MBS.Externals.Services.Interfaces;
 
 namespace MBS.DataAccess
 {
