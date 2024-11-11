@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBS.Repositories", "MBS.Rep
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBS.Externals", "MBS.Externals\MBS.Externals.csproj", "{977591E4-5703-43F6-A8B8-0BB70DE127D1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBS.Repositories", "MBS.Repositories\MBS.Repositories.csproj", "{FB63EADC-1DD4-4A3D-B9F3-500FD5CD9EE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,7 @@ Global
 		{63978476-1785-4B0C-9F9A-33B41251F9CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63978476-1785-4B0C-9F9A-33B41251F9CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63978476-1785-4B0C-9F9A-33B41251F9CB}.Release|Any CPU.Build.0 = Release|Any CPU
+
 		{95D8D77A-9CA5-4278-A504-B379A458EA7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{95D8D77A-9CA5-4278-A504-B379A458EA7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95D8D77A-9CA5-4278-A504-B379A458EA7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,6 +48,7 @@ Global
 		{977591E4-5703-43F6-A8B8-0BB70DE127D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{977591E4-5703-43F6-A8B8-0BB70DE127D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{977591E4-5703-43F6-A8B8-0BB70DE127D1}.Release|Any CPU.Build.0 = Release|Any CPU
+
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
