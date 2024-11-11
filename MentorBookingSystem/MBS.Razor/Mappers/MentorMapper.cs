@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-
-
+﻿
 namespace MBS.Razor.Mappers;
 
-public class MentorMapper : Profile
+public class MentorMapper 
 {
     public MentorMapper()
     {

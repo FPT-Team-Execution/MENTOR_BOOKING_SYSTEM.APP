@@ -1,8 +1,8 @@
-using AutoMappers;
+
 
 namespace MBS.Razor.Mappers;
 
-public class RequestMapper : Profile
+public class RequestMapper 
 {
     public RequestMapper()
     {

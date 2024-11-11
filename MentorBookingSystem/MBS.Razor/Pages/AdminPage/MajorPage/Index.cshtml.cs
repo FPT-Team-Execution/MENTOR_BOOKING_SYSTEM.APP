@@ -29,7 +29,7 @@ namespace MBS.Razor.Pages.AdminPage.MajorPage
 
         private async Task LoadMajors()
         {
-            var data = await _majorService.GetMajorsAsync(PageIndex, Size) as BaseModel<Pagination<MajorResponse>>;
+            var data = await _majorService.GetMajorsAsync(PageIndex, Size) as BaseModel<Pagination<MajorResponseDto>>;
             var majorModels = data.ResponseRequestModel.Adapt<Pagination<MajorModel>>();
 
             MajorPagination = majorModels;
@@ -85,7 +85,7 @@ namespace MBS.Razor.Pages.AdminPage.MajorPage
                 ParentId = ChosenMajor.ParentId,
 
             };
-            var response = await _majorService.CreateNewMajorAsync(request) as BaseModel<MajorResponse>;
+            var response = await _majorService.CreateNewMajorAsync(request) as BaseModel<MajorResponseDto>;
             if (response != null && response.IsSuccess)
             {
                 SaveTempData(TempDataKeys.SuccessMessage, "Major created successfully.");

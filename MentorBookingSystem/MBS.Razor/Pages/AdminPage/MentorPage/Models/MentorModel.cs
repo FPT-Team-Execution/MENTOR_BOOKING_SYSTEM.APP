@@ -9,7 +9,7 @@ public class MentorModel
     public string? Industry { get; set; } = string.Empty;
     public int ConsumePoint { get; set; } = 0;
 
-    public IEnumerable<MajorResponse> Majors { get; set; }
+    public IEnumerable<MajorResponseDto> Majors { get; set; }
 
     public IEnumerable<DegreeResponse> Degrees { get; set; }
 

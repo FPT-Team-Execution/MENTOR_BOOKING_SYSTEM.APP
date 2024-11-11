@@ -1,7 +1,7 @@
-using AutoMapper;
+
 namespace MBS.Razor.Mappers;
 
-public class EventMapper : Profile
+public class EventMapper 
 {
     public EventMapper()
     {

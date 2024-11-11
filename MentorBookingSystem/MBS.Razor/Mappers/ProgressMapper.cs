@@ -1,8 +1,8 @@
-using AutoMapper;
+
 
 namespace MBS.Razor.Mappers;
 
-public class ProgressMapper : Profile
+public class ProgressMapper 
 {
     public ProgressMapper()
     {

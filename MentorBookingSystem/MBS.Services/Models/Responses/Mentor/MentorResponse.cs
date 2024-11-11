@@ -12,7 +12,7 @@ namespace MBS.Services.Models.Responses.Mentor
         public string Id { get; set; }
         public string? Industry { get; set; } = default;
         public int ConsumePoint { get; set; } = default;
-        public IEnumerable<MajorResponse>? Major { get; set; }
+        public IEnumerable<MajorResponseDto>? Major { get; set; }
 
         //inheritant
         public string FullName { get; set; }

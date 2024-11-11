@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using MBS.BusinessObject.Entities;
+﻿using MBS.BusinessObject.Entities;
 
 namespace MBS.Razor.Mappers;
 
-public class DegreeMapper : Profile
+public class DegreeMapper 
 {
     public DegreeMapper()
     {

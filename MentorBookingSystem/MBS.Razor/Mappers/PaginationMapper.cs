@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿
 using MBS.BusinessObject.Pagination;
 using System;
 using System.Collections.Generic;
@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace MBS.Razor.Mappers
 {
-    public class PaginationMapper : Profile
+    public class PaginationMapper 
     {
         public PaginationMapper()
         {
-            CreateMap(typeof(Pagination<>), typeof(Pagination<>));
         }
     }
 }

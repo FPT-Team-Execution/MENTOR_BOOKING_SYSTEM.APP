@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MBS.Razor.Mappers
 {
-    public class GroupMapper : Profile
+    public class GroupMapper 
     {
         public GroupMapper()
         {

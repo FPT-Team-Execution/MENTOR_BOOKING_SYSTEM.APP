@@ -1,8 +1,6 @@
-using AutoMapper;
-
 namespace MBS.Razor.Mappers;
 
-public class StudentMapper : Profile
+public class StudentMapper
 {
     public StudentMapper()
     {

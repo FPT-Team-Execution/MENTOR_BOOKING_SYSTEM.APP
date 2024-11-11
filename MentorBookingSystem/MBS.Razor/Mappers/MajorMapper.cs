@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿
 using MBS.Services.Models.Responses.Major;
 using System;
 using System.Collections.Generic;
@@ -8,11 +8,10 @@ using System.Threading.Tasks;
 
 namespace MBS.Razor.Mappers
 {
-    public class MajorMapper : Profile
+    public class MajorMapper
     {
         public MajorMapper()
         {
-            CreateMap<Major, MajorResponseDto>();
         }
     }
 }
