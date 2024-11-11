@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBS.BusinessObject", "MBS.B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBS.Externals", "ThirdPartyLayer\MBS.Externals.csproj", "{44D74F18-2866-481D-B067-82A1C9263528}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MBS.Repositories", "MBS.Repositories\MBS.Repositories.csproj", "{FB63EADC-1DD4-4A3D-B9F3-500FD5CD9EE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{44D74F18-2866-481D-B067-82A1C9263528}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44D74F18-2866-481D-B067-82A1C9263528}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44D74F18-2866-481D-B067-82A1C9263528}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB63EADC-1DD4-4A3D-B9F3-500FD5CD9EE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB63EADC-1DD4-4A3D-B9F3-500FD5CD9EE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB63EADC-1DD4-4A3D-B9F3-500FD5CD9EE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB63EADC-1DD4-4A3D-B9F3-500FD5CD9EE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
