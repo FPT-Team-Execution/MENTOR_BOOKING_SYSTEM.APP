@@ -10,7 +10,7 @@ namespace MBS.DataAccess.Repositories.Interfaces
 {
     public interface IPointTransactionRepository : IBaseRepository<PointTransaction>
     {
-        Task<Pagination<PointTransaction>> GetTransactionByStudentIdPageList(string studentId, int page, int size);
+        Task<Pagination<PointTransaction>> GetTransactionByStudentIdPageListAsync(string studentId, int page, int size);
         Task<Pagination<PointTransaction>> GetAllPageListAsync(int page, int size);
     }
 }

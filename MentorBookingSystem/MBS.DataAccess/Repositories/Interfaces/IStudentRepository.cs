@@ -12,7 +12,7 @@ namespace MBS.DataAccess.Repositories.Interfaces
     public interface IStudentRepository : IBaseRepository<Student>
     {
 
-        Task<Pagination<Student>> GetStudentsAsync(int page, int size, string sortOrder);
+        public Task<Pagination<Student>> GetStudentsAsync(int page, int size, string sortOrder);
         Task<Student?> GetByUserIdAsync(string userId, Func<IQueryable<Student>, IIncludableQueryable<Student, object>> include = null);
 
         Task<IEnumerable<Student>> GetStudents();

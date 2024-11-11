@@ -10,6 +10,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MBS.BusinessObject.Common;
+using MBS.BusinessObject.Entities;
 
 namespace MBS.DataAccess
 {
@@ -34,7 +36,7 @@ namespace MBS.DataAccess
         public DbSet<CalendarEvent> CalendarEvents { get; set; }
         public DbSet<Degree> Degrees { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
-        public DbSet<Group> Groups { get; set; }
+        public DbSet<BusinessObject.Entities.Group> Groups { get; set; }
         public DbSet<Major> Majors { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
         public DbSet<MeetingMember> MeetingMembers { get; set; }
