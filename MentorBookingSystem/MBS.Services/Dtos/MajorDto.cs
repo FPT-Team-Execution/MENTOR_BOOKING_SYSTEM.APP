@@ -1,4 +1,4 @@
-namespace MBS.Razor.Pages.AdminPage.StudentPage.Dtos;
+namespace MBS.Services.Dtos;
 
 public class MajorDto
 {
