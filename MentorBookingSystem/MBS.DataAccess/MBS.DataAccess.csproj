@@ -7,10 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <ProjectReference Include="..\MBS.BusinessObject\MBS.BusinessObject.csproj" />
+    <ProjectReference Include="..\MBS.Externals\MBS.Externals.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <ProjectReference Include="..\MBS.BusinessObject\MBS.BusinessObject.csproj" />
     <ProjectReference Include="..\ThirdPartyLayer\MBS.Externals.csproj" />
   </ItemGroup>

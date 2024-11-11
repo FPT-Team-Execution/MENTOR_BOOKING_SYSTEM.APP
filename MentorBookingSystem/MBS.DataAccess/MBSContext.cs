@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using MBS.BusinessObject.Common;
 using MBS.BusinessObject.Entities;
-using ThirdPartyLayer.Services.Interfaces;
+using MBS.Externals.Services.Interfaces;
 
 namespace MBS.DataAccess
 {
