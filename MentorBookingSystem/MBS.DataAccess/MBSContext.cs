@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
-using MBS.BusinessObject.Common;
 using MBS.BusinessObject.Entities;
 using MBS.Externals.Services.Interfaces;
+using MBS.BusinessObject.Commom;
 
 namespace MBS.DataAccess
 {

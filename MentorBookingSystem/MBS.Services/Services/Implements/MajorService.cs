@@ -1,4 +1,5 @@
-﻿using MBS.Services.Constants;
+﻿using MBS.Repositories.Interfaces;
+using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Models.Requests.Major;
@@ -12,6 +13,11 @@ namespace MBS.Services.Services.Implements;
 
 public class MajorService : IMajorService
 {
+    private readonly IMajorRepository _majorRepository;
+    public MajorService(IMajorRepository majorRepository)
+    {
+        _majorRepository = majorRepository;
+    }
     public async Task<IResponse> GetMentorMajorsAsync(GetMentorMajorsRequest request)
     {
         var token = WebUtils.AccessToken;
@@ -44,6 +50,12 @@ public class MajorService : IMajorService
 
         var response = WebUtils.HandleResponse<BaseModel<GroupResponse>>(result);
         return response;
+    }
+
+    public async Task<IEnumerable<MajorResponseDto>> GetAllMajors()
+    {
+        // return await _majorRepository.GetAllAsync();
+        return null;
     }
 
     public async Task<IResponse> GetMajorsAsync(int page, int size)

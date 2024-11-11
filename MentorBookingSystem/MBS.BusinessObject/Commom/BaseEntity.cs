@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MBS.BusinessObject.Common
+namespace MBS.BusinessObject.Commom
 {
     public abstract class BaseEntity
     {

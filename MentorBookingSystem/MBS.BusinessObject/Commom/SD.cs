@@ -1,4 +1,4 @@
-namespace MBS.BusinessObject.Common
+namespace MBS.BusinessObject.Commom
 {
     public class SD
     {

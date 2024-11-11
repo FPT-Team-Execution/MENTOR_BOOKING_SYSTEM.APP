@@ -1,7 +1,7 @@
-﻿using MBS.BusinessObject.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using MBS.BusinessObject.Enums;
+using MBS.BusinessObject.Commom;
 
 namespace MBS.BusinessObject.Entities
 {

@@ -1,4 +1,4 @@
-﻿using MBS.BusinessObject.Common;
+﻿using MBS.BusinessObject.Commom;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
