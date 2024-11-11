@@ -1,71 +1,37 @@
-using MBS.Services.Constants;
+using Mapster;
+using MBS.BusinessObject.Entities;
+using MBS.Repositories.Interfaces;
 using MBS.Services.Models;
-using MBS.Services.Models.Requests.Student;
-using MBS.Services.Models.Responses.Major;
-using MBS.Services.Models.Responses.Student;
 using MBS.Services.Services.Interfaces;
-using MBS.Services.Utils;
+using StudentDto = MBS.Services.Dtos.StudentDto;
 
 namespace MBS.Services.Services.Implements;
 
 public class StudentService : IStudentService
 {
-    public async Task<Pagination<StudentResponse>> GetStudentsAsync(int page, int size, string sortOrder = "asc")
+    private readonly IStudentRepository _studentRepository;
+
+    public StudentService(IStudentRepository studentRepository)
     {
-        var token = WebUtils.AccessToken;
-        var result = await WebUtils.GetAsync
-        (
-            ApiEndPoints.StudentUrl,
-            headers: new Dictionary<string, string>
-            {
-                { "Accept-Charset", "utf-8" },
-                { "Authorization", $"Bearer {token}" }
-            },
-            token: token,
-            queryParams: new Dictionary<string, string?>()
-            {
-                { "page", page.ToString() },
-                { "size", size.ToString() },
-                {"sortOrder", sortOrder }
-            }
-        );
-        var response = WebUtils.HandleResponse<BaseModel<Pagination<StudentResponse>>>(result);
-        return response.ResponseRequestModel;
+        _studentRepository = studentRepository;
     }
 
-    public async Task<BaseModel<UpdateStudentResponse>> UpdateStudentAsync(UpdateStudentRequest student)
+    public async Task<Pagination<StudentDto>> GetStudentsAsync(int page, int size, string sortOrder = "asc")
     {
-        var token = WebUtils.AccessToken;
-        var result = await WebUtils.PutAsync
-        (
-            ApiEndPoints.StudentUpdateUrl,
-            data: student,
-            headers: new Dictionary<string, string>
-            {
-                { "Accept-Charset", "utf-8" },
-                { "Authorization", $"Bearer {token}" }
-            },
-            token: token
-        );
-        var response = WebUtils.HandleResponse<BaseModel<UpdateStudentResponse>>(result);
-        return response;
+        var students = await _studentRepository.GetStudentsAsync(page, size, sortOrder);
+        return students.Adapt<Pagination<StudentDto>>();
     }
 
-    public async Task<BaseModel<CreateStudentResponse, CreateStudentRequest>> CreateStudentAsync(CreateStudentRequest student)
+    public async Task<bool> UpdateStudentAsync(StudentDto student)
     {
-        var token = WebUtils.AccessToken;
-        var result = await WebUtils.PostAsync
-        (
-            ApiEndPoints.StudentCreateUrl,
-            data: student,
-            headers: new Dictionary<string, string>
-            {
-                { "Accept-Charset", "utf-8" },
-                { "Authorization", $"Bearer {token}" }
-            },
-            token: token
-        );
-        var response = WebUtils.HandleResponse<BaseModel<CreateStudentResponse, CreateStudentRequest>>(result);
-        return response;
+        var studentFound = await _studentRepository.GetByIdAsync(student.Id, "UserId");
+        if (studentFound == null) return false;
+        var result = _studentRepository.Update(studentFound);
+        return result;
+    }
+
+    public async Task<string> CreateStudentAsync(StudentDto student)
+    {
+        return string.Empty;
     }
 }

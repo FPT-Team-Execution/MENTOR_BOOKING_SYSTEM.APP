@@ -75,7 +75,7 @@ public class Index : BaseAdminPage
                     Size = 100
                 });
 
-            var majors = (BaseModel<Pagination<MajorResponse>>)await _majorService.GetMentorMajorsAsync(
+            var majors = (BaseModel<Pagination<MajorResponseDto>>)await _majorService.GetMentorMajorsAsync(
                 new GetMentorMajorsRequest()
                 {
                     MentorId = mentorId,
@@ -83,7 +83,7 @@ public class Index : BaseAdminPage
                     Size = 100
                 });
 
-            ChosenMentor.Majors = majors.ResponseRequestModel.Items.Adapt<IEnumerable<MajorResponse>>();
+            ChosenMentor.Majors = majors.ResponseRequestModel.Items.Adapt<IEnumerable<MajorResponseDto>>();
             ChosenMentor.Degrees = degrees.ResponseRequestModel.Items.Adapt<IEnumerable<DegreeResponse>>();
 
             SaveTempData(TempDataKeys.AdminKeys.ChosenMentor, ChosenMentor);

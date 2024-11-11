@@ -1,9 +1,5 @@
-using System.Security.Claims;
 using MBS.Razor.Extensions;
 using MBS.Services.Constants;
-using MBS.Services.Models.Responses.Student;
-using MBS.Services.Services.Implements;
-using MBS.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,17 +9,10 @@ builder.Services.AddRazorPages();
 // Register IHttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 //add Services
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IMajorService, MajorService>();
-builder.Services.AddScoped<IClaimService, ClaimService>();
-builder.Services.AddScoped<IStudentService, StudentService>();
-builder.Services.AddScoped<IMentorService, MentorService>();
-builder.Services.AddScoped<IGroupService, GroupService>();
-builder.Services.AddScoped<IPositionService, PositionService>();
-builder.Services.AddScoped<ISkillService, SkillService>();
-builder.Services.AddScoped<IProjectService, ProjectService>();
-builder.Services.AddScoped<IMeetingService, MeetingService>();
-
+builder.Services.AddServiceDependencies();
+//add data access dependencies
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddRepositoryDependencies();
 
 builder.Services.AddAuthentication(options =>
     {

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MBS.Externals.Services.Interfaces
 {
-    public interface IClaimService
+    public interface IClaimExternalService
     {
         string GetUserId();
         Task<AuthenticateResult?> GetAuthenticationAsync(string authenticationScheme);

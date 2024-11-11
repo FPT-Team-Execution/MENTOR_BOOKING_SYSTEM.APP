@@ -2,7 +2,7 @@
 
 namespace MBS.Services.Models.Responses.Major;
 
-public class MajorResponse
+public class MajorResponseDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

@@ -2,5 +2,5 @@ namespace MBS.Services.Models.Responses.Major;
 
 public class MentorMajorsResponse
 {
-    public required IEnumerable<MajorResponse> Majors { get; set; }
+    public required IEnumerable<MajorResponseDto> Majors { get; set; }
 }

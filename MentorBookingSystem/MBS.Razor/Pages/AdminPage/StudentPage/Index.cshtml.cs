@@ -1,6 +1,6 @@
 ﻿using Mapster;
-using MBS.Razor.Pages.AdminPage.StudentPage.Models;
 using MBS.Services.Constants;
+using MBS.Services.Dtos;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Student;
 using MBS.Services.Models.Responses.Major;
@@ -12,11 +12,11 @@ namespace MBS.Razor.Pages.AdminPage.StudentPage;
 
 public class Index : BaseAdminPage
 {
-    public Pagination<StudentModel> StudentPagination { get; set; } = new();
-    public List<MajorResponse> Majors { get; set; } = new();
+    public Pagination<StudentDto> StudentPagination { get; set; } = new();
+    public List<MajorResponseDto> Majors { get; set; } = new();
     [BindProperty]public int NewPoint { get; set; } = 0;
 
-    [BindProperty] public StudentModel ChosenStudent { get; set; } = new();
+    [BindProperty] public StudentDto ChosenStudent { get; set; } = new();
 
     public string SortOrder { get; set; } = "asc";
     public string SearchName { get; set; } = string.Empty;
@@ -35,18 +35,15 @@ public class Index : BaseAdminPage
 
     private async Task LoadMajors()
     {
-        var data = (await _majorService.GetMajorsAsync(1, 100) as BaseModel<Pagination<MajorResponse>>)
-            .ResponseRequestModel.Items;
-        var majorModels = data.Adapt<IEnumerable<MajorResponse>>();
-        Majors = majorModels.ToList();
+        var data = await _majorService.GetAllMajors();
+        Majors = data.ToList();
         SaveTempData(TempDataKeys.AdminKeys.Majors, Majors);
     }
 
     private async Task LoadStudents()
     {
-        var data = await _studentService.GetStudentsAsync(page: PageIndex, size: Size, SortOrder);
-        var studentModels = data.Adapt<Pagination<StudentModel>>();
-        StudentPagination = studentModels;
+        var students = await _studentService.GetStudentsAsync(page: PageIndex, size: Size, SortOrder);
+        StudentPagination = students;
         
         SaveTempData(TempDataKeys.AdminKeys.StudentPagination, StudentPagination);
         SaveTempData(TempDataKeys.PageIndex, PageIndex);
@@ -76,7 +73,7 @@ public class Index : BaseAdminPage
     {
         try
         {
-            StudentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!;
+            StudentPagination = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!;
             var chosenStudent = StudentPagination.Items.FirstOrDefault(x => x.Id == studentId);
             SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, chosenStudent);
             if (chosenStudent == null)
@@ -141,7 +138,7 @@ public class Index : BaseAdminPage
     {
         try
         {
-            var studentPagination = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!;
+            var studentPagination = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!;
             //set pageIndex and page Size
             Size = int.Parse(size);
             //if total item from previous load * previous total pages is lower or equal then new size -> pageIndex = 1
@@ -164,13 +161,12 @@ public class Index : BaseAdminPage
         return Page();
     }
 
-    public async Task<IActionResult> OnPostCreate(StudentModel student)
+    public async Task<IActionResult> OnPostCreate(StudentDto student)
     {
-        var studentModelRequest = student.Adapt<CreateStudentRequest>();
-        var data = await _studentService.CreateStudentAsync(studentModelRequest);
-        if (!data.IsSuccess)
+        var userId = await _studentService.CreateStudentAsync(student);
+        if (string.IsNullOrEmpty(userId))
         {
-            SaveTempDataString(TempDataKeys.ErrorMessage, "Error: " + data.Message);
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Create failed");
             return await OnGetShowStudentDetail(student.Id);
         }
         //Load data
@@ -180,13 +176,12 @@ public class Index : BaseAdminPage
         return await OnGetShowStudentDetail(student.Id);
     }
 
-    public async Task<IActionResult> OnPutUpdate(StudentModel student)
+    public async Task<IActionResult> OnPutUpdate(StudentDto student)
     {
-        var studentModelRequest = student.Adapt<UpdateStudentRequest>();
-        var data = await _studentService.UpdateStudentAsync(studentModelRequest);
-        if (!data.IsSuccess)
+        var updateResult = await _studentService.UpdateStudentAsync(student);
+        if (!updateResult)
         {
-            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Update failed");
             return await OnGetShowStudentDetail(student.Id);
         }
         //Load data
@@ -197,7 +192,7 @@ public class Index : BaseAdminPage
     }
     public async Task<IActionResult> OnPutDebitPoint(string studentId)
     {
-        var student = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
+        var student = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
         if (student == null)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
@@ -205,14 +200,14 @@ public class Index : BaseAdminPage
         }
         
         //debit point
-        student.WalletPoint += NewPoint;
+        student.WalletPoint -= NewPoint;
         //reset new point
         NewPoint = 0;
         var studentModelRequest = student.Adapt<UpdateStudentRequest>();
-        var data = await _studentService.UpdateStudentAsync(studentModelRequest);
-        if (!data.IsSuccess)
+        var updateResult = await _studentService.UpdateStudentAsync(student);
+        if (!updateResult)
         {
-            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Update failed");
             return await OnGetShowStudentDetail(student.Id);
         }
         //Load data
@@ -223,7 +218,7 @@ public class Index : BaseAdminPage
     }
     public async Task<IActionResult> OnPutCreditPoint(String studentId)
     {
-        var student = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
+        var student = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
         if (student == null)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
@@ -231,14 +226,14 @@ public class Index : BaseAdminPage
         }
         
         //credit point
-        student.WalletPoint -= NewPoint;
+        student.WalletPoint += NewPoint;
         //reset point
         NewPoint = 0;
         var studentModelRequest = student.Adapt<UpdateStudentRequest>();
-        var data = await _studentService.UpdateStudentAsync(studentModelRequest);
-        if (!data.IsSuccess)
+        var updateResult = await _studentService.UpdateStudentAsync(student);
+        if (!updateResult)
         {
-            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Update failed");
             return await OnGetShowStudentDetail(student.Id);
         }
         //Load data
@@ -249,7 +244,7 @@ public class Index : BaseAdminPage
     }
     public async Task<IActionResult> OnPutCreditModify(string studentId)
     {
-        var student = GetTempData<Pagination<StudentModel>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
+        var student = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
         if (student == null)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
@@ -261,10 +256,10 @@ public class Index : BaseAdminPage
         //reset point
         NewPoint = 0;
         var studentModelRequest = student.Adapt<UpdateStudentRequest>();
-        var data = await _studentService.UpdateStudentAsync(studentModelRequest);
-        if (!data.IsSuccess)
+        var updateResult = await _studentService.UpdateStudentAsync(student);
+        if (!updateResult)
         {
-            SaveTempDataString(TempDataKeys.ErrorMessage, data.Message);
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Update failed");
             return await OnGetShowStudentDetail(student.Id);
         }
         //Load data
@@ -274,7 +269,7 @@ public class Index : BaseAdminPage
         return await OnGetShowStudentDetail(student.Id);
     }
     
-    public async Task<IActionResult> OnPost(StudentModel chosenStudent, string action)
+    public async Task<IActionResult> OnPost(StudentDto chosenStudent, string action)
     {
         try
         {

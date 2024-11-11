@@ -10,11 +10,11 @@ using MBS.Externals.Services.Interfaces;
 
 namespace MBS.Externals.Services.Implements
 {
-    public class ClaimService : IClaimService
+    public class ClaimExternalService : IClaimExternalService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public ClaimService(IHttpContextAccessor httpContextAccessor)
+        public ClaimExternalService(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
 

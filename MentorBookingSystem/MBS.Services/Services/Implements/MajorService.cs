@@ -1,4 +1,6 @@
-﻿using MBS.Services.Constants;
+﻿using Mapster;
+using MBS.Repositories.Interfaces;
+using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Models.Requests.Major;
@@ -12,6 +14,11 @@ namespace MBS.Services.Services.Implements;
 
 public class MajorService : IMajorService
 {
+    private readonly IMajorRepository _majorRepository;
+    public MajorService(IMajorRepository majorRepository)
+    {
+        _majorRepository = majorRepository;
+    }
     public async Task<IResponse> GetMentorMajorsAsync(GetMentorMajorsRequest request)
     {
         var token = WebUtils.AccessToken;
@@ -30,7 +37,7 @@ public class MajorService : IMajorService
             },
             token: token
         );
-        var response = WebUtils.HandleResponse<BaseModel<Pagination<MajorResponse>>>(result);
+        var response = WebUtils.HandleResponse<BaseModel<Pagination<MajorResponseDto>>>(result);
         return response;
     }
 
@@ -46,6 +53,12 @@ public class MajorService : IMajorService
         return response;
     }
 
+    public async Task<IEnumerable<MajorResponseDto>> GetAllMajors()
+    {
+        var majors =  await _majorRepository.GetAllAsync();
+        return majors.Adapt<IEnumerable<MajorResponseDto>>();
+    }
+
     public async Task<IResponse> GetMajorsAsync(int page, int size)
     {
         var result = await WebUtils.GetAsync
@@ -58,7 +71,7 @@ public class MajorService : IMajorService
             },
             token: WebUtils.AccessToken
         );
-        var response = WebUtils.HandleResponse<BaseModel<Pagination<MajorResponse>>>(result);
+        var response = WebUtils.HandleResponse<BaseModel<Pagination<MajorResponseDto>>>(result);
         return response;
     }
 }
