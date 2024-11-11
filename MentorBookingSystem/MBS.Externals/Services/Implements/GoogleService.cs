@@ -20,11 +20,11 @@ namespace MBS.Externals.Services.Implements
 {
     public class GoogleService : IGoogleService
     {
-        private readonly IClaimService _claimService;
+        private readonly IClaimExternalService _claimExternalService;
         private readonly IConfiguration _configuration;
-        public GoogleService(IClaimService claimService, IConfiguration configuration)
+        public GoogleService(IClaimExternalService claimExternalService, IConfiguration configuration)
         {
-            _claimService = claimService;
+            _claimExternalService = claimExternalService;
             _configuration = configuration;
         }
 

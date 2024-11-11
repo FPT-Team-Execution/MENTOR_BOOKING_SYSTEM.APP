@@ -1,6 +1,6 @@
 namespace MBS.Services.Models.Responses.Student;
 
-public class StudentResponse
+public class StudentDto
 {
     public string Id { get; set; }
     public string? University { get; set; }

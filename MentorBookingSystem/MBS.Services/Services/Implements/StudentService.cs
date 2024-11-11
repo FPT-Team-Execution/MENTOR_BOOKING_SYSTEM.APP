@@ -1,3 +1,5 @@
+using Mapster;
+using MBS.Repositories.Interfaces;
 using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Student;
@@ -10,27 +12,16 @@ namespace MBS.Services.Services.Implements;
 
 public class StudentService : IStudentService
 {
-    public async Task<Pagination<StudentResponse>> GetStudentsAsync(int page, int size, string sortOrder = "asc")
+    private readonly IStudentRepository _studentRepository;
+
+    public StudentService(IStudentRepository studentRepository)
     {
-        var token = WebUtils.AccessToken;
-        var result = await WebUtils.GetAsync
-        (
-            ApiEndPoints.StudentUrl,
-            headers: new Dictionary<string, string>
-            {
-                { "Accept-Charset", "utf-8" },
-                { "Authorization", $"Bearer {token}" }
-            },
-            token: token,
-            queryParams: new Dictionary<string, string?>()
-            {
-                { "page", page.ToString() },
-                { "size", size.ToString() },
-                {"sortOrder", sortOrder }
-            }
-        );
-        var response = WebUtils.HandleResponse<BaseModel<Pagination<StudentResponse>>>(result);
-        return response.ResponseRequestModel;
+        _studentRepository = studentRepository;
+    }
+    public async Task<Pagination<StudentDto>> GetStudentsAsync(int page, int size, string sortOrder = "asc")
+    {
+        var students = await _studentRepository.GetStudentsAsync(page, size, sortOrder);
+        return students.Adapt<Pagination<StudentDto>>();
     }
 
     public async Task<BaseModel<UpdateStudentResponse>> UpdateStudentAsync(UpdateStudentRequest student)

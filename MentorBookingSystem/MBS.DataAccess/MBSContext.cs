@@ -9,10 +9,10 @@ namespace MBS.DataAccess
 {
     public class MBSContext : IdentityDbContext
     {
-        private readonly IClaimService _claimService;
-        public MBSContext(DbContextOptions<MBSContext> options, IClaimService claimService) : base(options)
+        private readonly IClaimExternalService _claimExternalService;
+        public MBSContext(DbContextOptions<MBSContext> options, IClaimExternalService claimExternalService) : base(options)
         {
-            _claimService = claimService;
+            _claimExternalService = claimExternalService;
         }
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -46,11 +46,11 @@ namespace MBS.DataAccess
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _claimService.GetUserId();
+                        entry.Entity.CreatedBy = _claimExternalService.GetUserId();
                         entry.Entity.CreatedOn = DateTime.Now;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.UpdatedBy = _claimService.GetUserId();
+                        entry.Entity.UpdatedBy = _claimExternalService.GetUserId();
                         entry.Entity.UpdatedOn = DateTime.Now;
                         break;
                 }
@@ -63,11 +63,11 @@ namespace MBS.DataAccess
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedBy = _claimService.GetUserId();
+                        entry.Entity.CreatedBy = _claimExternalService.GetUserId();
                         entry.Entity.CreatedOn = DateTime.Now;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.UpdatedBy = _claimService.GetUserId();
+                        entry.Entity.UpdatedBy = _claimExternalService.GetUserId();
                         entry.Entity.UpdatedOn = DateTime.Now;
                         break;
                 }
