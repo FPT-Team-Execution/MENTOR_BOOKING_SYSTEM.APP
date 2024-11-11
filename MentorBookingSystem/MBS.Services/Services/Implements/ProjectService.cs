@@ -1,5 +1,6 @@
 ﻿using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Requests.Project;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Models.Responses.Project;
 using MBS.Services.Services.Interfaces;
@@ -14,6 +15,11 @@ namespace MBS.Services.Services.Implements
 {
     public class ProjectService : IProjectService
     {
+        public Task<IResponse> CreateProjectAsync(CreateProjectModel createProjectModel)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IResponse> GetProjectAsync(int page, int size, string search)
         {
             var url = ApiEndPoints.ProjectUrl.Replace("{page}",page.ToString()).Replace("{pageSize}",size.ToString()).Replace("{search}",search);
