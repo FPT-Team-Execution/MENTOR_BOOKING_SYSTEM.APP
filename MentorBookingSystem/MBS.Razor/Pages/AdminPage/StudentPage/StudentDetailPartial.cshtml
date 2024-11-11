@@ -2,7 +2,7 @@
 @using MBS.Services.Utils
 @model MBS.Razor.Pages.AdminPage.StudentPage.Index
 @{
-    var chosenStudent = Model.GetTempData<StudentModel>(TempDataKeys.AdminKeys.ChosenStudent, isKeep: false) ?? new StudentModel();
+    var chosenStudent = Model.GetTempData<StudentModelDto>(TempDataKeys.AdminKeys.ChosenStudent, isKeep: false) ?? new StudentModelDto();
     var majors = Model.GetTempData<IEnumerable<MajorModel>>(TempDataKeys.AdminKeys.Majors) ?? [];
 }
 <div>
