@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBS.DataAccess", "MBS.DataA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBS.BusinessObject", "MBS.BusinessObject\MBS.BusinessObject.csproj", "{63978476-1785-4B0C-9F9A-33B41251F9CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThirdPartyLayer", "ThirdPartyLayer\ThirdPartyLayer.csproj", "{44D74F18-2866-481D-B067-82A1C9263528}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MBS.Externals", "ThirdPartyLayer\MBS.Externals.csproj", "{44D74F18-2866-481D-B067-82A1C9263528}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
