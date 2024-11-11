@@ -1,5 +1,5 @@
 ﻿@page
-@using MBS.Razor.Pages.AdminPage.StudentPage.Models
+@using MBS.Razor.Pages.AdminPage.StudentPage.Dtos
 @using MBS.Services.Models
 @using MBS.Services.Utils
 @using Microsoft.AspNetCore.Mvc.TagHelpers
@@ -10,8 +10,8 @@
     string pageName = "Index";
     //* get temp data
     //Student Pagination 
-    var studentPagination = Model.GetTempData<Pagination<StudentModelDto>>(TempDataKeys.AdminKeys.StudentPagination);
-    var students = studentPagination == null ? Array.Empty<StudentModelDto>() : studentPagination.Items.ToArray();
+    var studentPagination = Model.GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination);
+    var students = studentPagination == null ? Array.Empty<StudentDto>() : studentPagination.Items.ToArray();
     //Get search & sort Order
     string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
     string sortOrder = Model.GetTempData<string>(TempDataKeys.SortOrder) ?? Model.SortOrder;

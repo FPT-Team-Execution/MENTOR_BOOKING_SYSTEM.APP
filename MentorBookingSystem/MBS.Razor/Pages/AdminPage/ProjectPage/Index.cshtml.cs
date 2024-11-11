@@ -1,5 +1,4 @@
-﻿using MBS.Razor.Pages.AdminPage.StudentPage.Models;
-using MBS.Services.Models.Responses.Major;
+﻿using MBS.Services.Models.Responses.Major;
 using MBS.Services.Models;
 using MBS.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;

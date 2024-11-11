@@ -1,8 +1,8 @@
 using MBS.Services.Constants.Enums;
 
-namespace MBS.Razor.Pages.AdminPage.StudentPage.Models;
+namespace MBS.Razor.Pages.AdminPage.StudentPage.Dtos;
 
-public class StudentModelDto
+public class StudentDto
 {
     public string Id { get; set; } = String.Empty;
     public string FullName { get; set; }  = String.Empty;

@@ -1,9 +1,9 @@
-@using MBS.Razor.Pages.AdminPage.StudentPage.Models
+@using MBS.Razor.Pages.AdminPage.StudentPage.Dtos
 @using MBS.Services.Utils
 @model MBS.Razor.Pages.AdminPage.StudentPage.Index
 @{
-    var chosenStudent = Model.GetTempData<StudentModelDto>(TempDataKeys.AdminKeys.ChosenStudent, isKeep: false) ?? new StudentModelDto();
-    var majors = Model.GetTempData<IEnumerable<MajorModel>>(TempDataKeys.AdminKeys.Majors) ?? [];
+    var chosenStudent = Model.GetTempData<StudentDto>(TempDataKeys.AdminKeys.ChosenStudent, isKeep: false) ?? new StudentDto();
+    var majors = Model.GetTempData<IEnumerable<MajorDto>>(TempDataKeys.AdminKeys.Majors) ?? [];
 }
 <div>
     <form method="post">
