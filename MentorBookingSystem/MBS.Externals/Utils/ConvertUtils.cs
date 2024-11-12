@@ -32,6 +32,10 @@ namespace MBS.Externals.Utils
         {
             return dateTime.ToString(format);
         }
-
+        public static string FormatDateTimeToString(DateTime? dateTime, string regex = "yyyy-MM-dd")
+        {
+            if(dateTime == null) return string.Empty;
+            return dateTime.Value.ToString(regex);
+        }
     }
 }
