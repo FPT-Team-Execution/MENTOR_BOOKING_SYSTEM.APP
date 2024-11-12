@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace MBS.Repositories.Implements
 {
@@ -17,6 +18,14 @@ namespace MBS.Repositories.Implements
             return await _dao.GetPagingListAsync(
                 page: page,
                 size: size
+                );
+        }
+
+        public async Task<Project?> GetProjectById(Guid projectId)
+        {
+            return await _dao.SingleOrDefaultAsync(
+                predicate: x => x.Id == projectId,
+                include: q => q.Include(x => x.Mentor)
                 );
         }
 

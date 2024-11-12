@@ -9,11 +9,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mapster;
+using MBS.Repositories.Interfaces;
+using MBS.Services.Dtos;
 
 namespace MBS.Services.Services.Implements
 {
     public class ProjectService : IProjectService
     {
+        private readonly IProjectRepository _projectRepository;
+
+        public ProjectService(IProjectRepository projectRepository)
+        {
+            _projectRepository = projectRepository;
+        }
+        public async Task<ProjectDto?> GetProjectByIdAsync(Guid projectId)
+        {
+            var project = await _projectRepository.GetProjectById(projectId);
+            return project.Adapt<ProjectDto>();
+        }
+
         public async Task<IResponse> GetProjectAsync(int page, int size, string search)
         {
             var url = ApiEndPoints.ProjectUrl.Replace("{page}",page.ToString()).Replace("{pageSize}",size.ToString()).Replace("{search}",search);
@@ -21,5 +36,6 @@ namespace MBS.Services.Services.Implements
             var response = WebUtils.HandleResponse<BaseModel<Pagination<ProjectResponse>>>(result);
             return response;
         }
+        
     }
 }

@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MBS.Services.Dtos;
 using MBS.Services.Models.Responses.Project;
 
 namespace MBS.Services.Services.Interfaces
 {
     public interface IProjectService
     {
+        Task<ProjectDto?> GetProjectByIdAsync(Guid projectId);
         Task<IResponse> GetProjectAsync(int page, int size, string sortOrder);
     }
 }

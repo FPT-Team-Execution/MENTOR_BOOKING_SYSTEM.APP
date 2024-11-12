@@ -14,6 +14,8 @@ public static class DataAccessDependency
         services.AddScoped(typeof(IBaseDAO<>), typeof(BaseDAO<>));
         services.AddScoped<IMajorRepository, MajorRepository>();
         services.AddScoped<IStudentRepository, StudentRepository>();
+        services.AddScoped<IProjectRepository, ProjectRepository>();
+        services.AddScoped<IGroupRepository, GroupRepository>();
 
     }
 

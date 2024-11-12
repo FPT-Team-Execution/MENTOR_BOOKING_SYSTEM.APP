@@ -1,8 +1,22 @@
 @page
+@using MBS.Services.Dtos
+@using MBS.Services.Utils
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model MBS.Razor.Pages.StudentPage.ProjectPage.Index
 
 @{
     Layout = "Shared/_LayoutStudent";
+    //* get temp data
+    //Members in project
+    var members = Model.GetTempData<List<GroupDto>>(TempDataKeys.StudentKeys.Groups);
+    var project = Model.GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
+    //Get search & sort Order
+    string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
+    string sortOrder = Model.GetTempData<string>(TempDataKeys.SortOrder) ?? Model.SortOrder;
+
+    //Get size and index
+    int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
 }
 
 <div class="row">
@@ -11,84 +25,37 @@
         <div class="card-body">
             <h5 class="card-title">Members</h5>
             <div class="table-responsive">
-                <table class="table text-nowrap align-middle mb-0">
-                    <thead>
-                    <tr class="border-2 border-bottom border-primary border-0">
-                        <th scope="col" class="ps-0">Page Title</th>
-                        <th scope="col">Link</th>
-                        <th scope="col" class="text-center">Pageviews</th>
-                        <th scope="col" class="text-center">Page Value</th>
+                <table class="table table-striped">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Full Name</th>
+                        <th scope="col">Position</th>
                     </tr>
                     </thead>
-                    <tbody class="table-group-divider">
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium">
-                            <span class="table-link1 text-truncate d-block">
-                                Welcome to our
-                                website
-                            </span>
-                        </th>
-                        <td>
-                            <a href="javascript:void(0)" class="link-primary text-dark fw-medium d-block">/index.html</a>
-                        </td>
-                        <td class="text-center fw-medium">18,456</td>
-                        <td class="text-center fw-medium">$2.40</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium">
-                            <span class="table-link1 text-truncate d-block">
-                                Modern Admin
-                                Dashboard Template
-                            </span>
-                        </th>
-                        <td>
-                            <a href="javascript:void(0)" class="link-primary text-dark fw-medium d-block">/dashboard</a>
-                        </td>
-                        <td class="text-center fw-medium">17,452</td>
-                        <td class="text-center fw-medium">$0.97</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium">
-                            <span class="table-link1 text-truncate d-block">
-                                Explore our
-                                product catalog
-                            </span>
-                        </th>
-                        <td>
-                            <a href="javascript:void(0)"
-                               class="link-primary text-dark fw-medium d-block">
-                                /product-checkout
-                            </a>
-                        </td>
-                        <td class="text-center fw-medium">12,180</td>
-                        <td class="text-center fw-medium">$7,50</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium">
-                            <span class="table-link1 text-truncate d-block">
-                                Comprehensive
-                                User Guide
-                            </span>
-                        </th>
-                        <td>
-                            <a href="javascript:void(0)" class="link-primary text-dark fw-medium d-block">/docs</a>
-                        </td>
-                        <td class="text-center fw-medium">800</td>
-                        <td class="text-center fw-medium">$5,50</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium border-0">
-                            <span class="table-link1 text-truncate d-block">
-                                Check out our
-                                services
-                            </span>
-                        </th>
-                        <td class="border-0">
-                            <a href="javascript:void(0)" class="link-primary text-dark fw-medium d-block">/services</a>
-                        </td>
-                        <td class="text-center fw-medium border-0">1300</td>
-                        <td class="text-center fw-medium border-0">$2,15</td>
-                    </tr>
+                    <tbody>
+                    @{
+                        @* if (!groups.Any()) *@
+                        @* { *@
+                        @*     <tr> *@
+                        @*         <td colspan="4" class="text-center">No groups available</td> *@
+                        @*     </tr> *@
+                        @* } *@
+                        @* else *@
+                        @* { *@
+                        @*     for (int i = 0; i < groups.Count(); i++) *@
+                        @*     { *@
+                        @*         var group = groups[i]; *@
+                        @*         var index = groupPagination.PageSize * (pageIndex - 1) + (i + 1); *@
+                        @*         <tr id="@group.id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowGroupDetails, new { groupId = @group.id })'"> *@
+                        @*             <th scope="row">@index</th> *@
+                        @*             <td>@group.StudentName</td> *@
+                        @*             <td>@group.ProjectName</td> *@
+                        @*             <td>@group.PositionName</td> *@
+                        @*         </tr> *@
+                        @*     } *@
+                        @* } *@
+                    }
                     </tbody>
                 </table>
             </div>
