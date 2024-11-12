@@ -1,6 +1,6 @@
-namespace MBS.BusinessObject.Commom
+namespace MBS.Services.Utils.Shared
 {
-    public class SD
+    public class SharedData
     {
         public static IEnumerable<string> defaultProgresses = [
            "Initiation & Planning",

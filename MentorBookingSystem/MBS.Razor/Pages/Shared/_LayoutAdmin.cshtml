@@ -1,12 +1,11 @@
-﻿@using System.Security.Claims
-@using MBS.Services.Constants.Enums
+﻿@using MBS.Services.Constants.Enums
 @using MBS.Services.Services.Interfaces
+@using MBS.Services.Utils.Shared
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@inject IClaimService _claimService
+@inject IClaimService ClaimService
 @{
-    var name = string.Empty;
-    var claims = _claimService.GetClaims();
-    var roleClaim = claims.ContainsKey(ClaimTypes.Role) ? claims[ClaimTypes.Role] : "";
+    string name = String.Empty;
+    var roleClaim = ClaimService.GetCookieValue(CookieNames.UserRole);
     if (roleClaim != UserRole.Admin || string.IsNullOrEmpty(roleClaim))
     {
         Context.Response.Redirect(RouteEndpoints.AccessDenied);

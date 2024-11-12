@@ -40,27 +40,62 @@ public class ClaimService : IClaimService
         _httpContextAccessor.HttpContext.Response.Cookies.Append(key, value, cookieOptions);
     }
 
-    public Dictionary<string, string> GetClaims()
+    public string GetClaim(string key)
     {
-        var claimsDictionary = new Dictionary<string, string>();
-
-        // Retrieve the access token from the cookie
-        var getAvalable = _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue("MBS", out string accessToken);
-        if (!getAvalable)
-        {
-            return claimsDictionary;
-        }
-        // Access Token found, now parse it to read claims
-        var handler = new JwtSecurityTokenHandler();
-        var jwtInfo = handler.ReadJwtToken(accessToken);
-
-        if (jwtInfo != null)
-        {
-            foreach (var claim in jwtInfo.Claims)
-            {
-                claimsDictionary[claim.Type] = claim.Value;
-            }
-        }
-        return claimsDictionary;
+        return _httpContextAccessor.HttpContext?.User?.FindFirst(key)?.Value;
     }
+    public string SetCookieValue(string key, string value, DateTime? expireTime)
+    {
+        CookieOptions option = new CookieOptions();
+
+        if (expireTime.HasValue)
+            option.Expires = expireTime;
+        else
+            option.Expires = DateTime.Now.AddDays(7); //default expired time is 7 days
+
+        _httpContextAccessor.HttpContext.Response.Cookies.Append(key, value, option);
+
+        if (expireTime != null)
+        {
+            //Save expired time in other cookie key
+            _httpContextAccessor.HttpContext.Response.Cookies.Append($"{key}_expires", expireTime.ToString(), option);
+        }
+        return key;
+    }
+    public string GetCookieValue(string key)
+    {
+        return _httpContextAccessor.HttpContext.Request.Cookies[key];
+    }
+    public string GetCookieExpiredTime(string key)
+    {
+        return _httpContextAccessor.HttpContext.Request.Cookies[$"{key}_expires"];
+    }
+    public void DeleteCookie(string key)
+    {
+        _httpContextAccessor.HttpContext.Response.Cookies.Delete(key);
+    }
+
+    // public Dictionary<string, string> GetClaims()
+    // {
+    //     var claimsDictionary = new Dictionary<string, string>();
+    //
+    //     // Retrieve the access token from the cookie
+    //     var getAvalable = _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue("MBS", out string accessToken);
+    //     if (!getAvalable)
+    //     {
+    //         return claimsDictionary;
+    //     }
+    //     // Access Token found, now parse it to read claims
+    //     var handler = new JwtSecurityTokenHandler();
+    //     var jwtInfo = handler.ReadJwtToken(accessToken);
+    //
+    //     if (jwtInfo != null)
+    //     {
+    //         foreach (var claim in jwtInfo.Claims)
+    //         {
+    //             claimsDictionary[claim.Type] = claim.Value;
+    //         }
+    //     }
+    //     return claimsDictionary;
+    // }
 }

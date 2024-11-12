@@ -9,6 +9,7 @@ using MBS.Services.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MBS.Services.Utils.Shared;
 
 namespace MBS.Razor.Pages.AdminPage.MajorPage
 {

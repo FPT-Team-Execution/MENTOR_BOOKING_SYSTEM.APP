@@ -1,4 +1,4 @@
-namespace MBS.Services.Utils;
+namespace MBS.Services.Utils.Shared;
 
 public class TempDataKeys
 {
