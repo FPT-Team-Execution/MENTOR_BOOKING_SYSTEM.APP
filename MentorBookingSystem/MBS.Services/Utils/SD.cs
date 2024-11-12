@@ -69,7 +69,14 @@ public class TempDataKeys
         public const string ChosenMeeting = "ChosenMeeting";
 
         #endregion
+    }
 
+    public class StudentKeys
+    {
+        #region Project Page
+        public const string Groups = "Groups";
+        public const string Project = "Project";
 
+        #endregion
     }
 }

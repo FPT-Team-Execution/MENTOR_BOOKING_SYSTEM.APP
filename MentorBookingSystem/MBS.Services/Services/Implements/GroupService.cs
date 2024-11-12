@@ -2,19 +2,34 @@
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Group;
 using MBS.Services.Models.Responses.Group;
-using MBS.Services.Models.Responses.Major;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Mapster;
+using MBS.Repositories.Interfaces;
+using MBS.Services.Dtos;
 
 namespace MBS.Services.Services.Implements
 {
     public class GroupService : IGroupService
     {
+        private readonly IGroupRepository _groupRepository;
+        public GroupService(IGroupRepository groupRepository)
+        {
+            _groupRepository = groupRepository;
+        }
+
+        public async Task<IEnumerable<GroupDto>> GetGroupsByStudentIdAsync(string userId, string? projectStatus = null)
+        {
+            var groups = await  _groupRepository.GetGroupsByStudentId(userId, projectStatus);
+            return groups.Adapt<IEnumerable<GroupDto>>();
+        }
+
+        public async Task<IEnumerable<GroupDto>> GetGroupsByProjectIdAsync(Guid projectId)
+        {
+            var groups = await  _groupRepository.GetGroupByProjectIdAsync(projectId);
+            return groups.Adapt<IEnumerable<GroupDto>>();
+        }
+
         public async Task<IResponse> GetGroupsAsync(int page, int size)
         {
             var result = await WebUtils.GetAsync

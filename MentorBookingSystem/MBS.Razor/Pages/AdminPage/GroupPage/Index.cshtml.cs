@@ -7,8 +7,6 @@ using MBS.Services.Models.Responses.Group;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace MBS.Razor.Pages.AdminPage.GroupPage
 {
