@@ -12,10 +12,12 @@ namespace MBS.Services.Services.Implements;
 public class ClaimService : IClaimService
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
+
     public ClaimService(IHttpContextAccessor httpContextAccessor)
     {
         _httpContextAccessor = httpContextAccessor;
     }
+
     public async Task SignInAsync(List<Claim> claims)
     {
         var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -23,18 +25,23 @@ public class ClaimService : IClaimService
         await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
             new ClaimsPrincipal(claimsIdentity));
     }
+
     public async Task SignOutAsync()
     {
         //sign out
+        _httpContextAccessor.HttpContext.Response.Cookies.Delete("USER_ID");
+        _httpContextAccessor.HttpContext.Response.Cookies.Delete("USER_ROLE");
+        _httpContextAccessor.HttpContext.Response.Cookies.Delete("USER_EMAIL");
         await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     }
+
     public void AppendCookie(string key, string value)
     {
         CookieOptions cookieOptions = new CookieOptions
         {
             Expires = DateTimeOffset.Now.AddMinutes(60), // Cookie valid for 60 minutes
             HttpOnly = true, // Prevents access from JavaScript (for security)
-            Secure = true,   // Ensure the cookie is only sent over HTTPS
+            Secure = true, // Ensure the cookie is only sent over HTTPS
             SameSite = SameSiteMode.Strict // Protects against CSRF attacks
         };
         _httpContextAccessor.HttpContext.Response.Cookies.Append(key, value, cookieOptions);
@@ -44,6 +51,7 @@ public class ClaimService : IClaimService
     {
         return _httpContextAccessor.HttpContext?.User?.FindFirst(key)?.Value;
     }
+
     public string SetCookieValue(string key, string value, DateTime? expireTime)
     {
         CookieOptions option = new CookieOptions();
@@ -60,16 +68,20 @@ public class ClaimService : IClaimService
             //Save expired time in other cookie key
             _httpContextAccessor.HttpContext.Response.Cookies.Append($"{key}_expires", expireTime.ToString(), option);
         }
+
         return key;
     }
+
     public string GetCookieValue(string key)
     {
         return _httpContextAccessor.HttpContext.Request.Cookies[key];
     }
+
     public string GetCookieExpiredTime(string key)
     {
         return _httpContextAccessor.HttpContext.Request.Cookies[$"{key}_expires"];
     }
+
     public void DeleteCookie(string key)
     {
         _httpContextAccessor.HttpContext.Response.Cookies.Delete(key);

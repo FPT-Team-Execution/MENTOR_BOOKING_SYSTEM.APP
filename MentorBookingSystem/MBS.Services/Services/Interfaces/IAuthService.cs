@@ -17,5 +17,9 @@ public interface IAuthService
     public string GetGoogleRedirectUrl();
     public Task<BaseModel<GoogleSignInResponse>> LoginWithGoogleAsync(string code);
 
-    public Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request);
+    // public Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request);
+    public Task<bool> CreateUserAsync(ApplicationUser user, string password);
+    public Task<bool> AddToRoleAsync(ApplicationUser user, string role);
+    Task SendVerifyEmail(ApplicationUser user);
+    Task<bool> VerifyEmail(ApplicationUser user, string token);
 }

@@ -24,14 +24,16 @@ public class StudentService : IStudentService
 
     public async Task<bool> UpdateStudentAsync(StudentDto student)
     {
-        var studentFound = await _studentRepository.GetByIdAsync(student.Id, "UserId");
+        var studentFound = await _studentRepository.GetByIdAsync(student.UserId, "UserId");
         if (studentFound == null) return false;
         var result = _studentRepository.Update(studentFound);
         return result;
     }
 
-    public async Task<string> CreateStudentAsync(StudentDto student)
+    public async Task<string> CreateStudentAsync(StudentDto studentDto)
     {
-        return string.Empty;
+        var student = studentDto.Adapt<Student>();
+        await _studentRepository.CreateAsync(student);
+        return student.UserId;
     }
 }
