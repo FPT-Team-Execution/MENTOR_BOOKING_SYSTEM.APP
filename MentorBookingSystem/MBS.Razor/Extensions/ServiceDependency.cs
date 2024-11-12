@@ -20,5 +20,7 @@ public static class ServiceDependency
         services.AddScoped<ISkillService, SkillService>();
         services.AddScoped<IProjectService, ProjectService>();
         services.AddScoped<IMeetingService, MeetingService>();
+        services.AddScoped<IEmailService, EmailService>();
+        services.AddScoped<ITemplateService, TemplateService>();
     }
 }

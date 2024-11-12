@@ -1,4 +1,7 @@
 ﻿using MBS.BusinessObject.Entities;
+using MBS.Externals.Models.Email;
+using MBS.Externals.Services.Interfaces;
+using MBS.Externals.Templates;
 using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
@@ -16,11 +19,15 @@ public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ITemplateService _templateService;
+    private readonly IEmailService _emailService;
 
-    public AuthService(IConfiguration configuration, UserManager<ApplicationUser> userManager)
+    public AuthService(IConfiguration configuration, UserManager<ApplicationUser> userManager, ITemplateService templateService, IEmailService emailService)
     {
         _configuration = configuration;
         _userManager = userManager;
+        _templateService = templateService;
+        _emailService = emailService;
     }
     // public async Task<BaseModel<LoginResponse, LoginRequest>> LoginAsync(LoginRequest request)
     // {
@@ -107,6 +114,17 @@ public class AuthService : IAuthService
         return result.Succeeded;
     }
 
+    public async Task SendVerifyEmail(ApplicationUser user)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+        var emailTemplate = await _templateService.GetTemplateAsync(TemplateConstants.ConfirmationEmail);
+
+        var emailBody = _templateService.ReplaceInTemplate(emailTemplate,
+            new Dictionary<string, string> { { "{Email}", user.Email! }, { "{Token}", token } });
+
+        await _emailService.SendEmailAsync(EmailMessage.Create(user.Email!, emailBody, "[MBS]Confirm your email"));
+    }
     // public async Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request)
     // {
     //     var result = await WebUtils.PostAsync(ApiEndPoints.RegisterUrl, request);

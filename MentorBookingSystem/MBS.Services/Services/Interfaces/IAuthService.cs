@@ -20,4 +20,5 @@ public interface IAuthService
     // public Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request);
     public Task<bool> CreateUserAsync(ApplicationUser user, string password);
     public Task<bool> AddToRoleAsync(ApplicationUser user, string role);
+    Task SendVerifyEmail(ApplicationUser user);
 }
