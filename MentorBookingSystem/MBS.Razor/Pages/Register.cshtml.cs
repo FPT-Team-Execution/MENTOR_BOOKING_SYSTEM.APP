@@ -49,6 +49,7 @@ namespace MBS.Razor.Pages
                 Email = RegisterRequest.Email,
                 FullName = RegisterRequest.FullName,
                 Gender = RegisterRequest.Gender,
+                UserName = RegisterRequest.Email
             };
 
             var createUserResult = await _authService.CreateUserAsync(user, RegisterRequest.Password);

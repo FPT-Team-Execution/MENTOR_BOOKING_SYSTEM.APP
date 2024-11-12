@@ -1,5 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using MBS.BusinessObject.Entities;
+using MBS.Externals.Models.Email;
+using MBS.Externals.Templates;
 using MBS.Services.Constants;
 using MBS.Services.Constants.Enums;
 using MBS.Services.Models.Requests.Auth;
@@ -58,7 +61,8 @@ namespace MBS.Razor.Pages
 
             if (!user.EmailConfirmed)
             {
-                TempData["ErrorMessage"] = "Email or password incorrect!";
+                await _authService.SendVerifyEmail(user);
+                TempData["ErrorMessage"] = "You need to confirm email!";
                 return Page();
             }
 
@@ -149,5 +153,6 @@ namespace MBS.Razor.Pages
             };
             return claims;
         }
+
     }
 }
