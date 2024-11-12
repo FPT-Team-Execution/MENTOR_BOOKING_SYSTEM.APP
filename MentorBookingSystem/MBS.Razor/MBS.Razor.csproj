@@ -13,6 +13,8 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\AdminPage\UserPage\MentorPage\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\StudentPage\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\AdminPage\CalendarPage\EventPage\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\AdminPage\CalendarPage\Index.cshtml" />
   </ItemGroup>
 
 </Project>
