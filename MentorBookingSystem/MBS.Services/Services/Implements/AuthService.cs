@@ -95,10 +95,22 @@ public class AuthService : IAuthService
         return response;
     }
 
-    public async Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request)
+    public async Task<bool> CreateUserAsync(ApplicationUser user, string password)
     {
-        var result = await WebUtils.PostAsync(ApiEndPoints.RegisterUrl, request);
-        var response = WebUtils.HandleResponse<BaseModel<RegisterResponse, RegisterRequest>>(result);
-        return response;
+        var result = await _userManager.CreateAsync(user, password);
+        return result.Succeeded;
     }
+
+    public async Task<bool> AddToRoleAsync(ApplicationUser user, string role)
+    {
+        var result = await _userManager.AddToRoleAsync(user, role);
+        return result.Succeeded;
+    }
+
+    // public async Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request)
+    // {
+    //     var result = await WebUtils.PostAsync(ApiEndPoints.RegisterUrl, request);
+    //     var response = WebUtils.HandleResponse<BaseModel<RegisterResponse, RegisterRequest>>(result);
+    //     return response;
+    // }
 }
