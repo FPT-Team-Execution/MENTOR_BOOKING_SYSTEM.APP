@@ -73,6 +73,12 @@ namespace MBS.Services.Services.Implements
             return result.Adapt<Pagination<DegreeDto>>();
         }
 
+        public async Task<MentorDto?> GetMentorById(string id)
+        {
+            var mentor = await _mentorRepository.GetMentorByIdAsync(id);
+            return mentor.Adapt<MentorDto>();
+        }
+
         // public async Task<IResponse> GetMentorDegrees(GetMentorDegreeRequest request)
         // {
         //     var token = WebUtils.AccessToken;
@@ -95,11 +101,5 @@ namespace MBS.Services.Services.Implements
         //     var response = WebUtils.HandleResponse<BaseModel<Pagination<DegreeResponse>>>(result);
         //     return response;
         // }
-
-        public async Task<MentorDto?> GetMentorById(string id)
-        {
-            var mentor = await _mentorRepository.GetMentorByIdAsync(id);
-            return mentor.Adapt<MentorDto>();
-        }
     }
 }
