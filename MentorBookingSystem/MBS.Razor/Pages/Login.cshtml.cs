@@ -3,6 +3,7 @@ using System.Security.Claims;
 using MBS.BusinessObject.Entities;
 using MBS.Externals.Models.Email;
 using MBS.Externals.Templates;
+using MBS.Razor.Pages.AdminPage;
 using MBS.Services.Constants;
 using MBS.Services.Constants.Enums;
 using MBS.Services.Models.Requests.Auth;
@@ -17,7 +18,7 @@ using Newtonsoft.Json;
 
 namespace MBS.Razor.Pages
 {
-    public class LoginModel : PageModel
+    public class LoginModel : BaseAdminPage
     {
         private readonly IClaimService _claimService;
         private IAuthService _authService;
@@ -63,7 +64,8 @@ namespace MBS.Razor.Pages
             {
                 await _authService.SendVerifyEmail(user);
                 TempData["ErrorMessage"] = "You need to confirm email!";
-                return Page();
+                SaveTempData("Email", user.Email!);
+                return Redirect(RouteEndpoints.ConfirmEmail);
             }
 
             var userRole = await _authService.GetUserRoleAsync(user);
@@ -153,6 +155,5 @@ namespace MBS.Razor.Pages
             };
             return claims;
         }
-
     }
 }

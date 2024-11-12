@@ -21,4 +21,5 @@ public interface IAuthService
     public Task<bool> CreateUserAsync(ApplicationUser user, string password);
     public Task<bool> AddToRoleAsync(ApplicationUser user, string role);
     Task SendVerifyEmail(ApplicationUser user);
+    Task<bool> VerifyEmail(ApplicationUser user, string token);
 }

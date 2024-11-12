@@ -125,6 +125,12 @@ public class AuthService : IAuthService
 
         await _emailService.SendEmailAsync(EmailMessage.Create(user.Email!, emailBody, "[MBS]Confirm your email"));
     }
+
+    public async Task<bool> VerifyEmail(ApplicationUser user, string token)
+    {
+        var result = await _userManager.ConfirmEmailAsync(user, token);
+        return result.Succeeded;
+    }
     // public async Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request)
     // {
     //     var result = await WebUtils.PostAsync(ApiEndPoints.RegisterUrl, request);

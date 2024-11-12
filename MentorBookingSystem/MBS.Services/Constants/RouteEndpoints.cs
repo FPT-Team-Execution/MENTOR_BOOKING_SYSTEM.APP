@@ -9,6 +9,8 @@ public static class RouteEndpoints
     public const string Logout = "/Logout";
     public const string Register = "/Register";
     public const string AccessDenied = "/DeniedPage";
+    public const string ConfirmEmail = "/ConfirmEmail";
+    public const string ResendConfirmEmail = "/ResendConfirmEmail";
 
     #endregion
 

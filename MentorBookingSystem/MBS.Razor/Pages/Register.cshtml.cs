@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using MBS.BusinessObject.Commom;
 using MBS.BusinessObject.Entities;
+using MBS.Razor.Pages.AdminPage;
 using MBS.Services.Constants;
 using MBS.Services.Constants.Enums;
 using MBS.Services.Dtos;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MBS.Razor.Pages
 {
-    public class RegisterModel : PageModel
+    public class RegisterModel : BaseAdminPage
     {
         private readonly IAuthService _authService;
         private readonly IMajorService _majorService;
@@ -89,7 +90,8 @@ namespace MBS.Razor.Pages
             }
 
             TempData["SuccessMessage"] = "Register successfully";
-            return Redirect(RouteEndpoints.Login);
-        }
+            SaveTempData("Email", user.Email);
+            return Redirect(RouteEndpoints.ConfirmEmail);
+        } 
     }
 }
