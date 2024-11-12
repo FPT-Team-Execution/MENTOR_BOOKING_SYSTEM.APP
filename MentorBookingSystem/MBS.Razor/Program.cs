@@ -1,6 +1,8 @@
+using MBS.DataAccess;
 using MBS.Razor.Extensions;
 using MBS.Services.Constants;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,9 @@ builder.Services.AddServiceDependencies();
 //add data access dependencies
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddRepositoryDependencies();
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<MBSContext>().AddDefaultTokenProviders();
 
 builder.Services.AddAuthentication(options =>
     {

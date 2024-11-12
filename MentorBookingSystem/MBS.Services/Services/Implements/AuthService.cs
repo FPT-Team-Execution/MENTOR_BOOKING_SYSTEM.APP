@@ -1,4 +1,5 @@
-﻿using MBS.Services.Constants;
+﻿using MBS.BusinessObject.Entities;
+using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Models.Responses;
@@ -6,6 +7,7 @@ using MBS.Services.Models.Responses.Auth;
 using MBS.Services.Models.Responses.Auth.GoogleAuth;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
 namespace MBS.Services.Services.Implements;
@@ -13,15 +15,33 @@ namespace MBS.Services.Services.Implements;
 public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;
-    public AuthService(IConfiguration configuration)
+    private readonly UserManager<ApplicationUser> _userManager;
+    public AuthService(IConfiguration configuration, UserManager<ApplicationUser> userManager)
     {
         _configuration = configuration;
+        _userManager = userManager;
     }
-    public async Task<BaseModel<LoginResponse, LoginRequest>> LoginAsync(LoginRequest request)
+    // public async Task<BaseModel<LoginResponse, LoginRequest>> LoginAsync(LoginRequest request)
+    // {
+    //     var result = await WebUtils.PostAsync(ApiEndPoints.LoginUrl, request);
+    //     var response = WebUtils.HandleResponse<BaseModel<LoginResponse, LoginRequest>>(result);
+    //     return response;
+    // }
+
+    public async Task<ApplicationUser?> LoginAsync(LoginRequest request)
     {
-        var result = await WebUtils.PostAsync(ApiEndPoints.LoginUrl, request);
-        var response = WebUtils.HandleResponse<BaseModel<LoginResponse, LoginRequest>>(result);
-        return response;
+        try
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+
+            _userManager.
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 
     public string GetGoogleRedirectUrl()
