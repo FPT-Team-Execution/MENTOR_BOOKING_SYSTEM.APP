@@ -1,13 +1,9 @@
-using System.Security.Claims;
-using Mapster;
-using MBS.BusinessObject.Entities;
 using MBS.BusinessObject.Enums;
 using MBS.Razor.Pages.AdminPage;
-using MBS.Repositories.Interfaces;
 using MBS.Services.Constants;
 using MBS.Services.Dtos;
 using MBS.Services.Services.Interfaces;
-using MBS.Services.Utils;
+using MBS.Services.Utils.Shared;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MBS.Razor.Pages.StudentPage.ProjectPage;
@@ -62,12 +58,7 @@ public class Index : BaseAdminPage
     {
         try
         {
-            var userIdClaim = _claimService.GetClaims().ContainsKey(ClaimTypes.NameIdentifier)
-                ? _claimService.GetClaims()[ClaimTypes.NameIdentifier]
-                : "";
-            var roleClaim = _claimService.GetClaims().ContainsKey(ClaimTypes.Role)
-                ? _claimService.GetClaims()[ClaimTypes.Role]
-                : "";
+            var userIdClaim = _claimService.GetClaim(CookieNames.UserId);
             await GetActiveProjectByUserId(userIdClaim);
         }
         catch
