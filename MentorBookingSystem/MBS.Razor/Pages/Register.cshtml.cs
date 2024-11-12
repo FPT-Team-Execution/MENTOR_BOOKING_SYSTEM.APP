@@ -85,6 +85,8 @@ namespace MBS.Razor.Pages
 
                 var addToRoleResult = await _authService.AddToRoleAsync(user, UserRole.Student);
 
+                await _authService.SendVerifyEmail(user);
+
                 transactionScope.Complete();
 
                 if (!addToRoleResult)
