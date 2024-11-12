@@ -1,5 +1,6 @@
 using MBS.BusinessObject.Entities;
 using MBS.DataAccess;
+using MBS.Externals.Models.Email;
 using MBS.Razor.Extensions;
 using MBS.Services.Constants;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -57,6 +58,8 @@ builder.Services.AddAuthentication(options =>
         options.AccessDeniedPath = RouteEndpoints.Login;
     });
 
+
+builder.Services.AddSingleton(builder.Configuration.GetSection("SmtpSettings").Get<SmtpSettings>()!);
 
 builder.Services.AddSession();
 

@@ -1,5 +1,9 @@
 using System.Threading.Tasks;
+using MBS.BusinessObject.Commom;
+using MBS.BusinessObject.Entities;
 using MBS.Services.Constants;
+using MBS.Services.Constants.Enums;
+using MBS.Services.Dtos;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Models.Responses.Major;
@@ -13,40 +17,78 @@ namespace MBS.Razor.Pages
     {
         private readonly IAuthService _authService;
         private readonly IMajorService _majorService;
+        private readonly IStudentService _studentService;
 
-        public BaseModel<Pagination<MajorResponseDto>>? MajorData { get; set; }
+        public IEnumerable<MajorDto> MajorData { get; set; }
 
-        public RegisterModel(IAuthService authService, IMajorService majorService)
+        public RegisterModel(IAuthService authService, IMajorService majorService, IStudentService studentService)
         {
             _authService = authService;
             _majorService = majorService;
+            _studentService = studentService;
         }
 
         [BindProperty] public RegisterRequest RegisterRequest { get; set; }
 
         public async Task OnGet()
         {
-            MajorData = await _majorService.GetMajorsAsync(1, 100) as BaseModel<Pagination<MajorResponseDto>>;
+            MajorData = await _majorService.GetAllMajors();
         }
 
         public async Task<IActionResult> OnPost()
         {
             if (!ModelState.IsValid)
             {
-                MajorData = await _majorService.GetMajorsAsync(1, 100) as BaseModel<Pagination<MajorResponseDto>>;
+                MajorData = await _majorService.GetAllMajors();
                 return Page();
             }
 
-            var response = await _authService.RegisterAsync(RegisterRequest);
-
-            if (response.StatusCode != StatusCodes.Status200OK)
+            var user = new ApplicationUser()
             {
-                TempData["ErrorMessage"] = response.Message;
-                MajorData = await _majorService.GetMajorsAsync(1, 100) as BaseModel<Pagination<MajorResponseDto>>;
+                Id = Guid.NewGuid().ToString(),
+                Email = RegisterRequest.Email,
+                FullName = RegisterRequest.FullName,
+                Gender = RegisterRequest.Gender,
+                UserName = RegisterRequest.Email
+            };
+
+            var createUserResult = await _authService.CreateUserAsync(user, RegisterRequest.Password);
+
+            if (!createUserResult)
+            {
+                TempData["ErrorMessage"] = "Register fail!";
+                MajorData = await _majorService.GetAllMajors();
                 return Page();
             }
 
-            TempData["SuccessMessage"] = response.Message;
+
+            var student = new StudentDto()
+            {
+                MajorId = RegisterRequest.MajorId,
+                UserId = user.Id,
+                University = RegisterRequest.University,
+                WalletPoint = 100,
+            };
+
+            var createStudentResult = await _studentService.CreateStudentAsync(student);
+
+            if (string.IsNullOrEmpty(createStudentResult))
+            {
+                TempData["ErrorMessage"] = "Register fail!";
+                MajorData = await _majorService.GetAllMajors();
+                return Page();
+            }
+
+            var addToRoleResult = await _authService.AddToRoleAsync(user, UserRole.Student);
+
+            if (!addToRoleResult)
+            {
+                TempData["ErrorMessage"] = "Register fail!";
+                MajorData = await _majorService.GetAllMajors();
+                return Page();
+            }
+
+            TempData["SuccessMessage"] = "Register successfully";
             return Redirect(RouteEndpoints.Login);
         }
     }
