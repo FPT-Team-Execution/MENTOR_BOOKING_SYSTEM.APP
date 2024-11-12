@@ -1,4 +1,8 @@
 @page
+@using System.Diagnostics
+@using MBS.BusinessObject.Enums
+@using MBS.DataAccess.Pagination
+@using MBS.Externals.Utils
 @using MBS.Services.Dtos
 @using MBS.Services.Utils.Shared
 @using Microsoft.AspNetCore.Mvc.TagHelpers
@@ -11,6 +15,12 @@
     var members = Model.GetTempData<List<GroupDto>>(TempDataKeys.StudentKeys.Groups);
     members ??= new List<GroupDto>();
     var project = Model.GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
+    project ??= new ProjectDto();
+
+    //Student Pagination 
+    var requestPagination = Model.GetTempData<Pagination<RequestDto>>(TempDataKeys.StudentKeys.RequestPagination);
+    var requestArray = requestPagination == null ? Array.Empty<RequestDto>() : requestPagination.Items.ToArray();
+
     //Get search & sort Order
     string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
     string sortOrder = Model.GetTempData<string>(TempDataKeys.SortOrder) ?? Model.SortOrder;
@@ -21,153 +31,175 @@
 }
 
 <div class="row">
-<div class="col-lg-8 mb-2">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Members</h5>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Full Name</th>
-                        <th scope="col">Position</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    @{
-                        if (!members.Any())
-                        {
-                            <tr>
-                                <td colspan="4" class="text-center">No member available</td>
-                            </tr>
-                        }
-                        else
-                        {
-                            var memberArray = members.ToArray();
-                            for (int i = 0; i < memberArray.Length; i++)
+    <div class="col-lg-8 mb-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Members</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Position</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @{
+                            if (!members.Any())
                             {
-                                var group = memberArray[i];
-                                <tr id="@(group.Id)" role="button">
-                                    <th scope="row">@(i + 1)</th>
-                                    <td>@group.StudentName</td>
-                                    <td>@group.PositionName</td>
+                                <tr>
+                                    <td colspan="4" class="text-center">No member available</td>
                                 </tr>
                             }
+                            else
+                            {
+                                var memberArray = members.ToArray();
+                                for (int i = 0; i < memberArray.Length; i++)
+                                {
+                                    var group = memberArray[i];
+                                    <tr id="@(group.Id)" role="button">
+                                        <th scope="row">@(i + 1)</th>
+                                        <td>@group.StudentName</td>
+                                        <td>@group.PositionName</td>
+                                    </tr>
+                                }
+                            }
                         }
-                    }
-                    </tbody>
-                </table>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div class="h-100 col-lg-4 row ">
-    <div class="col-lg-12  p-0">
-        <div class="row justify-content-center">
-            <div class="col-lg-12">
-                <div class="nav-wrapper">
-                    <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab"
-                               href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true">
-                                <i class="ni ni-calendar-grid-58 mr-2"></i>Project
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab"
-                               href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false">
-                                <i class="ni ni-cloud-upload-96 mr-2"></i>Mentor
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab"
-                               href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false">
-                                <i class="ni ni-bell-55 mr-2"></i>Process
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card shadow">
-                    <div class="card-body">
-                        <div class="tab-content" id="myTabContent">
-                            <!-- Tab Content for Project -->
-                            <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel"
-                                 aria-labelledby="tabs-icons-text-1-tab">
-                                <div class="col-lg-8">
-                                    <h4 class="mt-7">MBS</h4>
-                                    <p class="card-subtitle mt-2 mb-3">
-                                        <b>Tiltle: </b>Mentor Booking System
-                                    </p>
-                                    <p class="card-subtitle mt-2 mb-3">
-                                        <b>Description: </b>Mentor Booking For Capston
-                                    </p>
-                                    <p class="card-subtitle mt-2 mb-3">
-                                        <b>Due date: </b>2024-10-11
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- Tab Content for Mentor -->
-                            <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
-                                <div class="row">
-                                    <div class="col-lg-4" style="width: 150px; height: 150px; background-color: #f0f0f0;">
-                                        <img src="https://via.placeholder.com/150"
-                                             class="img-fluid"
-                                             style="max-width: 100%; max-height: 100%; object-fit: cover;" alt="mentor image"/>
-                                    </div>
-                                    <div class="col-lg-8">
-                                        <h4 class="mt-7">Nguyễn Xuân Đạt</h4>
+    <div class="h-100 col-lg-4 row ">
+        <div class="col-lg-12  p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="nav-wrapper">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab"
+                                   href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true">
+                                    <i class="ni ni-calendar-grid-58 mr-2"></i>Project
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab"
+                                   href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false">
+                                    <i class="ni ni-cloud-upload-96 mr-2"></i>Mentor
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab"
+                                   href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false">
+                                    <i class="ni ni-bell-55 mr-2"></i>Process
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <!-- Tab Content for Project -->
+                                <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel"
+                                     aria-labelledby="tabs-icons-text-1-tab">
+                                    <div class="col-lg-12">
+                                        <h4 class="mt-7">@(project.Title)</h4>
                                         <p class="card-subtitle mt-2 mb-3">
-                                            <b>Email: </b>datngx.dev@gmail.com
+                                            <b>Description: </b>@(project.Description)
                                         </p>
                                         <p class="card-subtitle mt-2 mb-3">
-                                            <b>Industry: </b>FPT Software
+                                            <b>Semester: </b>@(project.Semester)
                                         </p>
-                                        <button class="btn btn-icon btn-primary" type="button">
-                                            <span class="btn-inner--text"><i class="fas fa-comment-dots"></i> Create Request</span>
-                                        </button>
+                                        <p class="card-subtitle mt-2 mb-3">
+                                            <b>Due date: </b>@(ConvertUtils.FormatDateTimeToString(project.DueDate))
+                                        </p>
+                                        @{
+                                            var projectBgColor = string.Empty;
+                                            switch (project.Status)
+                                            {
+                                                case nameof(ProjectStatusEnum.Activated):
+                                                    projectBgColor = "bg-success";
+                                                    break;
+                                                case nameof(ProjectStatusEnum.Deactivated):
+                                                    projectBgColor = "bg-danger";
+                                                    break;
+                                                case nameof(ProjectStatusEnum.Closed):
+                                                    projectBgColor = "bg-gray-800";
+                                                    break;
+                                                default:
+                                                    projectBgColor = string.Empty;
+                                                    break;
+                                            }
+                                        }
+                                        <p class="card-subtitle badge badge-counter">
+                                            <span class="badge @projectBgColor  text-white fs-6 p-3">@(project.Status)</span>
+                                        </p>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- Tab Content for Process -->
-                            <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel"
-                                 aria-labelledby="tabs-icons-text-3-tab">
-                                <div class="vstack gap-4 mt-7 pt-2">
-                                    <div class="container mt-4">
-                                        <div class="progress-marks mb-3">
-                                            <!-- Progress bar -->
-                                            <div class="progress mb-3" role="progressbar" aria-label="Progress bar with labeled checkboxes" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar bg-success" style="width: 35%"></div>
-                                            </div>
-                                            <!-- Checkboxes and labels -->
-                                            <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between">
-                                                <div>
-                                                    <input class="custom-control-input" id="customCheck3" type="checkbox">
-                                                    <label class="custom-control-label ms-2" for="customCheck3">
-                                                        <span>Deployment</span>
-                                                    </label>
+                                <!-- Tab Content for Mentor -->
+                                <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                    <div class="row">
+                                        <div class="col-lg-4" style="width: 150px; height: 150px; background-color: #f0f0f0;">
+                                            <img src="https://via.placeholder.com/150"
+                                                 class="img-fluid"
+                                                 style="max-width: 100%; max-height: 100%; object-fit: cover;" alt="mentor image"/>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <h4 class="mt-7">Nguyễn Xuân Đạt</h4>
+                                            <p class="card-subtitle mt-2 mb-3">
+                                                <b>Email: </b>datngx.dev@gmail.com
+                                            </p>
+                                            <p class="card-subtitle mt-2 mb-3">
+                                                <b>Industry: </b>FPT Software
+                                            </p>
+                                            <button class="btn btn-icon btn-primary" type="button">
+                                                <span class="btn-inner--text"><i class="fas fa-comment-dots"></i> Create Request</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Tab Content for Process -->
+                                <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel"
+                                     aria-labelledby="tabs-icons-text-3-tab">
+                                    <div class="vstack gap-4 mt-7 pt-2">
+                                        <div class="container mt-4">
+                                            <div class="progress-marks mb-3">
+                                                <!-- Progress bar -->
+                                                <div class="progress mb-3" role="progressbar" aria-label="Progress bar with labeled checkboxes" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar bg-success" style="width: 35%"></div>
                                                 </div>
-                                                <a href="#" class="text-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </div>
-                                            <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between">
-                                                <div>
-                                                    <input class="custom-control-input" id="customCheck4" type="checkbox">
-                                                    <label class="custom-control-label ms-2" for="customCheck4">
-                                                        <span>Testing</span>
-                                                    </label>
+                                                <!-- Checkboxes and labels -->
+                                                <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between">
+                                                    <div>
+                                                        <input class="custom-control-input" id="customCheck3" type="checkbox">
+                                                        <label class="custom-control-label ms-2" for="customCheck3">
+                                                            <span>Deployment</span>
+                                                        </label>
+                                                    </div>
+                                                    <a href="#" class="text-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
                                                 </div>
-                                                <a href="#" class="text-danger">
-                                                    <i class="fas fa-trash"></i>
-                                                </a>
-                                            </div>
-                                            <div class="pl-0 custom-control custom-checkbox mb-3">
-                                                <div class="">
-                                                    <form action="" method="post" class="d-flex">
-                                                        <input type="email" name="email" class="form-control" placeholder="Process">
-                                                        <button type="submit" class="btn btn-danger">Create</button>
-                                                    </form>
+                                                <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between">
+                                                    <div>
+                                                        <input class="custom-control-input" id="customCheck4" type="checkbox">
+                                                        <label class="custom-control-label ms-2" for="customCheck4">
+                                                            <span>Testing</span>
+                                                        </label>
+                                                    </div>
+                                                    <a href="#" class="text-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                                <div class="pl-0 custom-control custom-checkbox mb-3">
+                                                    <div class="">
+                                                        <form action="" method="post" class="d-flex">
+                                                            <input type="email" name="email" class="form-control" placeholder="Process">
+                                                            <button type="submit" class="btn btn-danger">Create</button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -180,95 +212,80 @@
             </div>
         </div>
     </div>
-</div>
-<div class="col-lg-8">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">Requests</h5>
-            <div class="table-responsive">
-                <table class="table text-nowrap align-middle mb-0">
-                    <thead>
-                    <tr class="border-2 border-bottom border-primary border-0">
-                        <th scope="col" class="ps-0">Page Title</th>
-                        <th scope="col">Link</th>
-                        <th scope="col" class="text-center">Pageviews</th>
-                        <th scope="col" class="text-center">Page Value</th>
-                    </tr>
-                    </thead>
-                    <tbody class="table-group-divider">
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium">
-                            <span class="table-link1 text-truncate d-block">
-                                Welcome to our
-                                website
-                            </span>
-                        </th>
-                        <td>
-                            <a href="javascript:void(0)" class="link-primary text-dark fw-medium d-block">/index.html</a>
-                        </td>
-                        <td class="text-center fw-medium">18,456</td>
-                        <td class="text-center fw-medium">$2.40</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium">
-                            <span class="table-link1 text-truncate d-block">
-                                Modern Admin
-                                Dashboard Template
-                            </span>
-                        </th>
-                        <td>
-                            <a href="javascript:void(0)" class="link-primary text-dark fw-medium d-block">/dashboard</a>
-                        </td>
-                        <td class="text-center fw-medium">17,452</td>
-                        <td class="text-center fw-medium">$0.97</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium">
-                            <span class="table-link1 text-truncate d-block">
-                                Explore our
-                                product catalog
-                            </span>
-                        </th>
-                        <td>
-                            <a href="javascript:void(0)"
-                               class="link-primary text-dark fw-medium d-block">
-                                /product-checkout
-                            </a>
-                        </td>
-                        <td class="text-center fw-medium">12,180</td>
-                        <td class="text-center fw-medium">$7,50</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium">
-                            <span class="table-link1 text-truncate d-block">
-                                Comprehensive
-                                User Guide
-                            </span>
-                        </th>
-                        <td>
-                            <a href="javascript:void(0)" class="link-primary text-dark fw-medium d-block">/docs</a>
-                        </td>
-                        <td class="text-center fw-medium">800</td>
-                        <td class="text-center fw-medium">$5,50</td>
-                    </tr>
-                    <tr>
-                        <th scope="row" class="ps-0 fw-medium border-0">
-                            <span class="table-link1 text-truncate d-block">
-                                Check out our
-                                services
-                            </span>
-                        </th>
-                        <td class="border-0">
-                            <a href="javascript:void(0)" class="link-primary text-dark fw-medium d-block">/services</a>
-                        </td>
-                        <td class="text-center fw-medium border-0">1300</td>
-                        <td class="text-center fw-medium border-0">$2,15</td>
-                    </tr>
-                    </tbody>
-                </table>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Requests</h5>
+                <div class="table-responsive">
+                    <table class="table text-nowrap align-middle mb-0">
+                        <thead>
+                        <tr class="border-2 border-bottom border-primary border-0">
+                            <th scope="col" class="ps-0">ID</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Mentor</th>
+                            <th scope="col" class="text-center">Creater</th>
+                            <th scope="col" class="text-center">Start</th>
+                            <th scope="col" class="text-center">End</th>
+                            <th scope="col" class="text-center">CreateOn</th>
+                            <th scope="col" class="text-center">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        @{
+                            if (!requestArray.Any())
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center">No request available</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                for (int i = 0; i < requestArray.Length; i++)
+                                {
+                                    var request = requestArray[i];
+
+                                    var requestBgColor = string.Empty;
+                                    switch (request.Status)
+                                    {
+                                        case nameof(RequestStatusEnum.Accepted):
+                                            requestBgColor = "bg-success";
+                                            break;
+                                        case nameof(RequestStatusEnum.Rejected):
+                                            requestBgColor = "bg-danger";
+                                            break;
+                                        case nameof(RequestStatusEnum.Pending):
+                                            requestBgColor = "bg-gray-800";
+                                            break;
+                                        default:
+                                            requestBgColor = string.Empty;
+                                            break;
+                                    }
+
+                                    <tr id="@(request.Id)" role="button">
+                                        <th scope="row">@(i + 1)</th>
+                                        <td>@request.Title</td>
+                                        <td>@request.MentorName</td>
+                                        <td>@request.CreaterName</td>
+                                        <td>@(ConvertUtils.FormatDateTimeToString(request.Start))</td>
+                                        <td>@(ConvertUtils.FormatDateTimeToString(request.End))</td>
+                                        <td>@(ConvertUtils.FormatDateTimeToString(request.CreatedOn))</td>
+                                        @* <p class="card-subtitle badge badge-counter"> *@
+                                        @*     <span class="badge @(requestBgColor) text-white fs-4 p-3"> *@
+                                        @*         @(request.Status) *@
+                                        @*     </span> *@
+                                        @* </p> *@
+                                        <td>
+                                            <span class="badge @requestBgColor  text-white">@(request.Status)</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 </div>

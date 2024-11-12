@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MBS.DataAccess.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace MBS.Repositories.Implements

@@ -1,5 +1,6 @@
 ﻿using MBS.BusinessObject.Pagination;
 using MBS.DataAccess.DAO.Interfaces;
+using MBS.DataAccess.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace MBS.Repositories.Implements
