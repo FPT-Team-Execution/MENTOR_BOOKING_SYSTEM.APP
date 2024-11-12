@@ -15,11 +15,11 @@ namespace MBS.Services.Services.Implements;
 
 public class MajorService : IMajorService
 {
-    private readonly IMajorRepository _majorRepository;
+    private readonly IMentorMajorRepository _mentorMajorRepository;
 
-    public MajorService(IMajorRepository majorRepository)
+    public MajorService(IMentorMajorRepository mentorMajorRepository)
     {
-        _majorRepository = majorRepository;
+        _mentorMajorRepository = mentorMajorRepository;
     }
 
     public async Task<IResponse> GetMentorMajorsAsync(GetMentorMajorsRequest request)
@@ -44,6 +44,12 @@ public class MajorService : IMajorService
         return response;
     }
 
+    public async Task<Pagination<MajorDto>> GetMentorMajorsAsync(string mentorId, int page, int size)
+    {
+        var result = await _mentorMajorRepository.GetMentorMajorsAsync(mentorId, page, size);
+        return result.Adapt<Pagination<MajorDto>>();
+    }
+
     public async Task<IResponse> CreateNewMajorAsync(CreateNewMajorRequestModel request)
     {
         var result = await WebUtils.PostAsync(
@@ -58,7 +64,7 @@ public class MajorService : IMajorService
 
     public async Task<IEnumerable<MajorDto>> GetAllMajors()
     {
-        var majors = await _majorRepository.GetAllAsync();
+        var majors = await _mentorMajorRepository.GetAllAsync();
         return majors.Adapt<IEnumerable<MajorDto>>();
     }
 
