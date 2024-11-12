@@ -1,5 +1,6 @@
-﻿using MBS.Services.Constants;
+using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Requests.Project;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Models.Responses.Project;
 using MBS.Services.Services.Interfaces;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 using Mapster;
 using MBS.Repositories.Interfaces;
 using MBS.Services.Dtos;
+using MBS.DataAccess.Pagination;
 
 namespace MBS.Services.Services.Implements
 {
@@ -23,18 +25,22 @@ namespace MBS.Services.Services.Implements
         {
             _projectRepository = projectRepository;
         }
+        
+        public Task<IResponse> CreateProjectAsync(CreateProjectModel createProjectModel)
+        {
+            throw new NotImplementedException();
+        }
+        
         public async Task<ProjectDto?> GetProjectByIdAsync(Guid projectId)
         {
             var project = await _projectRepository.GetProjectById(projectId);
             return project.Adapt<ProjectDto>();
         }
 
-        public async Task<IResponse> GetProjectAsync(int page, int size, string search)
+        public async Task<Pagination<ProjectResponse>> GetProjectAsync(int page, int size, string search)
         {
-            var url = ApiEndPoints.ProjectUrl.Replace("{page}",page.ToString()).Replace("{pageSize}",size.ToString()).Replace("{search}",search);
-            var result = await WebUtils.GetAsync(url);
-            var response = WebUtils.HandleResponse<BaseModel<Pagination<ProjectResponse>>>(result);
-            return response;
+            var result = await _projectRepository.GetAllProjects(page, size);
+            return result.Adapt<Pagination<ProjectResponse>>();
         }
         
     }

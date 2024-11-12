@@ -1,4 +1,5 @@
-﻿using MBS.Services.Dtos;
+﻿using MBS.DataAccess.Pagination;
+using MBS.Services.Dtos;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Major;
 using MBS.Services.Models.Responses.Major;

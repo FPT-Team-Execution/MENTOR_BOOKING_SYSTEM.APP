@@ -15,6 +15,7 @@ using MBS.Services.Models.Requests.Degree;
 using MBS.Services.Models.Requests.Mentor;
 using MBS.Services.Models.Responses.Degree;
 using MBS.Services.Models.Responses.Mentor;
+using MBS.DataAccess.Pagination;
 
 namespace MBS.Services.Services.Implements
 {

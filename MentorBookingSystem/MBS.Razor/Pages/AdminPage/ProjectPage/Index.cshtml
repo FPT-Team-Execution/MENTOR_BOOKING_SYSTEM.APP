@@ -3,6 +3,7 @@
 @using MBS.Razor.Pages.AdminPage.ProjectPage.Models
 @using MBS.Services.Models
 @using MBS.Services.Utils
+@using MBS.DataAccess.Pagination
 @using MBS.Services.Utils.Shared
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 
@@ -44,6 +45,8 @@
                         </div>
                     </div>
                 </form>
+
+                <a href="/AdminPage/ProjectPage/Create"> <button class="btn btn-primary">Create Project</button> </a>
             </div>
         </div>
         <div class="table-responsive">

@@ -1,5 +1,6 @@
 using Mapster;
 using MBS.BusinessObject.Entities;
+using MBS.DataAccess.Pagination;
 using MBS.Repositories.Interfaces;
 using MBS.Services.Models;
 using MBS.Services.Services.Interfaces;

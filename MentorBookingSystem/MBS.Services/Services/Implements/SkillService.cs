@@ -1,4 +1,5 @@
-﻿using MBS.Services.Constants;
+﻿using MBS.DataAccess.Pagination;
+using MBS.Services.Constants;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Skill;
 using MBS.Services.Models.Responses.Position;
