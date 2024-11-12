@@ -1,0 +1,27 @@
+@page
+@model MBS.Razor.Pages.ConfirmEmail
+
+@{
+    Layout = "Shared/_Layout";
+}
+
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
+        <div class="text-center">
+            <h3 class="card-title mb-4 text-primary">Verify Email</h3>
+            <p class="text-muted">Enter the token we sent to your email</p>
+        </div>
+        <form method="post">
+            <div class="form-group mb-3">
+                <label for="Token" class="form-label">Token</label>
+                <input type="text" id="Token" name="Token" class="form-control" placeholder="Enter Token" required/>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Xác Nhận</button>
+        </form>
+        <div class="text-center mt-3">
+            <p class="text-muted">
+                <a href="@RouteEndpoints.ResendConfirmEmail" class="text-primary">Send Again</a>
+            </p>
+        </div>
+    </div>
+</div>
