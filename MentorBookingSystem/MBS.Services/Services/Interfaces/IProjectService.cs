@@ -9,6 +9,7 @@ using MBS.Services.Dtos;
 using MBS.Services.Models.Responses.Project;
 using MBS.Services.Models.Requests.Position;
 using MBS.Services.Models.Requests.Project;
+using MBS.DataAccess.Pagination;
 
 namespace MBS.Services.Services.Interfaces
 {

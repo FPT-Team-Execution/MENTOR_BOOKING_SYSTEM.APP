@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using MBS.Services.Dtos;
 using MBS.Services.Models.Requests.Degree;
 using MBS.Services.Models.Requests.Mentor;
+using MBS.DataAccess.Pagination;
 
 namespace MBS.Services.Services.Interfaces
 {

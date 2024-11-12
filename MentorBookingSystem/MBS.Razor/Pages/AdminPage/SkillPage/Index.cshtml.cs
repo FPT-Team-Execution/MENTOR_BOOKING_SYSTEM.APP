@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using MBS.Services.Utils.Shared;
+using MBS.DataAccess.Pagination;
 
 namespace MBS.Razor.Pages.AdminPage.SkillPage
 {

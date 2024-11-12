@@ -11,6 +11,7 @@ using MBS.Razor.Pages.AdminPage.MeetingPage.Model;
 using MBS.Services.Models.Responses.Meeting;
 using Mapster;
 using MBS.Services.Utils.Shared;
+using MBS.DataAccess.Pagination;
 
 namespace MBS.Razor.Pages.AdminPage.MeetingPage;
 
