@@ -1,11 +1,10 @@
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using MBS.BusinessObject.Entities;
 
 namespace MBS.Services.Dtos;
 
-public class ProcessDto
+public class ProgressDto
 {
+    public Guid Id { get; set; }
     [MaxLength(100)]
     public string Name  { get; set; } = string.Empty;
     [Required] public bool IsComplete { get; set; } = false;

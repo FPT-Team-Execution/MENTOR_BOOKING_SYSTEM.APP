@@ -78,6 +78,12 @@ public class TempDataKeys
         public const string Project = "Project";
         public const string RequestPagination = "RequestPagination";
         public const string Mentor = "Mentor";
+        public const string Progresses = "Progresses";
+
+        public const string Percent = "Percent";
+        public const string Complete = "Complete";
+        public const string NotComplete = "NotComplete";
+
         #endregion
     }
 }

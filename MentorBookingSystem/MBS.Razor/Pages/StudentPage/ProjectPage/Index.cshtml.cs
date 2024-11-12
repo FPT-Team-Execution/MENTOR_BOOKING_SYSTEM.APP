@@ -16,19 +16,27 @@ public class Index : BaseAdminPage
     private readonly IProjectService _projectService;
     private readonly IRequestService _reqService;
     private readonly IMentorService _mentorService;
-    public Index(IGroupService groupService, IClaimService claimService, IProjectService projectService, IRequestService reqService, IMentorService mentorService)
+    private readonly IProgressService _progressService;
+    public Index(IGroupService groupService, IClaimService claimService, IProjectService projectService,
+        IRequestService reqService, IMentorService mentorService, IProgressService progressService)
     {
         _groupService = groupService;
         _claimService = claimService;
         _projectService = projectService;
         _reqService = reqService;
         _mentorService = mentorService;
+        _progressService = progressService;
     }
 
     public ProjectDto Project { get; set; } = new();
     public List<GroupDto> Groups { get; set; } = new();
     public Pagination<RequestDto> RequestsPagination { get; set; } = new();
     public MentorDto Mentor { get; set; } = new();
+    public List<ProgressDto> Progresses { get; set; } = new();
+    
+    public double Percent { get; set; } = 0;
+    public List<ProgressDto> Complete { get; set; } = new();
+    public List<ProgressDto> NotComplete { get; set; } = new();
 
     
     
@@ -76,7 +84,21 @@ public class Index : BaseAdminPage
         SaveTempData(TempDataKeys.PageSize, Size);
         SaveTempData(TempDataKeys.SortOrder, SortOrder);
         
-        //TODO: get processes by process
+        //* get processes by process
+        var progresses = await _progressService.GetProgressByProjectIdAsync(Project.Id);
+        Progresses = progresses.ToList();
+        SaveTempData(TempDataKeys.StudentKeys.Progresses, Progresses);
+        
+        
+        //* get processes detail
+        var progressDetail = await _progressService.GetCompleteProgressPercent(Project.Id);
+        Percent = progressDetail.Percent;
+        SaveTempData(TempDataKeys.StudentKeys.Percent, Percent);
+        Complete = progressDetail.Complete.ToList();
+        SaveTempData(TempDataKeys.StudentKeys.Complete, Complete);
+        NotComplete = progressDetail.NotComplete.ToList();
+        SaveTempData(TempDataKeys.StudentKeys.NotComplete, NotComplete);
+
         
         //* get mentor info
         var mentor = await _mentorService.GetMentorById(project.MentorId);

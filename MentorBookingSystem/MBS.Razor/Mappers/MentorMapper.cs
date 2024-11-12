@@ -11,6 +11,7 @@ public class MentorMapper : IRegister
     {
         config.NewConfig<Mentor, MentorDto>()
             .Map(dest => dest.Id, src => src.UserId)
+            .Map(dest => dest.FullName, src => src.User.FullName)
             .Map(dest => dest.Email, src => src.User.Email)
             .Map(dest => dest.Industry, src => src.Industry)
             .Map(dest => dest.ConsumePoint, src => src.ConsumePoint)

@@ -14,7 +14,7 @@
     //Members in project
     var members = Model.GetTempData<List<GroupDto>>(TempDataKeys.StudentKeys.Groups);
     members ??= new List<GroupDto>();
-    
+
     //Project
     var project = Model.GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
     project ??= new ProjectDto();
@@ -22,11 +22,25 @@
     //Mentor
     var mentor = Model.GetTempData<MentorDto>(TempDataKeys.StudentKeys.Mentor);
     mentor ??= new MentorDto();
-    
+
     //Student Pagination 
     var requestPagination = Model.GetTempData<Pagination<RequestDto>>(TempDataKeys.StudentKeys.RequestPagination);
     var requestArray = requestPagination == null ? Array.Empty<RequestDto>() : requestPagination.Items.ToArray();
 
+    //Progresses
+    var progresses = Model.GetTempData<List<ProgressDto>>(TempDataKeys.StudentKeys.Progresses);
+    var progressArray = progresses == null ? Array.Empty<ProgressDto>() : progresses.ToArray();
+
+    //Get Process Detail (Percent, Complete, NotComplete)
+    var percent = Double.TryParse(Model.GetTempData<string>(TempDataKeys.StudentKeys.Percent), out var result) ? result : 0;
+    
+    var complete = Model.GetTempData<List<ProgressDto>>(TempDataKeys.StudentKeys.Complete);
+    var completeArray = complete == null ? Array.Empty<ProgressDto>() : complete.ToArray();
+    
+    var notComplete = Model.GetTempData<List<ProgressDto>>(TempDataKeys.StudentKeys.NotComplete);
+    var notCompleteArray = notComplete == null ? Array.Empty<ProgressDto>() : notComplete.ToArray();
+
+    
     //Get search & sort Order
     string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
     string sortOrder = Model.GetTempData<string>(TempDataKeys.SortOrder) ?? Model.SortOrder;
@@ -172,33 +186,44 @@
                                     <div class="vstack gap-4 mt-7 pt-2">
                                         <div class="container mt-4">
                                             <div class="progress-marks mb-3">
-                                                <!-- Progress bar -->
+                                                <!-- Progress bar section -->
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <span>Progress: <strong>@(percent)%</strong></span>
+                                                    <span>Complete: <strong>@(completeArray.Length)</strong></span>
+                                                    <span>Not Complete: <strong>@(notCompleteArray.Length)</strong></span>
+                                                </div>
                                                 <div class="progress mb-3" role="progressbar" aria-label="Progress bar with labeled checkboxes" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
                                                     <div class="progress-bar bg-success" style="width: 35%"></div>
                                                 </div>
+
                                                 <!-- Checkboxes and labels -->
-                                                <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between">
-                                                    <div>
-                                                        <input class="custom-control-input" id="customCheck3" type="checkbox">
-                                                        <label class="custom-control-label ms-2" for="customCheck3">
-                                                            <span>Deployment</span>
-                                                        </label>
-                                                    </div>
-                                                    <a href="#" class="text-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                                <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between">
-                                                    <div>
-                                                        <input class="custom-control-input" id="customCheck4" type="checkbox">
-                                                        <label class="custom-control-label ms-2" for="customCheck4">
-                                                            <span>Testing</span>
-                                                        </label>
-                                                    </div>
-                                                    <a href="#" class="text-danger">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
+                                                @{
+                                                    if (!progressArray.Any())
+                                                    {
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">No progress added</td>
+                                                        </tr>
+                                                    }
+                                                    else
+                                                    {
+                                                        @for (int i = 0; i < progressArray.Length; i++)
+                                                        {
+                                                            var progress = progressArray[i];
+                                                            <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between" id="@(progress.Id)" role="button">
+                                                                <div class="d-flex align-items-center">
+                                                                    <input class="custom-control-input" name="progressId" type="checkbox" hidden="hidden">
+                                                                    <input class="custom-control-input" id="customCheck@(i)" type="checkbox" checked="@progress.IsComplete">
+                                                                    <label class="custom-control-label ms-2" for="customCheck@(i)">
+                                                                        <span>@progress.Name</span>
+                                                                    </label>
+                                                                </div>
+                                                                <a href="#" class="text-danger">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </a>
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
                                                 <div class="pl-0 custom-control custom-checkbox mb-3">
                                                     <div class="">
                                                         <form action="" method="post" class="d-flex">
