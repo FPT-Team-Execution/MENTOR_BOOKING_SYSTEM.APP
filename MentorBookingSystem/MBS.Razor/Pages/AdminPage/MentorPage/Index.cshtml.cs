@@ -69,24 +69,16 @@ public class Index : BaseAdminPage
             MentorPagination = GetTempData<Pagination<MentorDto>>(TempDataKeys.AdminKeys.MentorPagination)!;
             ChosenMentor = MentorPagination.Items.First(x => x.Id == mentorId);
 
-            var degrees = (BaseModel<Pagination<DegreeResponse>>)await _mentorService.GetMentorDegrees(
-                new GetMentorDegreeRequest()
-                {
-                    MentorId = mentorId,
-                    Page = 1,
-                    Size = 100
-                });
+            var degrees = await _mentorService.GetMentorDegrees(
+                mentorId,
+                1,
+                100
+            );
 
-            var majors = (BaseModel<Pagination<MajorResponseDto>>)await _majorService.GetMentorMajorsAsync(
-                new GetMentorMajorsRequest()
-                {
-                    MentorId = mentorId,
-                    Page = 1,
-                    Size = 100
-                });
+            var majors = await _majorService.GetMentorMajorsAsync(mentorId, 1, 100);
 
-            ChosenMentor.Majors = majors.ResponseRequestModel.Items.Adapt<IEnumerable<MajorDto>>();
-            ChosenMentor.Degrees = degrees.ResponseRequestModel.Items.Adapt<IEnumerable<DegreeDto>>();
+            ChosenMentor.Majors = majors.Items.Adapt<IEnumerable<MajorDto>>();
+            ChosenMentor.Degrees = degrees.Items.Adapt<IEnumerable<DegreeDto>>();
 
             SaveTempData(TempDataKeys.AdminKeys.ChosenMentor, ChosenMentor);
             if (ChosenMentor == null)
