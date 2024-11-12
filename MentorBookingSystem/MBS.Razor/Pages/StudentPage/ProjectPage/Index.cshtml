@@ -14,9 +14,15 @@
     //Members in project
     var members = Model.GetTempData<List<GroupDto>>(TempDataKeys.StudentKeys.Groups);
     members ??= new List<GroupDto>();
+    
+    //Project
     var project = Model.GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
     project ??= new ProjectDto();
 
+    //Mentor
+    var mentor = Model.GetTempData<MentorDto>(TempDataKeys.StudentKeys.Mentor);
+    mentor ??= new MentorDto();
+    
     //Student Pagination 
     var requestPagination = Model.GetTempData<Pagination<RequestDto>>(TempDataKeys.StudentKeys.RequestPagination);
     var requestArray = requestPagination == null ? Array.Empty<RequestDto>() : requestPagination.Items.ToArray();
@@ -142,17 +148,17 @@
                                 <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
                                     <div class="row">
                                         <div class="col-lg-4" style="width: 150px; height: 150px; background-color: #f0f0f0;">
-                                            <img src="https://via.placeholder.com/150"
+                                            <img src="@(mentor.AvatarUrl ?? "https://via.placeholder.com/150") "
                                                  class="img-fluid"
                                                  style="max-width: 100%; max-height: 100%; object-fit: cover;" alt="mentor image"/>
                                         </div>
                                         <div class="col-lg-8">
-                                            <h4 class="mt-7">Nguyễn Xuân Đạt</h4>
+                                            <h4 class="mt-7">@(mentor.FullName)</h4>
                                             <p class="card-subtitle mt-2 mb-3">
-                                                <b>Email: </b>datngx.dev@gmail.com
+                                                <b>Email: </b>@(mentor.Email)
                                             </p>
                                             <p class="card-subtitle mt-2 mb-3">
-                                                <b>Industry: </b>FPT Software
+                                                <b>Industry: </b>@(mentor.Industry)
                                             </p>
                                             <button class="btn btn-icon btn-primary" type="button">
                                                 <span class="btn-inner--text"><i class="fas fa-comment-dots"></i> Create Request</span>

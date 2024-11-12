@@ -8,6 +8,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mapster;
+using MBS.Repositories.Interfaces;
+using MBS.Services.Dtos;
 using MBS.Services.Models.Requests.Degree;
 using MBS.Services.Models.Requests.Mentor;
 using MBS.Services.Models.Responses.Degree;
@@ -17,6 +20,13 @@ namespace MBS.Services.Services.Implements
 {
     public class MentorService : IMentorService
     {
+        private readonly IMentorRepository _mentorRepository;
+
+        public MentorService(IMentorRepository mentorRepository)
+        {
+            _mentorRepository = mentorRepository;
+        }
+
         public async Task<IResponse> GetMentorsAsync(int page, int size)
         {
             var result = await WebUtils.GetAsync(ApiEndPoints.MentorUrl,
@@ -66,9 +76,15 @@ namespace MBS.Services.Services.Implements
                 },
                 token: token
             );
-            
+
             var response = WebUtils.HandleResponse<BaseModel<Pagination<DegreeResponse>>>(result);
             return response;
+        }
+
+        public async Task<MentorDto?> GetMentorById(string id)
+        {
+            var mentor =  await _mentorRepository.GetMentorByIdAsync(id);
+            return mentor.Adapt<MentorDto>();
         }
     }
 }

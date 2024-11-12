@@ -6,9 +6,9 @@ public class MentorDto
     public string? Industry { get; set; } = string.Empty;
     public int ConsumePoint { get; set; } = 0;
 
-    public IEnumerable<MajorDto> Majors { get; set; }
+    public IEnumerable<MajorDto> Majors { get; set; } = new List<MajorDto>();
 
-    public IEnumerable<DegreeDto> Degrees { get; set; }
+    public IEnumerable<DegreeDto> Degrees { get; set; } = new List<DegreeDto>();
 
     //inheritant
     public string FullName { get; set; } = string.Empty;

@@ -15,18 +15,22 @@ public class Index : BaseAdminPage
     private readonly IClaimService _claimService;
     private readonly IProjectService _projectService;
     private readonly IRequestService _reqService;
-
-    public Index(IGroupService groupService, IClaimService claimService, IProjectService projectService, IRequestService reqService)
+    private readonly IMentorService _mentorService;
+    public Index(IGroupService groupService, IClaimService claimService, IProjectService projectService, IRequestService reqService, IMentorService mentorService)
     {
         _groupService = groupService;
         _claimService = claimService;
         _projectService = projectService;
         _reqService = reqService;
+        _mentorService = mentorService;
     }
 
     public ProjectDto Project { get; set; } = new();
     public List<GroupDto> Groups { get; set; } = new();
     public Pagination<RequestDto> RequestsPagination { get; set; } = new();
+    public MentorDto Mentor { get; set; } = new();
+
+    
     
     //TODO: add search name
     public string SearchName { get; set; } = string.Empty;
@@ -71,6 +75,19 @@ public class Index : BaseAdminPage
         SaveTempData(TempDataKeys.PageIndex, PageIndex);
         SaveTempData(TempDataKeys.PageSize, Size);
         SaveTempData(TempDataKeys.SortOrder, SortOrder);
+        
+        //TODO: get processes by process
+        
+        //* get mentor info
+        var mentor = await _mentorService.GetMentorById(project.MentorId);
+        if (mentor == null)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "No information found for this project");
+            return;
+        }
+        Mentor = mentor;
+        SaveTempData(TempDataKeys.StudentKeys.Mentor, Mentor);
+
     }
 
     public async Task<IActionResult> OnGetAsync()
