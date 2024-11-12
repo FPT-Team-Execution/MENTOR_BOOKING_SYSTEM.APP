@@ -80,7 +80,7 @@
                             {
                                 var student = students[i];
                                 var index = studentPagination.PageSize * (pageIndex - 1) + (i + 1);
-                                <tr id="@student.Id" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowStudentDetails, new { studentId = student.Id })'">
+                                <tr id="@student.UserId" role="button" onclick="location.href='@Url.Page(pageName, PageHandlers.ShowStudentDetails, new { studentId = student.UserId })'">
                                     <th scope="row">@index</th>
                                     <td>@student.FullName</td>
                                     <td>@student.Email</td>

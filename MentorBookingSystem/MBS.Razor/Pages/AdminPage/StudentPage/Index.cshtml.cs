@@ -13,7 +13,7 @@ namespace MBS.Razor.Pages.AdminPage.StudentPage;
 public class Index : BaseAdminPage
 {
     public Pagination<StudentDto> StudentPagination { get; set; } = new();
-    public List<MajorResponseDto> Majors { get; set; } = new();
+    public List<MajorDto> Majors { get; set; } = new();
     [BindProperty]public int NewPoint { get; set; } = 0;
 
     [BindProperty] public StudentDto ChosenStudent { get; set; } = new();
@@ -74,7 +74,7 @@ public class Index : BaseAdminPage
         try
         {
             StudentPagination = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!;
-            var chosenStudent = StudentPagination.Items.FirstOrDefault(x => x.Id == studentId);
+            var chosenStudent = StudentPagination.Items.FirstOrDefault(x => x.UserId == studentId);
             SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, chosenStudent);
             if (chosenStudent == null)
                 SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
@@ -167,13 +167,13 @@ public class Index : BaseAdminPage
         if (string.IsNullOrEmpty(userId))
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Create failed");
-            return await OnGetShowStudentDetail(student.Id);
+            return await OnGetShowStudentDetail(student.UserId);
         }
         //Load data
         await LoadStudents();
         SaveTempDataString(TempDataKeys.SuccessMessage, "Create Successful");
         SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
-        return await OnGetShowStudentDetail(student.Id);
+        return await OnGetShowStudentDetail(student.UserId);
     }
 
     public async Task<IActionResult> OnPutUpdate(StudentDto student)
@@ -182,17 +182,17 @@ public class Index : BaseAdminPage
         if (!updateResult)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Update failed");
-            return await OnGetShowStudentDetail(student.Id);
+            return await OnGetShowStudentDetail(student.UserId);
         }
         //Load data
         await LoadStudents();
         SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
         SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
-        return await OnGetShowStudentDetail(student.Id);
+        return await OnGetShowStudentDetail(student.UserId);
     }
     public async Task<IActionResult> OnPutDebitPoint(string studentId)
     {
-        var student = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
+        var student = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.UserId == studentId);
         if (student == null)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
@@ -208,17 +208,17 @@ public class Index : BaseAdminPage
         if (!updateResult)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Update failed");
-            return await OnGetShowStudentDetail(student.Id);
+            return await OnGetShowStudentDetail(student.UserId);
         }
         //Load data
         await LoadStudents();
         SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
         SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
-        return await OnGetShowStudentDetail(student.Id);
+        return await OnGetShowStudentDetail(student.UserId);
     }
     public async Task<IActionResult> OnPutCreditPoint(String studentId)
     {
-        var student = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
+        var student = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.UserId == studentId);
         if (student == null)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
@@ -234,17 +234,17 @@ public class Index : BaseAdminPage
         if (!updateResult)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Update failed");
-            return await OnGetShowStudentDetail(student.Id);
+            return await OnGetShowStudentDetail(student.UserId);
         }
         //Load data
         await LoadStudents();
         SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
         SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
-        return await OnGetShowStudentDetail(student.Id);
+        return await OnGetShowStudentDetail(student.UserId);
     }
     public async Task<IActionResult> OnPutCreditModify(string studentId)
     {
-        var student = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.Id == studentId);
+        var student = GetTempData<Pagination<StudentDto>>(TempDataKeys.AdminKeys.StudentPagination)!.Items.FirstOrDefault(x => x.UserId == studentId);
         if (student == null)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Student not found");
@@ -260,13 +260,13 @@ public class Index : BaseAdminPage
         if (!updateResult)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Update failed");
-            return await OnGetShowStudentDetail(student.Id);
+            return await OnGetShowStudentDetail(student.UserId);
         }
         //Load data
         await LoadStudents();
         SaveTempDataString(TempDataKeys.SuccessMessage, "Update Successful");
         SaveTempData(TempDataKeys.AdminKeys.ChosenStudent, student);
-        return await OnGetShowStudentDetail(student.Id);
+        return await OnGetShowStudentDetail(student.UserId);
     }
     
     public async Task<IActionResult> OnPost(StudentDto chosenStudent, string action)
@@ -280,11 +280,11 @@ public class Index : BaseAdminPage
                 case "update":
                     return await OnPutUpdate(chosenStudent);
                 case "point-debit":
-                    return await OnPutDebitPoint(chosenStudent.Id);
+                    return await OnPutDebitPoint(chosenStudent.UserId);
                 case "point-credit":
-                    return await OnPutCreditPoint(chosenStudent.Id);
+                    return await OnPutCreditPoint(chosenStudent.UserId);
                 case "point-modify":
-                    return await OnPutCreditPoint(chosenStudent.Id);
+                    return await OnPutCreditPoint(chosenStudent.UserId);
                 default:
                     return Page();
             }

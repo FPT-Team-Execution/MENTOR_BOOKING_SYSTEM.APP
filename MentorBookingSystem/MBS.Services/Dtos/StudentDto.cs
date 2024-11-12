@@ -4,11 +4,11 @@ namespace MBS.Services.Dtos;
 
 public class StudentDto
 {
-    public string Id { get; set; } = String.Empty;
+    public string UserId { get; set; } = String.Empty;
     public string FullName { get; set; }  = String.Empty;
     public string? Email { get; set; } = string.Empty;
     public string? University { get; set; } = string.Empty;
-    public string MajorId { get; set; } = string.Empty;
+    public Guid MajorId { get; set; }
     public int WalletPoint { get; set; } = 0;
     public string? AvatarUrl { get; set; } = string.Empty;
     public string Gender { get; set; } = UserGender.Male;
