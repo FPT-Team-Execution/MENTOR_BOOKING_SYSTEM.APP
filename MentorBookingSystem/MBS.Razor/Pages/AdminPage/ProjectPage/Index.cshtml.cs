@@ -35,8 +35,8 @@ public class Index : BaseAdminPage
 
     private async Task LoadProject()
     {
-        var response = await _projectService.GetProjectAsync(PageIndex, Size, search) as BaseModel<Pagination<ProjectResponse>>;
-        var projectList = response!.ResponseRequestModel.Adapt<Pagination<ProjectModel>>();
+        var response = await _projectService.GetProjectAsync(PageIndex, Size, search);
+        var projectList = response.Adapt<Pagination<ProjectModel>>();
         ProjectPagination = projectList;
 
         SaveTempData(TempDataKeys.AdminKeys.ProjectPagination, ProjectPagination);

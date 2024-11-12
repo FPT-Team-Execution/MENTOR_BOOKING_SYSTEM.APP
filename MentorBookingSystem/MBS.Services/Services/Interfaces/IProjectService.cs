@@ -13,6 +13,6 @@ namespace MBS.Services.Services.Interfaces
     public interface IProjectService
     {
         Task<ProjectDto?> GetProjectByIdAsync(Guid projectId);
-        Task<IResponse> GetProjectAsync(int page, int size, string sortOrder);
+        public Task<Pagination<ProjectResponse>> GetProjectAsync(int page, int size, string search);
     }
 }
