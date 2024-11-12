@@ -16,6 +16,7 @@ public class AuthService : IAuthService
 {
     private readonly IConfiguration _configuration;
     private readonly UserManager<ApplicationUser> _userManager;
+
     public AuthService(IConfiguration configuration, UserManager<ApplicationUser> userManager)
     {
         _configuration = configuration;
@@ -28,20 +29,14 @@ public class AuthService : IAuthService
     //     return response;
     // }
 
-    public async Task<ApplicationUser?> LoginAsync(LoginRequest request)
+    public async Task<ApplicationUser?> GetUserByEmailAsync(string email)
     {
-        try
-        {
-            var user = await _userManager.FindByEmailAsync(request.Email);
+        return await _userManager.FindByEmailAsync(email);
+    }
 
-            _userManager.
-
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+    public Task<bool> IsPasswordCorrect(ApplicationUser user, string password)
+    {
+        return _userManager.
     }
 
     public string GetGoogleRedirectUrl()
@@ -50,11 +45,15 @@ public class AuthService : IAuthService
         var url = googleAuthSettings["Url"];
         var clientId = googleAuthSettings["ClientId"];
         var redirectUrl = googleAuthSettings["RedirectUrl"];
+
         #region Scopes
+
         var calendarScope = Uri.EscapeDataString(googleAuthSettings["Scopes:Calendar"]!);
         var profileScope = Uri.EscapeDataString(googleAuthSettings["Scopes:Profile"]!);
         var emailScope = Uri.EscapeDataString(googleAuthSettings["Scopes:Email"]!);
+
         #endregion
+
         var scope = $"{calendarScope} {profileScope} {emailScope}";
         var responseType = googleAuthSettings["ResponseType"];
         //* prompt=consent is optional based on business
@@ -70,7 +69,7 @@ public class AuthService : IAuthService
         var queryParams = new Dictionary<string, string>
         {
             { "code", code },
-            { "callbackUri", googleAuthSettings["RedirectUrl"]!},
+            { "callbackUri", googleAuthSettings["RedirectUrl"]! },
         };
         var headers = new Dictionary<string, string>
         {
@@ -80,7 +79,7 @@ public class AuthService : IAuthService
             url: ApiEndPoints.LoginWithGoogleUrl,
             headers: headers,
             queryParams: queryParams!
-            );
+        );
         var response = WebUtils.HandleResponse<BaseModel<GoogleSignInResponse>>(result);
         return response;
     }

@@ -10,7 +10,8 @@ namespace MBS.Services.Services.Interfaces;
 public interface IAuthService
 {
     // public Task<BaseModel<LoginResponse, LoginRequest>> LoginAsync(LoginRequest request);
-    public Task<ApplicationUser?> LoginAsync(LoginRequest request);
+    public Task<ApplicationUser?> GetUserByEmailAsync(string email);
+    public Task<bool> IsPasswordCorrect(ApplicationUser user, string password);
     public string GetGoogleRedirectUrl();
     public Task<BaseModel<GoogleSignInResponse>> LoginWithGoogleAsync(string code);
 
