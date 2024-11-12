@@ -1,0 +1,24 @@
+@page
+@model MBS.Razor.Pages.ResendConfirmEmail
+
+@{
+    Layout = "Shared/_Layout";
+}
+
+
+<div class="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div class="card shadow-lg p-4" style="width: 100%; max-width: 400px;">
+        <div class="text-center">
+            <h3 class="card-title mb-4 text-primary">Send Confirmation Email</h3>
+            <p class="text-muted">Please enter your email address to receive a confirmation code.</p>
+        </div>
+
+        <form method="post">
+            <div class="form-group mb-3">
+                <label for="Email" class="form-label">Email Address</label>
+                <input type="email" id="Email" name="Email" class="form-control" placeholder="example@email.com" required/>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Send Confirmation Token</button>
+        </form>
+    </div>
+</div>
