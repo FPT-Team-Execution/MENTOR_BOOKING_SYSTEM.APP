@@ -1,3 +1,4 @@
+using MBS.BusinessObject.Entities;
 using MBS.DataAccess;
 using MBS.Razor.Extensions;
 using MBS.Services.Constants;
@@ -16,8 +17,26 @@ builder.Services.AddServiceDependencies();
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddRepositoryDependencies();
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-    .AddEntityFrameworkStores<MBSContext>().AddDefaultTokenProviders();
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<MBSContext>()
+    .AddDefaultTokenProviders();
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 6;
+    options.Password.RequiredUniqueChars = 1;
+
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
+
+    options.User.AllowedUserNameCharacters =
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+});
 
 builder.Services.AddAuthentication(options =>
     {
@@ -35,7 +54,7 @@ builder.Services.AddAuthentication(options =>
         options.Cookie.Name = "MBS";
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.LoginPath = RouteEndpoints.Login;
-        options.AccessDeniedPath = RouteEndpoints.Login; 
+        options.AccessDeniedPath = RouteEndpoints.Login;
     });
 
 
@@ -50,6 +69,7 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRouting();
 app.UseHttpsRedirection();

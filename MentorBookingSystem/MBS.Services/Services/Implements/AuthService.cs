@@ -34,9 +34,20 @@ public class AuthService : IAuthService
         return await _userManager.FindByEmailAsync(email);
     }
 
-    public Task<bool> IsPasswordCorrect(ApplicationUser user, string password)
+    public async Task<bool> IsPasswordCorrect(ApplicationUser user, string password)
     {
-        return _userManager.
+        return await _userManager.CheckPasswordAsync(user, password);
+    }
+
+    public async Task<IList<string>> GetUserRolesAsync(ApplicationUser user)
+    {
+        return await _userManager.GetRolesAsync(user);
+    }
+
+    public async Task<string> GetUserRoleAsync(ApplicationUser user)
+    {
+        var result = await _userManager.GetRolesAsync(user);
+        return result.ToList().First();
     }
 
     public string GetGoogleRedirectUrl()

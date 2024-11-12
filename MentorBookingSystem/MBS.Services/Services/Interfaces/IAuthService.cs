@@ -12,6 +12,8 @@ public interface IAuthService
     // public Task<BaseModel<LoginResponse, LoginRequest>> LoginAsync(LoginRequest request);
     public Task<ApplicationUser?> GetUserByEmailAsync(string email);
     public Task<bool> IsPasswordCorrect(ApplicationUser user, string password);
+    public Task<IList<string>> GetUserRolesAsync(ApplicationUser user);
+    public Task<string> GetUserRoleAsync(ApplicationUser user);
     public string GetGoogleRedirectUrl();
     public Task<BaseModel<GoogleSignInResponse>> LoginWithGoogleAsync(string code);
 
