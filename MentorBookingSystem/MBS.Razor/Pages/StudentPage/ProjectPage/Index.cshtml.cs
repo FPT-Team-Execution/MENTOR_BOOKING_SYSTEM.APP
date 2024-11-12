@@ -27,7 +27,7 @@ public class Index : BaseAdminPage
     public int Size { get; set; } = 5;
     public int PageIndex { get; set; } = 1;
     
-    private async Task GetActiveProjectByUserId(string userId)
+    private async Task GetActiveProjectInfoByUserId(string userId)
     {
         //Get all groups that student has joined
         var userGroups = await _groupService.GetGroupsByStudentIdAsync(userId, ProjectStatusEnum.Activated.ToString());
@@ -52,20 +52,24 @@ public class Index : BaseAdminPage
         //Save to next use
         SaveTempData(TempDataKeys.StudentKeys.Groups, Groups);
         SaveTempData(TempDataKeys.StudentKeys.Project, Project);
+        
+        //TODO: get request by project id
+        
     }
 
-    public async Task<IActionResult> OnGet()
+    public async Task<IActionResult> OnGetAsync()
     {
         try
         {
-            var userIdClaim = _claimService.GetClaim(CookieNames.UserId);
-            await GetActiveProjectByUserId(userIdClaim);
+            var userIdClaim = _claimService.GetCookieValue(CookieNames.UserId);
+            await GetActiveProjectInfoByUserId(userIdClaim);
         }
         catch
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
             return RedirectToPage(RouteEndpoints.AdminStudent);
         }
+
         return Page();
     }
 }

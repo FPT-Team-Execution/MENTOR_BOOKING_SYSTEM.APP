@@ -25,7 +25,7 @@ namespace MBS.Repositories.Implements
         {
             return await _dao.SingleOrDefaultAsync(
                 predicate: x => x.Id == projectId,
-                include: q => q.Include(x => x.Mentor)
+                include: q => q.Include(x => x.Mentor).ThenInclude(m => m.User)
                 );
         }
 
