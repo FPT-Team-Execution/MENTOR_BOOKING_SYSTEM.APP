@@ -62,12 +62,14 @@ namespace MBS.Razor.Pages
                 return Page();
             }
 
+            var userRole = await _authService.GetUserRoleAsync(user);
+
             var claims = new List<Claim>
             {
                 //User Name
                 new Claim(ClaimTypes.Name, user.Email!),
                 //Role
-                new Claim(ClaimTypes.Role, await _authService.GetUserRoleAsync(user)),
+                new Claim(ClaimTypes.Role, userRole),
                 //User Id
                 new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
@@ -77,7 +79,7 @@ namespace MBS.Razor.Pages
             //append access token
             _claimService.AppendCookie("USER_ID", user.Id);
             _claimService.AppendCookie("USER_EMAIL", user.Email);
-            _claimService.AppendCookie("USER_ROLE", user.Email);
+            _claimService.AppendCookie("USER_ROLE", userRole);
             //var claims = GetClaims(response.ResponseModel.JwtToken.AccessToken);
             //await _claimService.SignInAsync(claims);
             TempData["SuccessMessage"] = "Login successfully";
