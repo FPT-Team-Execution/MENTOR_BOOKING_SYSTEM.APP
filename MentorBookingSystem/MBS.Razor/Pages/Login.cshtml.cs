@@ -20,7 +20,7 @@ namespace MBS.Razor.Pages
         private IAuthService _authService;
         private IConfiguration _configuration;
 
-        public LoginModel(IClaimService claimService,IAuthService authService, IConfiguration configuration)
+        public LoginModel(IClaimService claimService, IAuthService authService, IConfiguration configuration)
         {
             this._authService = authService;
             _configuration = configuration;
@@ -40,23 +40,49 @@ namespace MBS.Razor.Pages
                 return Page();
             }
 
-            var response = await _authService.LoginAsync(LoginRequest);
+            var user = await _authService.GetUserByEmailAsync(LoginRequest.Email);
 
-            if (!response.StatusCode.Equals(StatusCodes.Status200OK) || response.ResponseModel == null)
+            if (user is null)
             {
-                TempData["ErrorMessage"] = response.Message;
+                TempData["ErrorMessage"] = "Email or password incorrect!";
                 return Page();
             }
-            var accessToken = response.ResponseModel.JwtToken.AccessToken;
-            WebUtils.AccessToken = accessToken;
-            var claims = GetClaims(accessToken);
+
+            var isPasswordCorrect = await _authService.IsPasswordCorrect(user, LoginRequest.Password);
+
+            if (!isPasswordCorrect)
+            {
+                TempData["ErrorMessage"] = "Email or password incorrect!";
+                return Page();
+            }
+
+            if (!user.EmailConfirmed)
+            {
+                TempData["ErrorMessage"] = "Email or password incorrect!";
+                return Page();
+            }
+
+            var userRole = await _authService.GetUserRoleAsync(user);
+
+            var claims = new List<Claim>
+            {
+                //User Name
+                new Claim(ClaimTypes.Name, user.Email!),
+                //Role
+                new Claim(ClaimTypes.Role, userRole),
+                //User Id
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
+            };
+
             //save it to cookie
             await _claimService.SignInAsync(claims);
             //append access token
-            _claimService.AppendCookie("MBS", accessToken);
+            _claimService.AppendCookie("USER_ID", user.Id);
+            _claimService.AppendCookie("USER_EMAIL", user.Email);
+            _claimService.AppendCookie("USER_ROLE", userRole);
             //var claims = GetClaims(response.ResponseModel.JwtToken.AccessToken);
             //await _claimService.SignInAsync(claims);
-            TempData["SuccessMessage"] = response.Message;
+            TempData["SuccessMessage"] = "Login successfully";
 
             return claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)!.Value.ToString() switch
             {
@@ -91,6 +117,7 @@ namespace MBS.Razor.Pages
             _claimService.AppendCookie("MBS", accessToken);
             return Redirect(RouteEndpoints.Mentor);
         }
+
         /// <summary>
         /// Logout
         /// </summary>
@@ -100,8 +127,8 @@ namespace MBS.Razor.Pages
             // Response.Redirect(RouteEndpoints.Login);
             await _claimService.SignOutAsync();
             Response.Redirect(RouteEndpoints.Login);
-
         }
+
         private List<Claim> GetClaims(string token)
         {
             // var tokenGoogle = response.ResponseRequestModel.googleToken;
@@ -111,11 +138,14 @@ namespace MBS.Razor.Pages
             var claims = new List<Claim>
             {
                 //User Name
-                new Claim(ClaimTypes.Name, jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value.ToString()),
+                new Claim(ClaimTypes.Name,
+                    jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Name)!.Value.ToString()),
                 //Role
-                new Claim(ClaimTypes.Role, jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)!.Value.ToString()),
+                new Claim(ClaimTypes.Role,
+                    jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)!.Value.ToString()),
                 //User Id
-                new Claim(ClaimTypes.NameIdentifier, jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value.ToString())
+                new Claim(ClaimTypes.NameIdentifier,
+                    jwtInfo.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)!.Value.ToString())
             };
             return claims;
         }
