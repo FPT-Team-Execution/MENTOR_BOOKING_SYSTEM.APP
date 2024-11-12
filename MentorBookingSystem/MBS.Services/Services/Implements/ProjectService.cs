@@ -1,5 +1,6 @@
-﻿using MBS.Services.Constants;
+using MBS.Services.Constants;
 using MBS.Services.Models;
+using MBS.Services.Models.Requests.Project;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Models.Responses.Project;
 using MBS.Services.Services.Interfaces;
@@ -23,6 +24,12 @@ namespace MBS.Services.Services.Implements
         {
             _projectRepository = projectRepository;
         }
+        
+        public Task<IResponse> CreateProjectAsync(CreateProjectModel createProjectModel)
+        {
+            throw new NotImplementedException();
+        }
+        
         public async Task<ProjectDto?> GetProjectByIdAsync(Guid projectId)
         {
             var project = await _projectRepository.GetProjectById(projectId);
