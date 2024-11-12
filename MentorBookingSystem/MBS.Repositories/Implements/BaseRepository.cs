@@ -28,7 +28,8 @@ namespace MBS.Repositories.Implements
         {
             return await _dao.GetPagingListAsync(
                 page: page,
-                size: size);
+                size: size
+                );
 
         }
 

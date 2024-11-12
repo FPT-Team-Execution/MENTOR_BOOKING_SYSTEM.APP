@@ -1,5 +1,6 @@
 ﻿@page
 @using MBS.Razor.Pages.AdminPage.MentorPage.Models
+@using MBS.Services.Dtos
 @using MBS.Services.Models
 @using MBS.Services.Utils
 @using MBS.Services.Utils.Shared
@@ -12,7 +13,7 @@
     string pageName = "Index";
 
     //Student Pagination 
-    var mentorPagination = Model.GetTempData<Pagination<MentorModel>>(TempDataKeys.AdminKeys.MentorPagination)! ?? Model.MentorPagination;
+    var mentorPagination = Model.GetTempData<Pagination<MentorDto>>(TempDataKeys.AdminKeys.MentorPagination)! ?? Model.MentorPagination;
     var mentors = mentorPagination.Items.ToArray();
     //Get search & sort Order
     string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
