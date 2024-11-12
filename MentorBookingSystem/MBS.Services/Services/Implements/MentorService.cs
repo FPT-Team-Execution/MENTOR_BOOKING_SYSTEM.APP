@@ -27,17 +27,25 @@ namespace MBS.Services.Services.Implements
             _mentorRepository = mentorRepository;
         }
 
-        public async Task<IResponse> GetMentorsAsync(int page, int size)
+
+
+        // public async Task<IResponse> GetMentorsAsync(int page, int size)
+        // {
+        //     var result = await WebUtils.GetAsync(ApiEndPoints.MentorUrl,
+        //         token: WebUtils.AccessToken,
+        //         queryParams: new Dictionary<string, string?>()
+        //         {
+        //             { "page", page.ToString() },
+        //             { "size", size.ToString() }
+        //         });
+        //     var response = WebUtils.HandleResponse<BaseModel<Pagination<MentorResponse>>>(result);
+        //     return response;
+        // }
+
+        public async Task<Pagination<MentorDto>> GetMentorsAsync(int page, int size)
         {
-            var result = await WebUtils.GetAsync(ApiEndPoints.MentorUrl,
-                token: WebUtils.AccessToken,
-                queryParams: new Dictionary<string, string?>()
-                {
-                    { "page", page.ToString() },
-                    { "size", size.ToString() }
-                });
-            var response = WebUtils.HandleResponse<BaseModel<Pagination<MentorResponse>>>(result);
-            return response;
+            var result = await _mentorRepository.GetMentorsAsync(page, size);
+            return result.Adapt<Pagination<MentorDto>>();
         }
 
         public async Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request)
