@@ -18,7 +18,7 @@ namespace MBS.BusinessObject.Entities
         public Project Project { get; set; }
         public string? CreatedBy { get; set; }
         [Required]
-        public bool? IsComplete { get; set; }
+        public bool IsComplete { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? UpdatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }

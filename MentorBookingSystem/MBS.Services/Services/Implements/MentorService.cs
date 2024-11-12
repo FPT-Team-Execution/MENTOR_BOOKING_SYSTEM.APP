@@ -27,6 +27,8 @@ namespace MBS.Services.Services.Implements
             _mentorRepository = mentorRepository;
         }
 
+
+
         // public async Task<IResponse> GetMentorsAsync(int page, int size)
         // {
         //     var result = await WebUtils.GetAsync(ApiEndPoints.MentorUrl,
@@ -85,6 +87,12 @@ namespace MBS.Services.Services.Implements
 
             var response = WebUtils.HandleResponse<BaseModel<Pagination<DegreeResponse>>>(result);
             return response;
+        }
+
+        public async Task<MentorDto?> GetMentorById(string id)
+        {
+            var mentor =  await _mentorRepository.GetMentorByIdAsync(id);
+            return mentor.Adapt<MentorDto>();
         }
     }
 }

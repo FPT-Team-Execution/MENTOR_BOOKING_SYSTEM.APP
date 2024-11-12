@@ -1,4 +1,4 @@
-﻿using Mapster;
+using Mapster;
 using MBS.BusinessObject.Entities;
 using MBS.Services.Dtos;
 
@@ -19,8 +19,7 @@ public class MentorMapper : IRegister
             .Map(dest => dest.UserName, src => src.User.UserName)
             .Map(dest => dest.PhoneNumber, src => src.User.PhoneNumber)
             .Map(dest => dest.EmailConfirmed, src => src.User.EmailConfirmed)
-            .Map(dest => dest.LockoutEnd,
-                src => src.User.LockoutEnd.HasValue ? src.User.LockoutEnd.Value.DateTime : (DateTime?)null)
+            .Map(dest => dest.LockoutEnd, src => src.User.LockoutEnd.HasValue ? src.User.LockoutEnd.Value.DateTime : (DateTime?)null)
             .Map(dest => dest.LockoutEnabled, src => src.User.LockoutEnabled)
             .Map(dest => dest.CreatedBy, src => src.User.CreatedBy)
             .Map(dest => dest.CreatedOn, src => src.User.CreatedOn)

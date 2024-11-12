@@ -1,4 +1,4 @@
-﻿using MBS.Services.Models;
+using MBS.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,5 +15,7 @@ namespace MBS.Services.Services.Interfaces
         public Task<Pagination<MentorDto>> GetMentorsAsync(int page, int size);
         public Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request);
         public Task<IResponse> GetMentorDegrees(GetMentorDegreeRequest request);
+        public Task<MentorDto?> GetMentorById(string id);
+
     }
 }
