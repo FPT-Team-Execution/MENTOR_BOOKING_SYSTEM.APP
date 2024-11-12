@@ -14,8 +14,8 @@ namespace MBS.Services.Services.Interfaces
     {
         public Task<Pagination<MentorDto>> GetMentorsAsync(int page, int size);
         public Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request);
-        public Task<IResponse> GetMentorDegrees(GetMentorDegreeRequest request);
+        public Task<Pagination<DegreeDto>> GetMentorDegrees(string mentorId, int page, int size);
         public Task<MentorDto?> GetMentorById(string id);
-
+        
     }
 }

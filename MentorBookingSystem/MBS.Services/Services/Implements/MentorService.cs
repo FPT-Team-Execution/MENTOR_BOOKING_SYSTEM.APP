@@ -21,12 +21,13 @@ namespace MBS.Services.Services.Implements
     public class MentorService : IMentorService
     {
         private readonly IMentorRepository _mentorRepository;
+        private readonly IDegreeRepository _degreeRepository;
 
-        public MentorService(IMentorRepository mentorRepository)
+        public MentorService(IMentorRepository mentorRepository, IDegreeRepository degreeRepository)
         {
             _mentorRepository = mentorRepository;
+            _degreeRepository = degreeRepository;
         }
-
 
 
         // public async Task<IResponse> GetMentorsAsync(int page, int size)
@@ -66,33 +67,39 @@ namespace MBS.Services.Services.Implements
             return response;
         }
 
-        public async Task<IResponse> GetMentorDegrees(GetMentorDegreeRequest request)
+        public async Task<Pagination<DegreeDto>> GetMentorDegrees(string mentorId, int page, int size)
         {
-            var token = WebUtils.AccessToken;
-            var result = await WebUtils.GetAsync
-            (
-                ApiEndPoints.MentorDegreeUrl(request.MentorId),
-                queryParams: new Dictionary<string, string?>()
-                {
-                    { "page", request.Page.ToString() },
-                    { "size", request.Size.ToString() }
-                },
-                headers: new Dictionary<string, string>
-                {
-                    { "Accept-Charset", "utf-8" },
-                    { "Authorization", $"Bearer {token}" }
-                },
-                token: token
-            );
-
-            var response = WebUtils.HandleResponse<BaseModel<Pagination<DegreeResponse>>>(result);
-            return response;
+            var result = await _degreeRepository.GetDegreesByMentorId(mentorId, page, size);
+            return result.Adapt<Pagination<DegreeDto>>();
         }
 
         public async Task<MentorDto?> GetMentorById(string id)
         {
-            var mentor =  await _mentorRepository.GetMentorByIdAsync(id);
+            var mentor = await _mentorRepository.GetMentorByIdAsync(id);
             return mentor.Adapt<MentorDto>();
         }
+
+        // public async Task<IResponse> GetMentorDegrees(GetMentorDegreeRequest request)
+        // {
+        //     var token = WebUtils.AccessToken;
+        //     var result = await WebUtils.GetAsync
+        //     (
+        //         ApiEndPoints.MentorDegreeUrl(request.MentorId),
+        //         queryParams: new Dictionary<string, string?>()
+        //         {
+        //             { "page", request.Page.ToString() },
+        //             { "size", request.Size.ToString() }
+        //         },
+        //         headers: new Dictionary<string, string>
+        //         {
+        //             { "Accept-Charset", "utf-8" },
+        //             { "Authorization", $"Bearer {token}" }
+        //         },
+        //         token: token
+        //     );
+        //
+        //     var response = WebUtils.HandleResponse<BaseModel<Pagination<DegreeResponse>>>(result);
+        //     return response;
+        // }
     }
 }

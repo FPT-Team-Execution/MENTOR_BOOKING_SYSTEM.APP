@@ -13,6 +13,5 @@ namespace MBS.Repositories.Interfaces
     {
         Task<Major> GetMajorByIdAsync(Guid majorId);
         Task<Pagination<Major>> GetPagedListBaseAsync(int page, int size);
-
     }
 }

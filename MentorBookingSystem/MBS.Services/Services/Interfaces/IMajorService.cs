@@ -9,6 +9,6 @@ public interface IMajorService
 {
     public Task<IEnumerable<MajorDto>> GetAllMajors();
     public Task<IResponse> GetMajorsAsync(int page, int size);
-    public Task<IResponse> GetMentorMajorsAsync(GetMentorMajorsRequest request);
+    public Task<Pagination<MajorDto>> GetMentorMajorsAsync(string mentorId, int page, int size);
     Task<IResponse> CreateNewMajorAsync(CreateNewMajorRequestModel request);
 }
