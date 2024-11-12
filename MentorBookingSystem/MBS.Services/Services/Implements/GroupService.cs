@@ -21,13 +21,14 @@ namespace MBS.Services.Services.Implements
         public async Task<IEnumerable<GroupDto>> GetGroupsByStudentIdAsync(string userId, string? projectStatus = null)
         {
             var groups = await  _groupRepository.GetGroupsByStudentId(userId, projectStatus);
-            return groups.Adapt<IEnumerable<GroupDto>>();
+            return groups.Adapt<List<GroupDto>>();
         }
 
         public async Task<IEnumerable<GroupDto>> GetGroupsByProjectIdAsync(Guid projectId)
         {
             var groups = await  _groupRepository.GetGroupByProjectIdAsync(projectId);
-            return groups.Adapt<IEnumerable<GroupDto>>();
+            var result =  groups.Adapt<List<GroupDto>>();
+            return result;
         }
 
         public async Task<IResponse> GetGroupsAsync(int page, int size)

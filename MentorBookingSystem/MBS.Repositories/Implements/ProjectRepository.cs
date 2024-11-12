@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MBS.DataAccess.Pagination;
 using Microsoft.EntityFrameworkCore;
 
 namespace MBS.Repositories.Implements
@@ -25,7 +26,7 @@ namespace MBS.Repositories.Implements
         {
             return await _dao.SingleOrDefaultAsync(
                 predicate: x => x.Id == projectId,
-                include: q => q.Include(x => x.Mentor)
+                include: q => q.Include(x => x.Mentor).ThenInclude(m => m.User)
                 );
         }
 

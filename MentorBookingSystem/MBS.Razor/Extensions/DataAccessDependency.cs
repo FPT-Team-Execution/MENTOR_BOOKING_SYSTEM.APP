@@ -3,6 +3,8 @@ using MBS.DataAccess.DAO.Implements;
 using MBS.DataAccess.DAO.Interfaces;
 using MBS.Repositories.Implements;
 using MBS.Repositories.Interfaces;
+using MBS.Services.Services.Implements;
+using MBS.Services.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace MBS.Razor.Extensions;
@@ -16,6 +18,7 @@ public static class DataAccessDependency
         services.AddScoped<IStudentRepository, StudentRepository>();
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<IGroupRepository, GroupRepository>();
+        services.AddScoped<IRequestRepository, RequestRepository>();
 
     }
 

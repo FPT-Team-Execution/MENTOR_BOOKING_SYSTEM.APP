@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using MBS.BusinessObject.Pagination;
+using MBS.DataAccess.Pagination;
 using Microsoft.EntityFrameworkCore.Query;
 
 
