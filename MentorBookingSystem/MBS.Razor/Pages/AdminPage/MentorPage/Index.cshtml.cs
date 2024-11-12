@@ -1,6 +1,7 @@
 ﻿using Mapster;
 using MBS.Razor.Pages.AdminPage.MentorPage.Models;
 using MBS.Services.Constants;
+using MBS.Services.Dtos;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.Degree;
 using MBS.Services.Models.Requests.Major;
@@ -20,8 +21,8 @@ public class Index : BaseAdminPage
 {
     private IMentorService _mentorService;
     private IMajorService _majorService;
-    public Pagination<MentorModel>? MentorPagination { get; set; } = new();
-    public MentorModel? ChosenMentor { get; set; } = new();
+    public Pagination<MentorDto>? MentorPagination { get; set; } = new();
+    public MentorDto? ChosenMentor { get; set; } = new();
 
     public string SortOrder { get; set; } = "asc";
     public string SearchName { get; set; } = string.Empty;
@@ -37,8 +38,8 @@ public class Index : BaseAdminPage
 
     private async Task LoadMentors()
     {
-        var response = await _mentorService.GetMentorsAsync(PageIndex, Size) as BaseModel<Pagination<MentorResponse>>;
-        MentorPagination = response?.ResponseRequestModel.Adapt<Pagination<MentorModel>>();
+        var response = await _mentorService.GetMentorsAsync(PageIndex, Size);
+        MentorPagination = response;
 
         SaveTempData(TempDataKeys.AdminKeys.MentorPagination, MentorPagination);
         SaveTempData(TempDataKeys.PageIndex, PageIndex);
@@ -65,7 +66,7 @@ public class Index : BaseAdminPage
     {
         try
         {
-            MentorPagination = GetTempData<Pagination<MentorModel>>(TempDataKeys.AdminKeys.MentorPagination)!;
+            MentorPagination = GetTempData<Pagination<MentorDto>>(TempDataKeys.AdminKeys.MentorPagination)!;
             ChosenMentor = MentorPagination.Items.First(x => x.Id == mentorId);
 
             var degrees = (BaseModel<Pagination<DegreeResponse>>)await _mentorService.GetMentorDegrees(
@@ -84,8 +85,8 @@ public class Index : BaseAdminPage
                     Size = 100
                 });
 
-            ChosenMentor.Majors = majors.ResponseRequestModel.Items.Adapt<IEnumerable<MajorResponseDto>>();
-            ChosenMentor.Degrees = degrees.ResponseRequestModel.Items.Adapt<IEnumerable<DegreeResponse>>();
+            ChosenMentor.Majors = majors.ResponseRequestModel.Items.Adapt<IEnumerable<MajorDto>>();
+            ChosenMentor.Degrees = degrees.ResponseRequestModel.Items.Adapt<IEnumerable<DegreeDto>>();
 
             SaveTempData(TempDataKeys.AdminKeys.ChosenMentor, ChosenMentor);
             if (ChosenMentor == null)

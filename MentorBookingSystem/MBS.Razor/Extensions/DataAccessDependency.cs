@@ -19,7 +19,7 @@ public static class DataAccessDependency
         services.AddScoped<IProjectRepository, ProjectRepository>();
         services.AddScoped<IGroupRepository, GroupRepository>();
         services.AddScoped<IRequestRepository, RequestRepository>();
-
+        services.AddScoped<IMentorRepository, MentorRepository>();
     }
 
     public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
