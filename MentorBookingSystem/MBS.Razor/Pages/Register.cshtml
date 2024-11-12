@@ -71,7 +71,7 @@
 
                                     @if (Model.MajorData != null)
                                     {
-                                        foreach (var item in Model.MajorData.ResponseRequestModel.Items)
+                                        foreach (var item in Model.MajorData)
                                         {
                                             <option value="@item.Id">@item.Name</option>
                                         }
