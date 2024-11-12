@@ -42,7 +42,7 @@ namespace MBS.Services.Services.Implements
 
         public async Task<Pagination<MentorDto>> GetMentorsAsync(int page, int size)
         {
-            var result = await _mentorRepository.GetPagedListAsync(page, size);
+            var result = await _mentorRepository.GetMentorsAsync(page, size);
             return result.Adapt<Pagination<MentorDto>>();
         }
 

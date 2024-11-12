@@ -12,12 +12,11 @@ namespace MBS.Repositories.Interfaces
 {
     public interface IMentorRepository : IBaseRepository<Mentor>
     {
-        Task<IEnumerable<Mentor>> GetMentorsAsync();
+        Task<Pagination<Mentor>> GetMentorsAsync(int page, int size);
 
         Task<Mentor?> GetByUserIdAsync(string userId,
             Func<IQueryable<Mentor>, IIncludableQueryable<Mentor, object>> include = null);
 
         Task<Mentor?> GetMentorByIdAsync(string mentorId);
-        Task<Pagination<Mentor>> GetMentorsAsync(int page, int size);
     }
 }
