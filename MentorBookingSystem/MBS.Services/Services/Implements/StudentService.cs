@@ -24,8 +24,15 @@ public class StudentService : IStudentService
 
     public async Task<bool> UpdateStudentAsync(StudentDto student)
     {
-        var studentFound = await _studentRepository.GetByIdAsync(student.UserId, "UserId");
+        var studentFound = await _studentRepository.GetStudentByIdAsync(student.UserId);
         if (studentFound == null) return false;
+        studentFound.User.FullName = student.FullName;
+        studentFound.User.Email = student.Email;
+        studentFound.University = student.University;
+        studentFound.MajorId = student.MajorId;
+        studentFound.User.Birthday = student.Birthday;
+        studentFound.User.LockoutEnabled = student.LockoutEnabled;
+        studentFound.User.Gender = student.Gender;
         var result = _studentRepository.Update(studentFound);
         return result;
     }
