@@ -2,9 +2,9 @@
 
 namespace MBS.Razor.Pages.AdminPage.TransactionPage;
 
-public class Index : PageModel
+public class Index : BaseAdminPage
 {
-    public void OnGet()
+    public async void OnGetAsync()
     {
         
     }
