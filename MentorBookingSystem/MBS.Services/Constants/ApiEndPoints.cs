@@ -29,4 +29,7 @@ public class ApiEndPoints
 
     public static string PositionsUrl = $"{baseUrl}/positions";
     public static string SkillUrl = $"{baseUrl}/skills";
+
+    //CalendarEvent
+    public static string CalendarEventUrl = $"{baseUrl}/calendarEvents";
 }
