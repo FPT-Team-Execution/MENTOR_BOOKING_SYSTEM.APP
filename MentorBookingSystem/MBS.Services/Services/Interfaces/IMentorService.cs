@@ -17,10 +17,9 @@ namespace MBS.Services.Services.Interfaces
 {
     public interface IMentorService
     {
-        public Task<Pagination<MentorDto>> GetMentorsAsync(int page, int size);
+        public Task<Pagination<MentorDto>> GetMentorsPaginationAsync(int page, int size);
 
-        public Task<IResponse> GetMentorsAsync(int page, int size);
-        public Task<IEnumerable<MentorsResponse>> GetMentorsPaginationAsync();
+        public Task<IEnumerable<MentorsResponse>> GetMentorsAsync();
 
 
         public Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request);

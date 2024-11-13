@@ -3,13 +3,10 @@
     "",
     "\\MentorBookingSystem",
     "\\MentorBookingSystem\\MBS.DataAccess",
-    "\\MentorBookingSystem\\MBS.DataAccess\\Repositories",
-    "\\MentorBookingSystem\\MBS.DataAccess\\Repositories\\Interfaces",
     "\\MentorBookingSystem\\MBS.Razor",
     "\\MentorBookingSystem\\MBS.Razor\\Pages",
     "\\MentorBookingSystem\\MBS.Razor\\Pages\\AdminPage",
     "\\MentorBookingSystem\\MBS.Razor\\Pages\\AdminPage\\SkillPage"
   ],
-  "SelectedNode": "\\MentorBookingSystem\\MBS.DataAccess\\Repositories\\Interfaces\\IStudentRepository.cs",
   "PreviewInSolutionExplorer": false
 }

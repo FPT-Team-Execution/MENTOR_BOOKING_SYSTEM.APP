@@ -32,7 +32,7 @@ namespace MBS.Services.Services.Implements
             _degreeRepository = degreeRepository;
         }
 
-        public async Task<Pagination<MentorDto>> GetMentorsAsync(int page, int size)
+        public async Task<Pagination<MentorDto>> GetMentorsPaginationAsync(int page, int size)
         {
             var result = await _mentorRepository.GetMentorsAsync(page, size);
             return result.Adapt<Pagination<MentorDto>>();
@@ -69,10 +69,11 @@ namespace MBS.Services.Services.Implements
             var mentor = await _mentorRepository.GetMentorByIdAsync(id);
             return mentor.Adapt<MentorDto>();
         }
-        async Task<IEnumerable<MentorsResponse>> IMentorService.GetMentorsPaginationAsync()
+        async Task<IEnumerable<MentorsResponse>> IMentorService.GetMentorsAsync()
         {
             var result = await _mentorRepository.GetAllAsync();
             return result.Adapt<IEnumerable<MentorsResponse>>();
         }
+
     }
 }
