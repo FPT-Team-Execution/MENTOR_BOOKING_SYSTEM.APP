@@ -7,8 +7,10 @@ using MBS.Services.Dtos;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.CalendarEvent;
 using MBS.Services.Models.Requests.Major;
+using MBS.Services.Models.Requests.Mentor;
 using MBS.Services.Models.Responses.CalendarEvent;
 using MBS.Services.Models.Responses.Group;
+using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
 using System;
@@ -77,5 +79,24 @@ namespace MBS.Services.Services.Implements
         {
             throw new NotImplementedException();
         }
+
+        //public async Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request)
+        //{
+        //    var token = WebUtils.AccessToken;
+        //    var result = await WebUtils.PutAsync
+        //    (
+        //        ApiEndPoints.MentorUpdateUrl,
+        //        data: request,
+        //        headers: new Dictionary<string, string>
+        //        {
+        //            { "Accept-Charset", "utf-8" },
+        //            { "Authorization", $"Bearer {token}" }
+        //        },
+        //        token: token
+        //    );
+        //    var response = WebUtils.HandleResponse<BaseModel<UpdateMentorResponse>>(result);
+        //    return response;
+        //}
+
     }
 }
