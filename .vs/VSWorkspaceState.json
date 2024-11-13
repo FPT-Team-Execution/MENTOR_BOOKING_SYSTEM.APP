@@ -6,7 +6,11 @@
     "\\MentorBookingSystem\\MBS.Razor",
     "\\MentorBookingSystem\\MBS.Razor\\Pages",
     "\\MentorBookingSystem\\MBS.Razor\\Pages\\AdminPage",
-    "\\MentorBookingSystem\\MBS.Razor\\Pages\\AdminPage\\SkillPage"
+    "\\MentorBookingSystem\\MBS.Razor\\Pages\\AdminPage\\SkillPage",
+    "\\MentorBookingSystem\\MBS.Services",
+    "\\MentorBookingSystem\\MBS.Services\\Services",
+    "\\MentorBookingSystem\\MBS.Services\\Services\\Implements"
   ],
+  "SelectedNode": "\\MentorBookingSystem\\MBS.Services\\Services\\Implements\\ProjectService.cs",
   "PreviewInSolutionExplorer": false
 }

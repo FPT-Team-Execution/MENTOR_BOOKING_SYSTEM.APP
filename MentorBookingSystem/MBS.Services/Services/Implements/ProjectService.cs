@@ -14,6 +14,8 @@ using Mapster;
 using MBS.Repositories.Interfaces;
 using MBS.Services.Dtos;
 using MBS.DataAccess.Pagination;
+using MBS.BusinessObject.Entities;
+using MBS.Services.Models.Responses.Group;
 
 namespace MBS.Services.Services.Implements
 {
@@ -26,9 +28,25 @@ namespace MBS.Services.Services.Implements
             _projectRepository = projectRepository;
         }
         
-        public Task<IResponse> CreateProjectAsync(CreateProjectModel createProjectModel)
+        public async Task<IResponse> CreateProjectAsync(CreateProjectModel createProjectModel)
         {
-            throw new NotImplementedException();
+            var newProject = new Project();
+            newProject.Id = Guid.NewGuid();
+            newProject.Title = createProjectModel.Title;
+            newProject.Description = createProjectModel.Description;
+            newProject.Semester = createProjectModel.Semester;
+            newProject.Status = BusinessObject.Enums.ProjectStatusEnum.Activated;
+            newProject.MentorId = createProjectModel.MentorId;
+            newProject.DueDate = DateTime.Now.AddDays(30);
+            _projectRepository.CreateAsync(newProject);
+
+            var result = await WebUtils.PostAsync(
+           ApiEndPoints.ProjectUrl,
+           newProject,
+           token: WebUtils.AccessToken
+                );
+            var response = WebUtils.HandleResponse<BaseModel<ProjectResponse>>(result);
+            return response;
         }
         
         public async Task<ProjectDto?> GetProjectByIdAsync(Guid projectId)
