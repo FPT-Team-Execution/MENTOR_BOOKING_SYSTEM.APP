@@ -64,16 +64,17 @@ namespace MBS.Services.Services.Implements
 
         public async Task<Pagination<ProjectResponse>> GetAllProjectByMentorId(string mentorId, int page, int size)
         {
-            var result = await _projectRepository.GetAllAsync();
-            var projectResponseByMentor = new List<Project>();
-            foreach (var project in result)
+
+            var result = await _projectRepository.GetAllProjects(page, size);
+            var projectResponseByMentor = new List<ProjectResponse>();
+            foreach (var project in result.Items)
             {
                 if(project.MentorId == mentorId)
                 {
-                    var projectAdd = new Project();
+                    var projectAdd = new ProjectResponse();
                     projectAdd.Title = project.Title;
                     projectAdd.Description = project.Description;
-                    projectAdd.Status = project.Status;
+                    projectAdd.Status = project.Status.ToString();
                     projectAdd.Semester = project.Semester;
                     projectAdd.DueDate = project.DueDate;
                     projectResponseByMentor.Add(projectAdd);
@@ -85,9 +86,9 @@ namespace MBS.Services.Services.Implements
         .Take(size)
         .ToList();
 
-            // T?o ??i t??ng phân trang ?? tr? v?
             var projectPagination = new Pagination<ProjectResponse>
             {
+
                 Items = (IEnumerable<ProjectResponse>)paginatedItems,
                 PageIndex = page,
                 PageSize = size,
