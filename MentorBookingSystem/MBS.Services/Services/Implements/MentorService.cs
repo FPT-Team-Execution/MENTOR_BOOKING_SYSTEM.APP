@@ -83,7 +83,7 @@ namespace MBS.Services.Services.Implements
                 };
                 responseList.Add(objectParse);
             }
-            return responseList.Adapt<IEnumerable<MentorsResponse>>();
+            return responseList;
         }
 
     }
