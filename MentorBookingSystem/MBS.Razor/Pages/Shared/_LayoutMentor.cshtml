@@ -9,7 +9,7 @@
     var roleClaim = ClaimService.GetCookieValue(CookieNames.UserRole);
     if (roleClaim != UserRole.Mentor || string.IsNullOrEmpty(roleClaim))
     {
-        Context.Response.Redirect(RouteEndpoints.AccessDenied);
+        //Context.Response.Redirect(RouteEndpoints.AccessDenied);
     }
     name = roleClaim;
 }
