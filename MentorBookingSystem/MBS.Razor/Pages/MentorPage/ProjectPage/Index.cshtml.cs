@@ -2,6 +2,7 @@ using Mapster;
 using MBS.DataAccess.Pagination;
 using MBS.Razor.Pages.AdminPage.ProjectPage.Models;
 using MBS.Services.Constants;
+using MBS.Services.Models.Responses.Project;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils.Shared;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ namespace MBS.Razor.Pages.MentorPage.ProjectPage;
 
 public class Index : BaseMentorPage
 {
-    public Pagination<ProjectModel> ProjectPagination { get; set; } = new();
+    public Pagination<ProjectResponse> ProjectPagination { get; set; } = new();
     [BindProperty] public ProjectModel ChosenProject { get; set; } = new();
 
     public string SortOrder { get; set; } = "asc";
@@ -30,9 +31,8 @@ public class Index : BaseMentorPage
 
     private async Task LoadProject()
     {
-        var response = await _projectService.GetProjectAsync(PageIndex, Size, search);
-        var projectList = response.Adapt<Pagination<ProjectModel>>();
-        ProjectPagination = projectList;
+        var response = await _projectService.GetAllProjectByMentorId("5f10c206-033a-4930-95a5-ac66570ba58d", PageIndex, Size);
+        ProjectPagination = response;
 
         SaveTempData(TempDataKeys.AdminKeys.ProjectPagination, ProjectPagination);
         SaveTempData(TempDataKeys.PageIndex, PageIndex);

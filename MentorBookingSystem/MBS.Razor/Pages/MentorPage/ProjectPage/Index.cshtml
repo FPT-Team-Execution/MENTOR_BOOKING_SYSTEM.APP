@@ -7,12 +7,13 @@
 @using MBS.Services.Utils.Shared
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @using MBS.Services.Utils.Shared;
+@using MBS.Services.Models.Responses.Project;
 
 @{
     Layout = "Shared/_LayoutMentor";
     string pageName = "Index";
     //Student Pagination
-    var projectPagination = Model.GetTempData<Pagination<ProjectModel>>(TempDataKeys.MentorKeys.ProjectPagination)! ?? Model.ProjectPagination;
+    var projectPagination = Model.GetTempData<Pagination<ProjectResponse>>(TempDataKeys.MentorKeys.ProjectPagination)! ?? Model.ProjectPagination;
     var projects = projectPagination.Items.ToArray();
     //Get search & sort Order
     string search = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.search;
