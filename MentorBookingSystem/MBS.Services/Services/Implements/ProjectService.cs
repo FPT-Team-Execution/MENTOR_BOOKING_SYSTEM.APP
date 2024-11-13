@@ -27,7 +27,7 @@ namespace MBS.Services.Services.Implements
         {
             _projectRepository = projectRepository;
         }
-        
+
         public async Task<IResponse> CreateProjectAsync(CreateProjectModel createProjectModel)
         {
             var newProject = new Project();
@@ -48,7 +48,7 @@ namespace MBS.Services.Services.Implements
             var response = WebUtils.HandleResponse<BaseModel<ProjectResponse>>(result);
             return response;
         }
-        
+
         public async Task<ProjectDto?> GetProjectByIdAsync(Guid projectId)
         {
             var project = await _projectRepository.GetProjectById(projectId);
@@ -69,7 +69,7 @@ namespace MBS.Services.Services.Implements
             var projectResponseByMentor = new List<ProjectResponse>();
             foreach (var project in result.Items)
             {
-                if(project.MentorId == mentorId)
+                if (project.MentorId == mentorId)
                 {
                     var projectAdd = new ProjectResponse();
                     projectAdd.Title = project.Title;

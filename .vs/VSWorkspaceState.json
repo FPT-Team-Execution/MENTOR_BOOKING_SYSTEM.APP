@@ -11,6 +11,6 @@
     "\\MentorBookingSystem\\MBS.Services\\Services",
     "\\MentorBookingSystem\\MBS.Services\\Services\\Implements"
   ],
-  "SelectedNode": "\\MentorBookingSystem\\MBS.Services\\Services\\Implements\\ProjectService.cs",
+  "SelectedNode": "\\MentorBookingSystem\\MBS.Services\\Services\\Implements\\MentorService.cs",
   "PreviewInSolutionExplorer": false
 }
