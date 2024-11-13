@@ -12,11 +12,18 @@ using MBS.Services.Models.Requests.Degree;
 using MBS.Services.Models.Requests.Mentor;
 using MBS.Services.Models.Responses.Degree;
 using MBS.Services.Models.Responses.Mentor;
+using MBS.Repositories.Interfaces;
+using Mapster;
 
 namespace MBS.Services.Services.Implements
 {
     public class MentorService : IMentorService
     {
+        private readonly IMentorRepository _mentorRepository;
+        public MentorService(IMentorRepository mentorRepository)
+        {
+            _mentorRepository = mentorRepository;
+        }
         public async Task<IResponse> GetMentorsAsync(int page, int size)
         {
             var result = await WebUtils.GetAsync(ApiEndPoints.MentorUrl,
@@ -29,6 +36,8 @@ namespace MBS.Services.Services.Implements
             var response = WebUtils.HandleResponse<BaseModel<Pagination<MentorResponse>>>(result);
             return response;
         }
+
+
 
         public async Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request)
         {
@@ -69,6 +78,12 @@ namespace MBS.Services.Services.Implements
             
             var response = WebUtils.HandleResponse<BaseModel<Pagination<DegreeResponse>>>(result);
             return response;
+        }
+
+        async Task<IEnumerable<MentorsResponse>> IMentorService.GetMentorsPaginationAsync()
+        {
+            var result = await _mentorRepository.GetAllAsync();
+            return result.Adapt<IEnumerable<MentorsResponse>>();
         }
     }
 }
