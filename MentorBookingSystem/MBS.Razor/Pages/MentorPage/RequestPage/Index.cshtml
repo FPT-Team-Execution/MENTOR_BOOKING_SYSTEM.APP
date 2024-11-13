@@ -1,19 +1,118 @@
 @page
+@using MBS.BusinessObject.Entities
+@using MBS.DataAccess.Pagination
+@using MBS.Services.Utils.Shared
 @model MBS.Razor.Pages.MentorPage.RequestPage.Index
 
 @{
     Layout = "Shared/_LayoutMentor";
+    string pageName = "Index";
+    //Student Pagination
+    var requestPagination = Model.GetTempData<Pagination<Request>>(TempDataKeys.MentorKeys.RequestPagination)! ?? Model.RequestPagination;
+    var requests = requestPagination.Items.ToArray();
+    //Get search & sort Order
+    string search = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.search;
+
+    //Get size and index
+    int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
 <body>
 <div>
-    <h1>This is Mentor Request Page</h1>
+    <div class="row align-items-center m-2">
+        <div class="col">
+            <h5>Requests</h5>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover ">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Project Name</th>
+                <th scope="col">Start</th>
+                <th scope="col">End</th>
+                <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            @{
+            if (!requests.Any())
+            {
+            <tr>
+                <td colspan="8">No requests available</td>
+            </tr>
+            }
+            else
+            {
+            for (int i = 0; i < requests.Count(); i++)
+            {
+            var request = requests[i];
+            var index = requestPagination.PageSize * (pageIndex - 1) + (i + 1);
+            <tr id="@request.Id" role="button">
+                <th scope="row">@index</th>
+                <td>@request.Title</td>
+                <td>@request.Title</td>
+                <td>@request.Start</td>
+                <td>@request.End</td>
+                <td>@request.Status</td>
+            </tr>
+            }
+            }
+            }
+            </tbody>
+        </table>
+        @* Pagination Navigaion *@
+        <form id="paginationForm" method="post" asp-page-handler="PageNavigate" class="d-flex justify-content-center">
+            <input type="hidden" id="hiddenPageIndex" name="pageIndex" value="@requestPagination.PageIndex" />
+
+            <!-- Page Size Dropdown -->
+            <nav aria-label="page size" class="me-3 mr-2">
+                <select class="form-control" name="size" asp-for="@Model.Size" onchange="onChangeSubmit()">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
+            </nav>
+
+            <!-- Pagination Controls -->
+            <nav aria-label="Pagination">
+                <ul class="pagination mb-0">
+                    <li class="page-item">
+                        <button type="button" class="page-link @(requestPagination.TotalItems <= pageSize ? "disable" : "") " aria-label="Previous" @(requestPagination.PageIndex == 1 ? "disabled" : "") onclick="updatePageIndex(@(requestPagination.PageIndex - 1))">
+                            <span aria-hidden="true">Prev</span>
+                        </button>
+                    </li>
+                    @for (int i = 1; i <= requestPagination.TotalPages; i++)
+                    {
+                    <li class="page-item @(requestPagination.PageIndex == i ? "active" : "")">
+                        <button type="button" class="page-link" onclick="updatePageIndex(@i)">@i</button>
+                    </li>
+                    }
+                    <li class="page-item">
+                        <button type="button" class="page-link @(requestPagination.TotalItems <= pageSize ? "disable" : "")" aria-label="Next" @(requestPagination.PageIndex == requestPagination.TotalPages ? "disabled" : "") onclick="updatePageIndex(@(requestPagination.PageIndex + 1))">
+                            <span aria-hidden="true">Next</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </form>
+    </div>
 </div>
 </body>
-</html>
+
+@section Scripts {
+<script>
+    function updatePageIndex(newIndex) {
+        document.getElementById('hiddenPageIndex').value = newIndex;
+        document.getElementById('paginationForm').submit();
+    }
+
+    function onChangeSubmit() {
+        document.getElementById('paginationForm').submit();
+    }
+</script>
+
+}
