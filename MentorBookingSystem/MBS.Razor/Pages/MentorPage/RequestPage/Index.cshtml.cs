@@ -1,16 +1,16 @@
 using MBS.BusinessObject.Entities;
 using MBS.DataAccess.Pagination;
 using MBS.Services.Constants;
+using MBS.Services.Models.Responses.Requests;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MBS.Razor.Pages.MentorPage.RequestPage;
 
 public class Index : BaseMentorPage
 {
-    public Pagination<Request> RequestPagination { get; set; } = new();
+    public Pagination<RequestResponse> RequestPagination { get; set; } = new();
 
     public string SortOrder { get; set; } = "asc";
     public string search { get; set; } = "";
@@ -29,8 +29,9 @@ public class Index : BaseMentorPage
     private async Task LoadProject()
     {
         //Todo: get request from service
+        RequestPagination = await _requestService.GetAllRequestByMentorId("5f10c206-033a-4930-95a5-ac66570ba58d", PageIndex, Size);
         
-        SaveTempData(TempDataKeys.AdminKeys.ProjectPagination, RequestPagination);
+        SaveTempData(TempDataKeys.MentorKeys.RequestPagination, RequestPagination);
         SaveTempData(TempDataKeys.PageIndex, PageIndex);
         SaveTempData(TempDataKeys.PageSize, Size);
 
@@ -55,7 +56,7 @@ public class Index : BaseMentorPage
     {
         try
         {
-            var requestPagination = GetTempData<Pagination<Request>>(TempDataKeys.AdminKeys.ProjectPagination)!;
+            var requestPagination = GetTempData<Pagination<Request>>(TempDataKeys.MentorKeys.RequestPagination)!;
             Size = int.Parse(size);
             if ((requestPagination.TotalItems * requestPagination.TotalItems) <= Size)
                 PageIndex = 1;
