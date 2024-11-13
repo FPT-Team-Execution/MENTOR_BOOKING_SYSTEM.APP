@@ -65,37 +65,24 @@ namespace MBS.Services.Services.Implements
         public async Task<Pagination<ProjectResponse>> GetAllProjectByMentorId(string mentorId, int page, int size)
         {
 
-            var result = await _projectRepository.GetAllProjects(page, size);
-            var projectResponseByMentor = new List<ProjectResponse>();
-            foreach (var project in result.Items)
+            var result = await _projectRepository.GetProjectsByMentorId(mentorId, page, size);
+            var projectResponse = result.Items.Where(project => project.MentorId == mentorId).Select(project => new ProjectResponse
             {
-                if (project.MentorId == mentorId)
-                {
-                    var projectAdd = new ProjectResponse();
-                    projectAdd.Title = project.Title;
-                    projectAdd.Description = project.Description;
-                    projectAdd.Status = project.Status.ToString();
-                    projectAdd.Semester = project.Semester;
-                    projectAdd.DueDate = project.DueDate;
-                    projectResponseByMentor.Add(projectAdd);
-                }
-
-            }
-            var paginatedItems = projectResponseByMentor
-        .Skip((page - 1) * size)
-        .Take(size)
-        .ToList();
-
+                Title = project.Title,  
+                Description = project.Description,
+                Status = project.Status.ToString(),
+                Semester = project.Semester,
+                DueDate = project.DueDate   
+                
+            }).ToList();
             var projectPagination = new Pagination<ProjectResponse>
             {
-
-                Items = (IEnumerable<ProjectResponse>)paginatedItems,
+                Items = projectResponse,
                 PageIndex = page,
                 PageSize = size,
-                TotalItems = projectResponseByMentor.Count,
-                TotalPages = (int)Math.Ceiling((double)projectResponseByMentor.Count / size)
+                TotalItems = result.TotalItems,
+                TotalPages = result.TotalPages
             };
-
             return projectPagination;
         }
     }
