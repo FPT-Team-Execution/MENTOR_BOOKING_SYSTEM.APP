@@ -70,7 +70,13 @@ namespace MBS.Services.Services.Implements
             {
                 if(project.MentorId == mentorId)
                 {
-                    projectResponseByMentor.Add(project);
+                    var projectAdd = new Project();
+                    projectAdd.Title = project.Title;
+                    projectAdd.Description = project.Description;
+                    projectAdd.Status = project.Status;
+                    projectAdd.Semester = project.Semester;
+                    projectAdd.DueDate = project.DueDate;
+                    projectResponseByMentor.Add(projectAdd);
                 }
 
             }
