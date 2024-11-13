@@ -25,10 +25,14 @@
                     <span asp-validation-for="Project.Description" class="text-danger"></span>
                 </div>
 
-                <!-- Project Semester -->
+                <!-- Project Semester as Select Dropdown -->
                 <div class="form-group">
                     <label asp-for="Project.Semester"></label>
-                    <input asp-for="Project.Semester" class="form-control" />
+                    <select asp-for="Project.Semester" class="form-control">
+                        <option value="Spring 2025">Spring 2025</option>
+                        <option value="Summer 2025">Summer 2025</option>
+                        <option value="Fall 2025">Fall 2025</option>
+                    </select>
                     <span asp-validation-for="Project.Semester" class="text-danger"></span>
                 </div>
 
@@ -65,10 +69,11 @@
 
             mentors
                 .filter(mentor => mentor.FullName.toLowerCase().includes(query))
+                .slice(0, 3) // Show only the top 3 results
                 .forEach(mentor => {
                     const item = document.createElement("a");
                     item.classList.add("list-group-item", "list-group-item-action");
-                    item.textContent = mentor.FullName;
+                    item.textContent = `${mentor.FullName} (${mentor.Email})`;
                     item.href = "#";
                     item.onclick = (e) => {
                         e.preventDefault();
