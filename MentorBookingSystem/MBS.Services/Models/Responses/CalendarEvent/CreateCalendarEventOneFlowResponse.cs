@@ -11,3 +11,4 @@ namespace MBS.Services.Models.Responses.CalendarEvent
         public string CalendarEventId { get; set; }
         public Guid MeetingId { get; set; }
     }
+}

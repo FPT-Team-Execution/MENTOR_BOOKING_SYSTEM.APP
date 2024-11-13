@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MBS.Services.Dtos;
+using MBS.DataAccess.Pagination;
 
 namespace MBS.Services.Services.Interfaces
 {
