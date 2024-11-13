@@ -12,5 +12,7 @@ namespace MBS.Services.Models.Requests.Project
         public string Semester { get; set; }
         [MaxLength(450)]
         public string MentorId { get; set; }
+
+
     }
 }
