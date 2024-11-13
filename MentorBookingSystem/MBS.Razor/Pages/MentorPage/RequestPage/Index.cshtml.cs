@@ -1,11 +1,10 @@
 using MBS.BusinessObject.Entities;
 using MBS.DataAccess.Pagination;
 using MBS.Services.Constants;
-using MBS.Services.Models.Responses;
+using MBS.Services.Models.Responses.Requests;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils.Shared;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MBS.Razor.Pages.MentorPage.RequestPage;
 
