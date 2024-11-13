@@ -17,6 +17,8 @@ using MBS.Services.Models.Responses.Degree;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.DataAccess.Pagination;
 
+
+
 namespace MBS.Services.Services.Implements
 {
     public class MentorService : IMentorService
@@ -30,25 +32,13 @@ namespace MBS.Services.Services.Implements
             _degreeRepository = degreeRepository;
         }
 
-
-        // public async Task<IResponse> GetMentorsAsync(int page, int size)
-        // {
-        //     var result = await WebUtils.GetAsync(ApiEndPoints.MentorUrl,
-        //         token: WebUtils.AccessToken,
-        //         queryParams: new Dictionary<string, string?>()
-        //         {
-        //             { "page", page.ToString() },
-        //             { "size", size.ToString() }
-        //         });
-        //     var response = WebUtils.HandleResponse<BaseModel<Pagination<MentorResponse>>>(result);
-        //     return response;
-        // }
-
         public async Task<Pagination<MentorDto>> GetMentorsAsync(int page, int size)
         {
             var result = await _mentorRepository.GetMentorsAsync(page, size);
             return result.Adapt<Pagination<MentorDto>>();
         }
+
+
 
         public async Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request)
         {
@@ -79,28 +69,10 @@ namespace MBS.Services.Services.Implements
             var mentor = await _mentorRepository.GetMentorByIdAsync(id);
             return mentor.Adapt<MentorDto>();
         }
-
-        // public async Task<IResponse> GetMentorDegrees(GetMentorDegreeRequest request)
-        // {
-        //     var token = WebUtils.AccessToken;
-        //     var result = await WebUtils.GetAsync
-        //     (
-        //         ApiEndPoints.MentorDegreeUrl(request.MentorId),
-        //         queryParams: new Dictionary<string, string?>()
-        //         {
-        //             { "page", request.Page.ToString() },
-        //             { "size", request.Size.ToString() }
-        //         },
-        //         headers: new Dictionary<string, string>
-        //         {
-        //             { "Accept-Charset", "utf-8" },
-        //             { "Authorization", $"Bearer {token}" }
-        //         },
-        //         token: token
-        //     );
-        //
-        //     var response = WebUtils.HandleResponse<BaseModel<Pagination<DegreeResponse>>>(result);
-        //     return response;
-        // }
+        async Task<IEnumerable<MentorsResponse>> IMentorService.GetMentorsPaginationAsync()
+        {
+            var result = await _mentorRepository.GetAllAsync();
+            return result.Adapt<IEnumerable<MentorsResponse>>();
+        }
     }
 }

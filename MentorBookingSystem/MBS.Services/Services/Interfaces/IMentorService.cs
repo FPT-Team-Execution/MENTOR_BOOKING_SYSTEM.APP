@@ -7,13 +7,22 @@ using System.Threading.Tasks;
 using MBS.Services.Dtos;
 using MBS.Services.Models.Requests.Degree;
 using MBS.Services.Models.Requests.Mentor;
+
 using MBS.DataAccess.Pagination;
+
+using MBS.Services.Models.Responses.Mentor;
+
 
 namespace MBS.Services.Services.Interfaces
 {
     public interface IMentorService
     {
         public Task<Pagination<MentorDto>> GetMentorsAsync(int page, int size);
+
+        public Task<IResponse> GetMentorsAsync(int page, int size);
+        public Task<IEnumerable<MentorsResponse>> GetMentorsPaginationAsync();
+
+
         public Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request);
         public Task<Pagination<DegreeDto>> GetMentorDegrees(string mentorId, int page, int size);
         public Task<MentorDto?> GetMentorById(string id);
