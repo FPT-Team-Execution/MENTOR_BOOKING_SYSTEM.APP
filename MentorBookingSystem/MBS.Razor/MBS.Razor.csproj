@@ -19,4 +19,11 @@
     <_ContentIncludedByDefault Remove="Pages\MentorPage\GroupPage\Index.cshtml" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Pages\MentorPage\BaseMentorPage.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

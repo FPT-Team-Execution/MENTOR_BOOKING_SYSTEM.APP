@@ -27,7 +27,7 @@ namespace MBS.Services.Services.Implements
         {
             _projectRepository = projectRepository;
         }
-        
+
         public async Task<IResponse> CreateProjectAsync(CreateProjectModel createProjectModel)
         {
             var newProject = new Project();
@@ -48,7 +48,7 @@ namespace MBS.Services.Services.Implements
             var response = WebUtils.HandleResponse<BaseModel<ProjectResponse>>(result);
             return response;
         }
-        
+
         public async Task<ProjectDto?> GetProjectByIdAsync(Guid projectId)
         {
             var project = await _projectRepository.GetProjectById(projectId);
@@ -60,6 +60,30 @@ namespace MBS.Services.Services.Implements
             var result = await _projectRepository.GetAllProjects(page, size);
             return result.Adapt<Pagination<ProjectResponse>>();
         }
-        
+
+
+        public async Task<Pagination<ProjectResponse>> GetAllProjectByMentorId(string mentorId, int page, int size)
+        {
+
+            var result = await _projectRepository.GetProjectsByMentorId(mentorId, page, size);
+            var projectResponse = result.Items.Where(project => project.MentorId == mentorId).Select(project => new ProjectResponse
+            {
+                Title = project.Title,  
+                Description = project.Description,
+                Status = project.Status.ToString(),
+                Semester = project.Semester,
+                DueDate = project.DueDate   
+                
+            }).ToList();
+            var projectPagination = new Pagination<ProjectResponse>
+            {
+                Items = projectResponse,
+                PageIndex = page,
+                PageSize = size,
+                TotalItems = result.TotalItems,
+                TotalPages = result.TotalPages
+            };
+            return projectPagination;
+        }
     }
 }

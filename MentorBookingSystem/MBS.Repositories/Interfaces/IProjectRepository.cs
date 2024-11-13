@@ -11,7 +11,7 @@ namespace MBS.Repositories.Interfaces
 {
     public interface IProjectRepository : IBaseRepository<Project>
     {
-        Task<Pagination<Project>> GetProjectsByMentorId(string mentorId, int page, int size, string sortOrder);
+        Task<Pagination<Project>> GetProjectsByMentorId(string mentorId, int page, int size);
         Task<Pagination<Project>> GetAllProjects(int page, int size);
         Task<Project?> GetProjectById(Guid projectId);
 

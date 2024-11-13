@@ -16,6 +16,8 @@ namespace MBS.Repositories.Interfaces
         Task<Pagination<Request>> GetRequestByUserIdPaginationAsync(string userId, int page, int size, string sortOrder, string? requestStatus);
         Task<Pagination<Request>> GetRequestPaginationAsync(int page, int size, string sortOrder);
         Task<Request?> GetRequestById(Guid id);
+        Task<Pagination<Request>> GetRequestsByMentorId(string mentorId, int page, int size);
+
 
     }
 }
