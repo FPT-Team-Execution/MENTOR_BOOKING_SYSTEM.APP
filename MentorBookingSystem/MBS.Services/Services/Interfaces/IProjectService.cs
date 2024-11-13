@@ -18,5 +18,9 @@ namespace MBS.Services.Services.Interfaces
         Task<IResponse> CreateProjectAsync(CreateProjectModel createProjectModel);
         Task<ProjectDto?> GetProjectByIdAsync(Guid projectId);
         public Task<Pagination<ProjectResponse>> GetProjectAsync(int page, int size, string search);
+
+        public Task<Pagination<ProjectResponse>> GetAllProjectByMentorId(string mentorId, int page, int size);
+
+
     }
 }

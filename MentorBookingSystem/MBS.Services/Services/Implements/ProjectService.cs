@@ -60,6 +60,29 @@ namespace MBS.Services.Services.Implements
             var result = await _projectRepository.GetAllProjects(page, size);
             return result.Adapt<Pagination<ProjectResponse>>();
         }
-        
+
+
+        public async Task<Pagination<ProjectResponse>> GetAllProjectByMentorId(string mentorId, int page, int size)
+        {
+            var result = await _projectRepository.GetAllProjects(page, size);
+            var projectResponseByMentor = new List<Project>();
+            foreach (var project in result.Items)
+            {
+                if(project.MentorId == mentorId)
+                {
+                    projectResponseByMentor.Add(project);
+                }
+
+            }
+            var projectPagination = new Pagination<ProjectResponse>()
+            {
+                Items = (IEnumerable<ProjectResponse>)projectResponseByMentor,
+                PageIndex = page,
+                PageSize = size,
+                TotalItems = result.TotalItems,
+                TotalPages = result.TotalPages
+            };
+            return projectPagination;
+        }
     }
 }
