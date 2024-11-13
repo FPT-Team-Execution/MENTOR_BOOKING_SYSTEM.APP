@@ -39,7 +39,8 @@ public class Index : BaseAdminPage
 
     private async Task LoadMentors()
     {
-        var response = await _mentorService.GetMentorsAsync(PageIndex, Size);
+
+        var response = await _mentorService.GetMentorsPaginationAsync(PageIndex, Size);
         MentorPagination = response;
 
         SaveTempData(TempDataKeys.AdminKeys.MentorPagination, MentorPagination);

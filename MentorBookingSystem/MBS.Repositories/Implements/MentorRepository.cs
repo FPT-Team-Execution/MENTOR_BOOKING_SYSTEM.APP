@@ -31,7 +31,7 @@ namespace MBS.Repositories.Implements
                 );
         }
 
-        public async Task<Pagination<Mentor>> GetMentorsAsync(int page, int size)
+        public async Task<Pagination<Mentor>> GetMentorsPaginationAsync(int page, int size)
         {
             return await _dao.GetPagingListAsync(
                 include: source => source.Include(m => m.User),
@@ -42,7 +42,11 @@ namespace MBS.Repositories.Implements
 
         public async Task<IEnumerable<Mentor>> GetMentorsAsync()
         {
-            return await _dao.GetListAsync();
+            return await _dao.GetListAsync(
+                include: s => s.Include(m => m.User)
+                );
         }
+
+
     }
 }

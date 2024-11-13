@@ -60,7 +60,6 @@ public class MajorService : IMajorService
             request,
             token: WebUtils.AccessToken
         );
-
         var response = WebUtils.HandleResponse<BaseModel<GroupResponse>>(result);
         return response;
     }
