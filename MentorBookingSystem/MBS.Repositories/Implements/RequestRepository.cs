@@ -95,5 +95,15 @@ namespace MBS.Repositories.Implements
                 include: q => q.Include(r => r.Creater).Include(r => r.Mentor).Include(r => r.Project)
             );
         }
+
+        public Task<Pagination<Request>> GetRequestsByMentorId(string mentorId, int page, int size)
+        {
+            return _dao.GetPagingListAsync(
+                predicate: m => m.MentorId == mentorId,
+                include: q => q.Include(r => r.Project),
+                page: page,
+                size: size
+            );
+        }
     }
 }
