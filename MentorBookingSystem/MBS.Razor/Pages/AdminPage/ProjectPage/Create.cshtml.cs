@@ -1,7 +1,4 @@
-using Mapster;
-using MBS.BusinessObject.Entities;
-using MBS.DataAccess.Pagination;
-using MBS.Services.Dtos;
+using MBS.Services.Constants;
 using MBS.Services.Models.Requests.Project;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Services.Interfaces;
@@ -34,8 +31,14 @@ namespace MBS.Razor.Pages.AdminPage.ProjectPage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await _projectService.CreateProjectAsync(Project);
-            return RedirectToPage("Index"); // Redirect to an index or list page after creating
+            try
+            {
+                await _projectService.CreateProjectAsync(Project);
+                return Redirect(RouteEndpoints.AdminProject);
+            } catch (Exception e)
+            {
+                return Redirect(RouteEndpoints.AdminProject);
+            }
         }
     }
 }
