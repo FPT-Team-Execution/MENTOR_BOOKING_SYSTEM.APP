@@ -1,6 +1,6 @@
 using MBS.DataAccess.Pagination;
 using MBS.Services.Dtos;
-using MBS.Services.Models.Responses;
+using MBS.Services.Models.Responses.Requests;
 
 
 namespace MBS.Services.Services.Interfaces;

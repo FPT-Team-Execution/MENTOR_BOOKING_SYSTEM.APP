@@ -4,6 +4,7 @@ using MBS.DataAccess.Pagination;
 using MBS.Repositories.Interfaces;
 using MBS.Services.Dtos;
 using MBS.Services.Models.Responses;
+using MBS.Services.Models.Responses.Requests;
 using MBS.Services.Services.Interfaces;
 
 namespace MBS.Services.Services.Implements;
@@ -27,6 +28,7 @@ public class RequestService : IRequestService
         var result = await _requestRepository.GetRequestsByMentorId(mentorId, page, size);
         var response = result.Items.Where(q => q.MentorId == mentorId).Select(p => new RequestResponse
         {
+            RequestId = p.Id,
             Title = p.Title,
             Start = p.Start,
             End = p.End,

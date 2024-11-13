@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using MBS.BusinessObject.Enums;
+﻿using MBS.BusinessObject.Enums;
 
-namespace MBS.Services.Models.Responses;
+namespace MBS.Services.Models.Responses.Requests;
 
 public class RequestResponse
 {
+    public Guid RequestId { get; set; }
     public string Title { get; set; }
     public DateTime Start {  get; set; }
     public DateTime End { get; set; }
