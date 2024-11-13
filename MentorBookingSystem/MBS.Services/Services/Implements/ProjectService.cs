@@ -64,9 +64,9 @@ namespace MBS.Services.Services.Implements
 
         public async Task<Pagination<ProjectResponse>> GetAllProjectByMentorId(string mentorId, int page, int size)
         {
-            var result = await _projectRepository.GetAllProjects(page, size);
+            var result = await _projectRepository.GetAllAsync();
             var projectResponseByMentor = new List<Project>();
-            foreach (var project in result.Items)
+            foreach (var project in result)
             {
                 if(project.MentorId == mentorId)
                 {
@@ -80,14 +80,21 @@ namespace MBS.Services.Services.Implements
                 }
 
             }
-            var projectPagination = new Pagination<ProjectResponse>()
+            var paginatedItems = projectResponseByMentor
+        .Skip((page - 1) * size)
+        .Take(size)
+        .ToList();
+
+            // T?o ??i t??ng phân trang ?? tr? v?
+            var projectPagination = new Pagination<ProjectResponse>
             {
-                Items = (IEnumerable<ProjectResponse>)projectResponseByMentor,
+                Items = (IEnumerable<ProjectResponse>)paginatedItems,
                 PageIndex = page,
                 PageSize = size,
-                TotalItems = result.TotalItems,
-                TotalPages = result.TotalPages
+                TotalItems = projectResponseByMentor.Count,
+                TotalPages = (int)Math.Ceiling((double)projectResponseByMentor.Count / size)
             };
+
             return projectPagination;
         }
     }
