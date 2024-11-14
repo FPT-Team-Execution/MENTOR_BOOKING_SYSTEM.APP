@@ -68,7 +68,7 @@ namespace MBS.Razor.Pages
                 MajorId = RegisterRequest.MajorId,
                 UserId = user.Id,
                 University = RegisterRequest.University,
-                WalletPoint = 100,
+                // WalletPoint = 100,
             };
 
             var createStudentResult = await _studentService.CreateStudentAsync(student);

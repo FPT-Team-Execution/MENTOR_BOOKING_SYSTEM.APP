@@ -39,8 +39,15 @@ public class StudentService : IStudentService
 
     public async Task<string> CreateStudentAsync(StudentDto studentDto)
     {
-        var student = studentDto.Adapt<Student>();
-        await _studentRepository.CreateAsync(student);
-        return student.UserId;
+        // var student = studentDto.Adapt<Student>();
+        var student = new Student
+        {
+            MajorId = studentDto.MajorId,
+            UserId = studentDto.UserId,
+            University = studentDto.University,
+            WalletPoint = studentDto.WalletPoint,
+        };
+        var result = await _studentRepository.CreateAsync(student);
+        return studentDto.UserId;
     }
 }
