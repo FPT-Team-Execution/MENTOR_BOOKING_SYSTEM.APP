@@ -100,6 +100,37 @@ namespace MBS.Razor.Pages
                 SaveTempData("Email", user.Email);
                 return Redirect(RouteEndpoints.ConfirmEmail);
             }
-        }
+
+
+            var student = new StudentDto()
+            {
+                MajorId = RegisterRequest.MajorId,
+                UserId = user.Id,
+                University = RegisterRequest.University,
+                // WalletPoint = 100,
+            };
+
+            var createStudentResult = await _studentService.CreateStudentAsync(student);
+
+            if (string.IsNullOrEmpty(createStudentResult))
+            {
+                TempData["ErrorMessage"] = "Register fail!";
+                MajorData = await _majorService.GetAllMajors();
+                return Page();
+            }
+
+            var addToRoleResult = await _authService.AddToRoleAsync(user, UserRole.Student);
+
+            if (!addToRoleResult)
+            {
+                TempData["ErrorMessage"] = "Register fail!";
+                MajorData = await _majorService.GetAllMajors();
+                return Page();
+            }
+
+            TempData["SuccessMessage"] = "Register successfully";
+            SaveTempData("Email", user.Email);
+            return Redirect(RouteEndpoints.ConfirmEmail);
+        } 
     }
 }

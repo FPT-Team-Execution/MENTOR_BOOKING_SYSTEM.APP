@@ -1,8 +1,11 @@
 using System.Transactions;
-using Mapster;
 using MBS.BusinessObject.Entities;
 using MBS.Externals.Utils;
 using MBS.DataAccess.Pagination;
+﻿using System.Transactions;
+using Mapster;
+using MBS.BusinessObject.Entities;
+using MBS.Externals.Utils;
 using MBS.Services.Constants;
 using MBS.Services.Constants.Enums;
 using MBS.Services.Dtos;
@@ -21,7 +24,7 @@ public class Index : BaseAdminPage
 {
     public Pagination<StudentDto> StudentPagination { get; set; } = new();
     public List<MajorDto> Majors { get; set; } = new();
-    [BindProperty]public int NewPoint { get; set; } = 0;
+    [BindProperty] public int NewPoint { get; set; } = 0;
 
     [BindProperty] public StudentDto ChosenStudent { get; set; } = new();
 
