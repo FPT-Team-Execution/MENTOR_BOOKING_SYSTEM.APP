@@ -36,6 +36,13 @@ namespace MBS.Repositories.Implements
                 include: include
             );
         }
+        public async Task<Student?> GetStudentByIdAsync(string userId)
+        {
+            return await _dao.SingleOrDefaultAsync(
+                predicate: x => x.UserId == userId,
+                include: q => q.Include(x => x.User)
+            );
+        }
 
 
         public async Task<IEnumerable<Student>> GetStudents()
