@@ -32,7 +32,7 @@ public class RequestService : IRequestService
             Title = p.Title,
             Start = p.Start,
             End = p.End,
-            Status = RequestStatusEnum.Accepted,
+            Status = p.Status,
             ProjectName = p.Project.Title
         }).ToList();
         var paginationParse = new Pagination<RequestResponse>

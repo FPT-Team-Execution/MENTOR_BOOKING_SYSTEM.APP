@@ -82,6 +82,6 @@ public class Index : BaseMentorPage
     {
         bool check = await _requestService.UpdateRequestStatus(Guid.Parse(userId), RequestStatusEnum.Rejected);
         LoadProject();
-        return RedirectToPage(RouteEndpoints.MentorRequest);
+        return Redirect(RouteEndpoints.MentorRequest);
     }
 }
