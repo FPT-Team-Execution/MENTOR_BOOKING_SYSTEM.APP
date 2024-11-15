@@ -18,10 +18,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using MBS.BusinessObject.Entities;
 using MBS.BusinessObject.Enums;
+using MBS.Externals.Models.Google;
 using MBS.Externals.Models.Google.GoogleCalendar.Request;
 using MBS.Externals.Models.Google.GoogleCalendar.Response;
+using MBS.Externals.Models.Google.GoogleMeeting.Response;
 using MBS.Externals.Services.Interfaces;
 using MBS.Externals.Utils;
 using Microsoft.AspNetCore.Http;
@@ -542,9 +545,173 @@ namespace MBS.Services.Services.Implements
             }
         }
 
-        public Task<BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>> CreateCalendarEventOnelFlow(CreateCalendarEventOneFlowRequest request)
+        public async Task<BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>> CreateCalendarEventOnelFlow(CreateCalendarEventOneFlowRequest request)
         {
-            
+             try
+        {
+            //* get  request 
+            var requestFound = await _requestRepository.GetRequestById(request.RequestId);
+
+            if (requestFound == null)
+                return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
+                {
+                    Message = "Not found for reuqest Id",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status404NotFound,
+                };
+
+            if (requestFound.Status != RequestStatusEnum.Pending)
+                return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
+                {
+                    Message = "Invalid request status",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status400BadRequest,
+                };
+            var startDatetime = DateTime.Parse(request.Start);
+            var endDatetime = DateTime.Parse(request.End);
+
+            //check mentorId
+            var mentor = await _mentorRepository.GetMentorByIdAsync(request.MentorId);
+            if (mentor == null)
+            {
+                return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
+                {
+                    Message = "User not found",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status404NotFound,
+                };
+            }
+
+            //find overlayed events
+            var freeBusyRequest = new FreeBusyParamters()
+            {
+                Email = mentor.User.Email,
+                AccessToken = request.AccessToken,
+                Day = startDatetime,
+            };
+
+            var freeBusyResponse = await _googleService.GetFreeBusyPeriod(freeBusyRequest);
+
+            var isOverlayed = IsOverlapping(startDatetime, endDatetime, ((FreeBusyResponse)freeBusyResponse).Calendars[mentor.User.Email].Busy);
+
+            if (isOverlayed)
+            {
+                return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
+                {
+                    Message = "Is overlayed",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status400BadRequest,
+                };
+            }
+            //* create event on google calendar
+            var createGEventRequest = new CreateGoogleCalendarEventRequest()
+            {
+                Summary = $"Meeting {(request.IsOnline ? "ONLINE" : "OFFLINE")}",
+                Description = $"You have meeting with project: {requestFound.Project.Title.ToUpper()}",
+                Start = startDatetime,
+                End = endDatetime,
+                TimeZone = "Asia/Ho_Chi_Minh"
+            };
+            var googleEventResponse = await _googleService.InsertEventWithGoogleMeetCreate(
+                email: mentor.User.Email,
+                accessToken: request.AccessToken,
+                createRequest: createGEventRequest,
+                location: request.Location,
+                isOnline: request.IsOnline
+                );
+            if (!googleEventResponse.IsSuccess)
+            {
+                return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
+                {
+                    Message = ((GoogleErrorResponse)googleEventResponse).Error.Message,
+                    IsSuccess = false,
+                    StatusCode = ((GoogleErrorResponse)googleEventResponse).Error.Code
+                };
+            }
+            var googleEvent = ((GoogleCalendarEvent)googleEventResponse);
+
+            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                //update request to accepted
+                requestFound.Status = RequestStatusEnum.Accepted;
+                _requestRepository.Update(requestFound);
+                //*create meeting 
+                var googleMeetingUrl = string.Empty;
+                if (request.IsOnline)
+                {
+                    GoogleResponse googleMeetingResponse = await _googleService.CreateMeeting(request.AccessToken);
+                    if (!googleMeetingResponse.IsSuccess)
+                        return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
+                        {
+                            Message = ((GoogleErrorResponse)googleMeetingResponse).Error.Message,
+                            IsSuccess = false,
+                            StatusCode = ((GoogleErrorResponse)googleMeetingResponse).Error.Code
+                        };
+                    googleMeetingUrl = ((GoogleMeetingResponse)googleMeetingResponse).MeetingUri;
+                }
+                var newMeeting = new Meeting()
+                {
+                    Id = Guid.NewGuid(),
+                    RequestId = requestFound.Id,
+                    Description = request.Description,
+                    Location = googleEvent.Location,
+                    MeetUp = googleMeetingUrl,
+                    Status = MeetingStatusEnum.New
+                };
+                //create meeting
+                await _meetingRepository.CreateAsync(newMeeting);
+                //add new calendar event
+                var eventCreate = new CalendarEvent()
+                {
+                    Id = googleEvent.Id,
+                    Status = (EventStatus)Enum.Parse(typeof(EventStatus), googleEvent.Status, ignoreCase: true),
+                    Description = $"You have meeting with project: {requestFound.Project.Title.ToUpper()}",
+                    HtmlLink = googleEvent.HtmlLink,
+                    Created = googleEvent.Created,
+                    Updated = googleEvent.Updated,
+                    Summary = googleEvent.Summary,
+                    ICalUID = googleEvent.ICalUID,
+                    Start = googleEvent.Start.DateTime,
+                    End = googleEvent.End.DateTime,
+                    MentorId = request.MentorId,
+                    MeetingId = newMeeting.Id,
+                };
+                var addResult = await _calendarEventRepository.CreateAsync(eventCreate);
+                if (addResult)
+                {
+                    transactionScope.Complete();
+                    return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
+                    {
+                        Message = "Create event successfully",
+                        IsSuccess = true,
+                        StatusCode = StatusCodes.Status200OK,
+                        RequestModel = request,
+                        ResponseModel = new CreateCalendarEventOneFlowResponse
+                        {
+                            CalendarEventId = eventCreate.Id,
+                            MeetingId = newMeeting.Id
+                        }
+                    };
+                }
+                
+                return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
+                {
+                    Message = "Create event failed",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                };
+            }
+                
+        }
+        catch (Exception e)
+        {
+            return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
+            {
+                Message = e.Message,
+                IsSuccess = false,
+                StatusCode = StatusCodes.Status500InternalServerError,
+            };
+        }
         }
     }
 }
