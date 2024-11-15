@@ -19,9 +19,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MBS.BusinessObject.Entities;
+using MBS.BusinessObject.Enums;
 using MBS.Externals.Models.Google.GoogleCalendar.Request;
 using MBS.Externals.Models.Google.GoogleCalendar.Response;
 using MBS.Externals.Services.Interfaces;
+using MBS.Externals.Utils;
 using Microsoft.AspNetCore.Http;
 
 namespace MBS.Services.Services.Implements
@@ -345,14 +347,149 @@ namespace MBS.Services.Services.Implements
             }
         }
 
-        public Task<BaseModel<GetBusyEventResponse, GetBusyEventRequestModel>> GetBusyEvent(GetBusyEventRequestModel request)
+        public async Task<BaseModel<GetBusyEventResponse, GetBusyEventRequestModel>> GetBusyEvent(GetBusyEventRequestModel request)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var mentor = await _mentorRepository.GetByIdAsync(request.MentorId, "UserId");
+                if (mentor == null)
+                {
+                    return new BaseModel<GetBusyEventResponse, GetBusyEventRequestModel>
+                    {
+                        Message = "User not found",
+                        IsSuccess = false,
+                        StatusCode = StatusCodes.Status404NotFound,
+                    };
+                }
+                var (start, end) = ConvertUtils.GetStartEndTime(request.Day);
+                var events = await _calendarEventRepository.GetCalendarEventsByMentorIdAsync(request.MentorId, start, end);
+                var busyEventsInDay = events.Adapt<IEnumerable<BusyEventModel>>();
+                return new BaseModel<GetBusyEventResponse, GetBusyEventRequestModel>
+                {
+                    Message = "Get busy events successfully",
+                    IsSuccess = true,
+                    StatusCode = StatusCodes.Status200OK,
+                    RequestModel = request,
+                    ResponseModel = new GetBusyEventResponse
+                    {
+                        Events = busyEventsInDay.ToList()
+                    }
+                };
+            }
+            catch (Exception e)
+            {
+                return new BaseModel<GetBusyEventResponse, GetBusyEventRequestModel>
+                {
+                    Message = e.Message,
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                };
+            }
         }
 
-        public Task<BaseModel<UpdateCalendarEventResponseModel>> UpdateCalendarEvent(string calendarEventId, string accessToken, UpdateCalendarEventRequestModel request)
+        public async Task<BaseModel<UpdateCalendarEventResponseModel>> UpdateCalendarEvent(string calendarEventId, string accessToken, UpdateCalendarEventRequestModel request)
         {
-            throw new NotImplementedException();
+            try
+        {
+            //check meeting Id
+            var meeting = await _meetingRepository.GetByIdAsync(request.MeetingId, "Id");
+            if (meeting == null)
+                return new BaseModel<UpdateCalendarEventResponseModel>
+                {
+                    Message = "Meeting not found",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status404NotFound,
+                    ResponseRequestModel = null,
+
+                };
+            if (meeting.Status != MeetingStatusEnum.New)
+                return new BaseModel<UpdateCalendarEventResponseModel>
+                {
+                    Message = "Invalid meeting required",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    ResponseRequestModel = null,
+
+                };
+
+            //update calendar event
+            var calendarEvent = await _calendarEventRepository.GetEventByIdAsync(calendarEventId);
+            if (calendarEvent == null)
+                return new BaseModel<UpdateCalendarEventResponseModel>
+                {
+                    Message = "Not found for calendar event",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status404NotFound,
+                    ResponseRequestModel = null,
+
+                };
+            //TODO: call google calendar api to recheck event props
+            //~
+            var updateGEventRequets = new UpdateGoogleCalendarEventRequest()
+            {
+                Start = request.Start.Value,
+                End = request.End.Value,
+                TimeZone = "Asia/Ho_Chi_Minh"
+            };
+
+            var googleUpdateResponse = await _googleService.UpdateEvent(
+                eventId: calendarEventId,
+                email: calendarEvent.Mentor.UserId,
+                accessToken: accessToken,
+                updateRequest: updateGEventRequets
+                );
+            if (!googleUpdateResponse.IsSuccess)
+                return new BaseModel<UpdateCalendarEventResponseModel>
+                {
+                    Message = ((GoogleErrorResponse)googleUpdateResponse).Error.Message,
+                    IsSuccess = false,
+                    StatusCode = ((GoogleErrorResponse)googleUpdateResponse).Error.Code,
+                    ResponseRequestModel = null
+                };
+            GoogleCalendarEvent googleCalendarEventUpdated = (GoogleCalendarEvent)googleUpdateResponse;
+            //update local events
+            calendarEvent.HtmlLink = googleCalendarEventUpdated.HtmlLink;
+            calendarEvent.Description = request.Description;
+            calendarEvent.Summary = googleCalendarEventUpdated.Summary;
+            calendarEvent.ICalUID = googleCalendarEventUpdated.ICalUID;
+            calendarEvent.Updated = googleCalendarEventUpdated.Updated;
+            // if (request.Start != null)
+            //     calendarEvent.Start = request.Start.Value;
+            // if (request.End != null)
+            //     calendarEvent.End = request.End.Value;
+            calendarEvent.Start = googleCalendarEventUpdated.Start.DateTime;
+            calendarEvent.End = googleCalendarEventUpdated.End.DateTime;
+            calendarEvent.MeetingId = request.MeetingId;
+            var updateResult = _calendarEventRepository.Update(calendarEvent);
+            if (updateResult)
+                return new BaseModel<UpdateCalendarEventResponseModel>
+                {
+                    Message = "Update event successfully",
+                    IsSuccess = true,
+                    StatusCode = StatusCodes.Status200OK,
+                    ResponseRequestModel = new UpdateCalendarEventResponseModel
+                    {
+                        Event = calendarEvent,
+                    }
+                };
+            return new BaseModel<UpdateCalendarEventResponseModel>
+            {
+                Message = "Update event failed",
+                IsSuccess = false,
+                StatusCode = StatusCodes.Status500InternalServerError,
+                ResponseRequestModel = null,
+            };
+        }
+        catch (Exception e)
+        {
+            return new BaseModel<UpdateCalendarEventResponseModel>
+            {
+                Message = "Update event failed",
+                IsSuccess = false,
+                StatusCode = StatusCodes.Status500InternalServerError,
+                ResponseRequestModel = null,
+            };
+        }
         }
 
         public Task<BaseModel> DeleteCalendarEvent(string calendarEventId)
