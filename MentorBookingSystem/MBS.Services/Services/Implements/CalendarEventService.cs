@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MBS.Externals.Services.Interfaces;
 
 namespace MBS.Services.Services.Implements
 {
@@ -25,12 +26,18 @@ namespace MBS.Services.Services.Implements
     public class CalendarEventService : ICalendarEventService
     {   
         private readonly ICalendarEventRepository _calendarEventRepository;
-        private readonly MentorRepository _mentorRepository;
+        private readonly IMentorRepository _mentorRepository;
+        private readonly IRequestRepository _requestRepository;
+        private readonly IMeetingRepository _meetingRepository;
+        private readonly IGoogleService _googleService;
 
-        public CalendarEventService(ICalendarEventRepository calendarEventRepository, MentorRepository mentorRepository)
+        public CalendarEventService(ICalendarEventRepository calendarEventRepository, IMentorRepository mentorRepository, IRequestRepository requestRepository, IMeetingRepository meetingRepository, IGoogleService googleService)
         {
             _calendarEventRepository = calendarEventRepository;
             _mentorRepository = mentorRepository;
+            _googleService = googleService;
+            _meetingRepository = meetingRepository;
+            _requestRepository = requestRepository;
         }
 
         public async Task<CalendarEventDto> CreateCalendarEvent(CreateCalendarRequestModel request)
@@ -80,23 +87,7 @@ namespace MBS.Services.Services.Implements
             throw new NotImplementedException();
         }
 
-        //public async Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request)
-        //{
-        //    var token = WebUtils.AccessToken;
-        //    var result = await WebUtils.PutAsync
-        //    (
-        //        ApiEndPoints.MentorUpdateUrl,
-        //        data: request,
-        //        headers: new Dictionary<string, string>
-        //        {
-        //            { "Accept-Charset", "utf-8" },
-        //            { "Authorization", $"Bearer {token}" }
-        //        },
-        //        token: token
-        //    );
-        //    var response = WebUtils.HandleResponse<BaseModel<UpdateMentorResponse>>(result);
-        //    return response;
-        //}
+        
 
     }
 }
