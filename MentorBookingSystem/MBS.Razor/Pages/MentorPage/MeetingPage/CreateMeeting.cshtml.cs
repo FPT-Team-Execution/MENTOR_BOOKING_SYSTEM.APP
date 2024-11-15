@@ -24,6 +24,7 @@ public class CreateMeeting : PageModel
     public CreateCalendarEventOneFlowRequest EventModel { get; set; } = default!;
     [BindProperty]
     public RequestDto RequestInfo { get; set; } = default!; 
+    public string message = string.Empty;
     
     public async Task<IActionResult> OnGet(string id) 
     {
@@ -46,12 +47,20 @@ public class CreateMeeting : PageModel
             ModelState.AddModelError(string.Empty, "Request not found.");
             return Page();
         }
-        EventModel.AccessToken = "";
+        EventModel.AccessToken = "ya29.a0AeDClZAVXiaLxr62-WRZN1wNAyYLqW1kRqD9UCQHFbhFl9trnLDnjvjAvk3ZSsg9QUFpjVU9YHO7lh5NxCdl_kCrmFevvWlZ6pVzlIKGsCkvB33H-Ly-Ily0wTAKshcwwSgbzHOSWoQkF5aRBifWCMEZDUyGezTJ5R6E7vl3aCgYKAVASARESFQHGX2Miz-eE9h4YxK-Zpo4rfzYV3Q0175";
         EventModel.MentorId = RequestInfo.MentorId;
         EventModel.Start = RequestInfo.Start.ToString("MM/dd/yyyy HH:mm");
         EventModel.End = RequestInfo.End.ToString("MM/dd/yyyy HH:mm");
         EventModel.RequestId = RequestInfo.Id;
-        await _calendarEventService.CreateCalendarEventOnelFlow(EventModel);
+        var result = await _calendarEventService.CreateCalendarEventOnelFlow(EventModel);
+        if (result.IsSuccess)
+        {
+            message = "Calendar Event Created Successfully";
+        }
+        else
+        {
+            message = result.Message;
+        }
        return Page();
     }
 }

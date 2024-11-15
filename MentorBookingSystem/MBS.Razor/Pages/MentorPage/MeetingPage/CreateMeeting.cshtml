@@ -48,6 +48,9 @@
                             <input asp-for="EventModel.Location" class="form-control" placeholder="Enter meeting location">
                             <span asp-validation-for="EventModel.Location" class="text-danger"></span>
                         </div>
+                        <div>
+                            @Model.message
+                        </div>
 
                         <!-- Submit Button -->
                         <button type="submit" class="btn btn-primary w-100">Create Booking</button>
