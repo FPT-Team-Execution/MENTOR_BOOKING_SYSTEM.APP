@@ -20,7 +20,7 @@ public class CreateMeeting : PageModel
         _calendarEventService = calendarEventService;
     }
     [BindProperty]
-    public CreateCalendarEventOneFlowRequest eventModel { get; set; } = default!;
+    public CreateCalendarEventOneFlowRequest EventModel { get; set; } = default!;
     [BindProperty]
     public RequestDto RequestInfo { get; set; } = default!; 
     
@@ -28,5 +28,29 @@ public class CreateMeeting : PageModel
     {
         RequestInfo = await _requestService.GetRequestById(Guid.Parse(id));
         return Page();
+    }
+
+    public async Task<IActionResult> OnPostCreate()
+    {
+        if (RequestInfo.Id == Guid.Empty)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid Request.");
+            return Page();
+        }
+
+        RequestInfo = await _requestService.GetRequestById(RequestInfo.Id);
+
+        if (RequestInfo == null)
+        {
+            ModelState.AddModelError(string.Empty, "Request not found.");
+            return Page();
+        }
+        EventModel.AccessToken = "";
+        EventModel.MentorId = RequestInfo.MentorId;
+        EventModel.Start = RequestInfo.Start.ToString("MM/dd/yyyy HH:mm");
+        EventModel.End = RequestInfo.End.ToString("MM/dd/yyyy HH:mm");
+        EventModel.RequestId = RequestInfo.Id;
+        _calendarEventService.CreateCalendarEventOnelFlow(EventModel);
+       return Page();
     }
 }

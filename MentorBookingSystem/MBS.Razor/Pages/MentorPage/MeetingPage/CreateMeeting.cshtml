@@ -24,28 +24,29 @@
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <form method="post">
+                    <form method="post" asp-page-handler="Create">
+                        <input type="hidden" asp-for="RequestInfo.Id" />
                         <!-- Description Field -->
                         <div class="form-group mb-3">
-                            <label asp-for="eventModel.Description" class="form-label"></label>
-                            <textarea asp-for="eventModel.Description" class="form-control" rows="3" placeholder="Enter a brief description"></textarea>
-                            <span asp-validation-for="eventModel.Description" class="text-danger"></span>
+                            <label asp-for="EventModel.Description" class="form-label"></label>
+                            <textarea asp-for="EventModel.Description" class="form-control" rows="3" placeholder="Enter a brief description"></textarea>
+                            <span asp-validation-for="EventModel.Description" class="text-danger"></span>
                         </div>
 
                         <!-- IsOnline Field -->
                         <div class="form-check mb-3">
-                            <input type="checkbox" asp-for="eventModel.IsOnline" class="form-check-input" id="isOnlineCheck">
-                            <label asp-for="eventModel.IsOnline" class="form-check-label" for="isOnlineCheck">
+                            <input type="checkbox" asp-for="EventModel.IsOnline" class="form-check-input" id="isOnlineCheck">
+                            <label asp-for="EventModel.IsOnline" class="form-check-label" for="isOnlineCheck">
                                 Online Meeting
                             </label>
-                            <span asp-validation-for="eventModel.IsOnline" class="text-danger d-block"></span>
+                            <span asp-validation-for="EventModel.IsOnline" class="text-danger d-block"></span>
                         </div>
 
                         <!-- Location Field -->
                         <div class="form-group mb-3">
-                            <label asp-for="eventModel.Location" class="form-label"></label>
-                            <input asp-for="eventModel.Location" class="form-control" placeholder="Enter meeting location">
-                            <span asp-validation-for="eventModel.Location" class="text-danger"></span>
+                            <label asp-for="EventModel.Location" class="form-label"></label>
+                            <input asp-for="EventModel.Location" class="form-control" placeholder="Enter meeting location">
+                            <span asp-validation-for="EventModel.Location" class="text-danger"></span>
                         </div>
 
                         <!-- Submit Button -->
