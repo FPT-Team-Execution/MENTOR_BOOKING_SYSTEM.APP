@@ -14,7 +14,7 @@
     string pageName = "Index";
     //Student Pagination
     var projectPagination = Model.GetTempData<Pagination<ProjectResponse>>(TempDataKeys.MentorKeys.ProjectPagination)! ?? Model.ProjectPagination;
-    var projects = projectPagination.Items.ToArray();
+    var projects = projectPagination.Items.Any() ? projectPagination.Items.ToArray() : [];
     //Get search & sort Order
     string search = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.search;
 
