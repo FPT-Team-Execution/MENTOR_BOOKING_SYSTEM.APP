@@ -1,23 +1,10 @@
 using Mapster;
 using MBS.DataAccess.Pagination;
-using MBS.Repositories.Implements;
 using MBS.Repositories.Interfaces;
-using MBS.Services.Constants;
-using MBS.Services.Dtos;
 using MBS.Services.Models;
 using MBS.Services.Models.Requests.CalendarEvent;
-using MBS.Services.Models.Requests.Major;
-using MBS.Services.Models.Requests.Mentor;
 using MBS.Services.Models.Responses.CalendarEvent;
-using MBS.Services.Models.Responses.Group;
-using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Services.Interfaces;
-using MBS.Services.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Transactions;
 using MBS.BusinessObject.Entities;
 using MBS.BusinessObject.Enums;
@@ -49,6 +36,11 @@ namespace MBS.Services.Services.Implements
             _requestRepository = requestRepository;
         }
 
+
+        public Task<IEnumerable<CalendarEvent>> GetCalendarEventByMentorId(string mentorId, DateTime startDate, DateTime endDate)
+        {
+            return _calendarEventRepository.GetCalendarEventsByMentorIdAsync(mentorId, startDate, endDate);
+        }
 
         public async Task<BaseModel<CreateCalendarResponseModel, CreateCalendarRequestModel>> CreateCalendarEvent(CreateCalendarRequestModel request)
         {

@@ -14,6 +14,7 @@ namespace MBS.Services.Services.Interfaces
 {
     public interface ICalendarEventService
     {
+        Task<IEnumerable<CalendarEvent>> GetCalendarEventByMentorId(string mentorId, DateTime startDate, DateTime endDate);
         Task<BaseModel<CreateCalendarResponseModel, CreateCalendarRequestModel>> CreateCalendarEvent(CreateCalendarRequestModel request);
         Task<BaseModel<Pagination<CalendarEvent>>> GetCalendarEventsByMentorId(string mentorId,string accessToken, GetCalendarEventRequestModel parameters);
         Task<BaseModel<CalendarEventResponseModel>> GetCalendarEventId(string calendarEventId);
