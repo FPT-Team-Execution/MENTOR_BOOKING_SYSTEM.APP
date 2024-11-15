@@ -32,7 +32,7 @@ public class RequestService : IRequestService
             Title = p.Title,
             Start = p.Start,
             End = p.End,
-            Status = RequestStatusEnum.Accepted,
+            Status = p.Status,
             ProjectName = p.Project.Title
         }).ToList();
         var paginationParse = new Pagination<RequestResponse>
@@ -44,5 +44,20 @@ public class RequestService : IRequestService
             TotalPages = result.TotalPages
         };
         return paginationParse;
+    }
+    
+
+    public async Task<bool> UpdateRequestStatus(Guid requestId, RequestStatusEnum status)
+    {
+        try
+        {
+            var request = await _requestRepository.GetRequestById(requestId);
+            request.Status = status;
+            return _requestRepository.Update(request);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 }

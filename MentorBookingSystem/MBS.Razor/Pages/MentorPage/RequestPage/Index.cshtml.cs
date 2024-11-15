@@ -1,4 +1,5 @@
 using MBS.BusinessObject.Entities;
+using MBS.BusinessObject.Enums;
 using MBS.DataAccess.Pagination;
 using MBS.Services.Constants;
 using MBS.Services.Models.Responses.Requests;
@@ -75,5 +76,12 @@ public class Index : BaseMentorPage
         }
 
         return Page();
+    }
+    
+    public async Task<IActionResult> OnPostDeny(string userId)
+    {
+        bool check = await _requestService.UpdateRequestStatus(Guid.Parse(userId), RequestStatusEnum.Rejected);
+        LoadProject();
+        return Redirect(RouteEndpoints.MentorRequest);
     }
 }
