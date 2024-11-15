@@ -14,5 +14,7 @@ namespace MBS.Services.Services.Interfaces
         Task<IResponse> GetMeetingAsync(int page, int size);
 
         Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(string meetingId, int page, int size);
+        
+        Task<MeetingDto> GetMeetingByRequestId(string requestId);
     }
 }
