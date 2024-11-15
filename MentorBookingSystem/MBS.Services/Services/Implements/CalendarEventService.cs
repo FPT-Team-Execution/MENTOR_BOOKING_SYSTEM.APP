@@ -190,11 +190,124 @@ namespace MBS.Services.Services.Implements
             return false;
         }
 
-        public Task<BaseModel<Pagination<CalendarEvent>>> GetCalendarEventsByMentorId(string mentorId, string accessToken, GetCalendarEventRequestModel parameters)
+        public async Task<BaseModel<Pagination<CalendarEvent>>> GetCalendarEventsByMentorId(string mentorId, string accessToken, GetCalendarEventRequestModel parameters)
         {
-            throw new NotImplementedException();
+            try
+        {
+            var startDatetime = DateTime.Parse(parameters.StartTime);
+            var endDatetime = DateTime.Parse(parameters.EndTime);
+
+            //check time
+            if (startDatetime >= endDatetime)
+            {
+                return new BaseModel<Pagination<CalendarEvent>>
+                {
+                    Message = "Invalid parameters start time or end time.",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status400BadRequest,
+                    ResponseRequestModel = null,
+                };
+            }
+            //check mentor
+            var mentor = await _mentorRepository.GetMentorByIdAsync(mentorId);
+            if (mentor == null)
+            {
+                return new BaseModel<Pagination<CalendarEvent>>
+                {
+                    Message = "User not found",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status404NotFound,
+                    ResponseRequestModel = null,
+                };
+            }
+            //find events by mentor
+            var events = await _calendarEventRepository.GetCalendarEventsByMentorIdPaginationAsync(
+                mentorId, startDatetime, endDatetime, parameters.SortBy!, parameters.Page, parameters.Size);
+            //get events from google calendar
+            var gRequest = new GetGoogleCalendarEventsRequest
+            {
+                Email = mentor.User.Email!,
+                AccessToken = "Invalid google access token",
+                TimeMin = startDatetime,
+                TimeMax = endDatetime,
+            };
+            var googleResponse = await _googleService.ListEvents(gRequest);
+            if (!googleResponse.IsSuccess)
+            {
+                return new BaseModel<Pagination<CalendarEvent>>
+                {
+                    Message = ((GoogleErrorResponse)googleResponse).Error.Message,
+                    IsSuccess = false,
+                    StatusCode = ((GoogleErrorResponse)googleResponse).Error.Code,
+                    ResponseRequestModel = null
+                };
+            }
+            // filter new and old
+            var newEventsFromGoogle = FilterNewEvents(mentorId, (List<CalendarEvent>)events.Items, ((GetGoogleCalendarEventsResponse)googleResponse).Items);
+            if (newEventsFromGoogle.Any())
+            {
+                var addRangeResult = await _calendarEventRepository.CreateRangeAsync(newEventsFromGoogle);
+                if (!addRangeResult)
+                {
+                    return new BaseModel<Pagination<CalendarEvent>>
+                    {
+                        Message = "Create event fail",
+                        IsSuccess = false,
+                        StatusCode = StatusCodes.Status500InternalServerError,
+                        ResponseRequestModel = null,
+                    };
+                }
+            }
+            var asyncEvents = await _calendarEventRepository.GetCalendarEventsByMentorIdPaginationAsync(
+                mentorId, startDatetime, endDatetime, parameters.SortBy, parameters.Page, parameters.Size);
+            return new BaseModel<Pagination<CalendarEvent>>
+            {
+                Message ="Create event successfully",
+                IsSuccess = true,
+                StatusCode = StatusCodes.Status200OK,
+                ResponseRequestModel = asyncEvents
+            };
+        }
+        catch (Exception e)
+        {
+            return new BaseModel<Pagination<CalendarEvent>>
+            {
+                Message = e.Message,
+                IsSuccess = false,
+                StatusCode = StatusCodes.Status500InternalServerError,
+                ResponseRequestModel = null,
+            };
+        }
         }
 
+        private List<CalendarEvent> FilterNewEvents(string mentorId, List<CalendarEvent> localEvents, List<GoogleCalendarEvent> googleEvents)
+        {
+            // Initialize dictionary with local events
+            var localEventDictionary = localEvents.ToDictionary(e => e.Id, e => e);
+
+            // Filter new events from Google Calendar that don't exist in the local events
+            var newEvents = googleEvents
+                .Where(googleEvent => !localEventDictionary.ContainsKey(googleEvent.Id))
+                .Select(googleEvent => new CalendarEvent
+                {
+                    Id = googleEvent.Id,
+                    HtmlLink = googleEvent.HtmlLink,
+                    Summary = googleEvent.Summary,
+                    Description = string.Empty,
+                    ICalUID = googleEvent.ICalUID,
+                    Created = googleEvent.Created,
+                    Updated = googleEvent.Updated,
+                    MeetingId = null,
+                    MentorId = mentorId,
+                    Start = googleEvent.Start.DateTime,
+                    End = googleEvent.End.DateTime,
+                    Status = (EventStatus)Enum.Parse(typeof(EventStatus), googleEvent.Status)
+                })
+                .ToList();
+
+            return newEvents;
+        }
+        
         public Task<BaseModel<CalendarEventResponseModel>> GetCalendarEventId(string calendarEventId)
         {
             throw new NotImplementedException();
