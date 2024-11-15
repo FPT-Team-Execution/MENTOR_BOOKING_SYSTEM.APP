@@ -106,4 +106,10 @@ public class RequestService : IRequestService
             return null;
         }
     }
+
+    public async Task<IEnumerable<RequestDto>> GetRequestsByProjectId(Guid projectId, string? status = null)
+    {
+        var request = await _requestRepository.GetRequestByProjectIdAsync(projectId, status);
+        return request.Adapt<List<RequestDto>>();
+    }
 }

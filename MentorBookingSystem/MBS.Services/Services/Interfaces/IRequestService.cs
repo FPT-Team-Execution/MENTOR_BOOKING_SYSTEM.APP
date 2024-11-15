@@ -14,5 +14,6 @@ public interface IRequestService
     public Task<bool> UpdateRequestStatus(Guid requestId, RequestStatusEnum status);
     public Task<RequestDto> GetRequestById(Guid requestId);
     Task<bool> CreateProjectRequest(Request request);
+    Task<IEnumerable<RequestDto>> GetRequestsByProjectId(Guid projectId, string? status = null);
 
 }
