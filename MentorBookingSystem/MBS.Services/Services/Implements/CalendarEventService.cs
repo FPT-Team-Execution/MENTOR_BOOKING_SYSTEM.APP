@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MBS.BusinessObject.Entities;
 using MBS.Externals.Services.Interfaces;
 
 namespace MBS.Services.Services.Implements
@@ -40,18 +41,28 @@ namespace MBS.Services.Services.Implements
             _requestRepository = requestRepository;
         }
 
-        public async Task<CalendarEventDto> CreateCalendarEvent(CreateCalendarRequestModel request)
+
+        public Task<BaseModel<CreateCalendarResponseModel, CreateCalendarRequestModel>> CreateCalendarEvent(CreateCalendarRequestModel request)
         {
-            var result = await WebUtils.PostAsync(
-                ApiEndPoints.MajorUrl,
-                request,
-                token: WebUtils.AccessToken
-                );
-            return result.Adapt<CalendarEventDto>();
+            throw new NotImplementedException();
         }
 
+        public Task<BaseModel<Pagination<CalendarEvent>>> GetCalendarEventsByMentorId(string mentorId, string accessToken, GetCalendarEventRequestModel parameters)
+        {
+            throw new NotImplementedException();
+        }
 
-        public Task<BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>> CreateCalendarEventOnelFlow(CreateCalendarEventOneFlowRequest request)
+        public Task<BaseModel<CalendarEventResponseModel>> GetCalendarEventId(string calendarEventId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BaseModel<GetBusyEventResponse, GetBusyEventRequestModel>> GetBusyEvent(GetBusyEventRequestModel request)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<BaseModel<UpdateCalendarEventResponseModel>> UpdateCalendarEvent(string calendarEventId, string accessToken, UpdateCalendarEventRequestModel request)
         {
             throw new NotImplementedException();
         }
@@ -61,33 +72,9 @@ namespace MBS.Services.Services.Implements
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<CalendarEventDto>> GetAllCalendarEvents()
-        {
-            var resultSet = await _calendarEventRepository.GetAllAsync();
-            return resultSet.Adapt<IEnumerable<CalendarEventDto>>();
-        }
-
-        public Task<BaseModel<IEnumerable<CalendarEventDto>>> GetBusyEvent(GetBusyEventRequestModel request)
+        public Task<BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>> CreateCalendarEventOnelFlow(CreateCalendarEventOneFlowRequest request)
         {
             throw new NotImplementedException();
         }
-
-        public Task<BaseModel<CalendarEventDto>> GetCalendarEventId(string calendarEventId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<BaseModel<Pagination<CalendarEventDto>>> GetCalendarEventsByMentorId(string mentorId, string accessToken, GetCalendarEventsRequestModel parameters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<BaseModel<CalendarEventDto>> UpdateCalendarEvent(string calendarEventId, string accessToken, UpdateCalendarEventRequestModel request)
-        {
-            throw new NotImplementedException();
-        }
-
-        
-
     }
 }
