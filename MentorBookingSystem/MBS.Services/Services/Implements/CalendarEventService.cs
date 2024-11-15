@@ -544,7 +544,7 @@ namespace MBS.Services.Services.Implements
 
         public Task<BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>> CreateCalendarEventOnelFlow(CreateCalendarEventOneFlowRequest request)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }
