@@ -21,11 +21,12 @@ public class CreateMeeting : PageModel
     }
     [BindProperty]
     public CreateCalendarEventOneFlowRequest eventModel { get; set; } = default!;
-    public RequestDto Request { get; set; } = default!; 
+    [BindProperty]
+    public RequestDto RequestInfo { get; set; } = default!; 
     
     public async Task<IActionResult> OnGet(string id) 
     {
-        Request = await _requestService.GetRequestById(Guid.Parse(id));
+        RequestInfo = await _requestService.GetRequestById(Guid.Parse(id));
         return Page();
     }
 }
