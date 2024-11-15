@@ -18,8 +18,8 @@ namespace MBS.Repositories.Implements
         public async Task<Mentor?> GetMentorByIdAsync(string mentorId)
         {
             return await _dao.SingleOrDefaultAsync(
-                predicate: m => m.UserId == mentorId,
-                include: source => source.Include(m => m.User)
+              predicate:  m => m.UserId == mentorId,
+              include: source => source.Include(m=>m.User)
             );
         }
 

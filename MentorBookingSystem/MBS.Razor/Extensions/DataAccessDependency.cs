@@ -23,6 +23,8 @@ public static class DataAccessDependency
         services.AddScoped<IMentorMajorRepository, MentorMajorRepository>();
         services.AddScoped<IDegreeRepository, DegreeRepository>();
         services.AddScoped<IProgressRepository, ProgressRepository>();
+        services.AddScoped<ICalendarEventRepository, CalendarEventRepository>();
+        services.AddScoped<IMeetingRepository, MeetingRepository>();
     }
 
     public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)

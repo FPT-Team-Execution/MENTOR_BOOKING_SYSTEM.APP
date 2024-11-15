@@ -1,0 +1,62 @@
+﻿@page
+@using MBS.Services.Models.Requests.CalendarEvent
+@model MBS.Razor.Pages.MentorPage.MeetingPage.CreateMeeting
+
+@{
+    ViewData["Title"] = "Accept Booking";
+    Layout = "Shared/_LayoutMentor";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Accept Booking</h1>
+    <div class="row justify-content-center">
+        <div class="card mb-4 col-md-6">
+            <div class="card-body">
+                <h5 class="card-title">Request Information</h5>
+                <p><strong>Title: </strong> @Model.RequestInfo.Title</p>
+                <p><strong>Date: </strong> @Model.RequestInfo.Start.ToString("dd/MM/yyyy")</p>
+                <p><strong>Time: </strong> @Model.RequestInfo.Start.ToString("HH:mm") - @Model.RequestInfo.End.ToString("HH:mm") </p>
+                <!-- Add other fields as needed -->
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form method="post" asp-page-handler="Create">
+                        <input type="hidden" asp-for="RequestInfo.Id" />
+                        <!-- Description Field -->
+                        <div class="form-group mb-3">
+                            <label asp-for="EventModel.Description" class="form-label"></label>
+                            <textarea asp-for="EventModel.Description" class="form-control" rows="3" placeholder="Enter a brief description"></textarea>
+                            <span asp-validation-for="EventModel.Description" class="text-danger"></span>
+                        </div>
+
+                        <!-- IsOnline Field -->
+                        <div class="form-check mb-3">
+                            <input type="checkbox" asp-for="EventModel.IsOnline" class="form-check-input" id="isOnlineCheck">
+                            <label asp-for="EventModel.IsOnline" class="form-check-label" for="isOnlineCheck">
+                                Online Meeting
+                            </label>
+                            <span asp-validation-for="EventModel.IsOnline" class="text-danger d-block"></span>
+                        </div>
+
+                        <!-- Location Field -->
+                        <div class="form-group mb-3">
+                            <label asp-for="EventModel.Location" class="form-label"></label>
+                            <input asp-for="EventModel.Location" class="form-control" placeholder="Enter meeting location">
+                            <span asp-validation-for="EventModel.Location" class="text-danger"></span>
+                        </div>
+                        <div>
+                            @Model.message
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn btn-primary w-100">Create Booking</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

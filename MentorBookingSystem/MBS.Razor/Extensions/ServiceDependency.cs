@@ -28,6 +28,8 @@ public static class ServiceDependency
         services.AddScoped<IRequestService, RequestService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddScoped<ITemplateService, TemplateService>();
+        services.AddScoped<ICalendarEventService, CalendarEventService>();
+        services.AddScoped<IGoogleService, GoogleService>();
     }
 
     public static void AddMapper(this IServiceCollection services)

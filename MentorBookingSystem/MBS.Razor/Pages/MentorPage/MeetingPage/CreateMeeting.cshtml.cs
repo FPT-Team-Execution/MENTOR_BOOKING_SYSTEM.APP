@@ -1,0 +1,66 @@
+﻿using MBS.BusinessObject.Entities;
+using MBS.Repositories.Interfaces;
+using MBS.Services.Dtos;
+using MBS.Services.Models.Requests.CalendarEvent;
+using MBS.Services.Services.Implements;
+using MBS.Services.Services.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace MBS.Razor.Pages.MentorPage.MeetingPage;
+
+public class CreateMeeting : PageModel
+{
+    
+    private readonly IRequestService _requestService;
+    private readonly ICalendarEventService _calendarEventService;
+
+    public CreateMeeting(IRequestService requestService, ICalendarEventService calendarEventService)
+    {
+        _requestService = requestService;
+        _calendarEventService = calendarEventService;
+    }
+    [BindProperty]
+    public CreateCalendarEventOneFlowRequest EventModel { get; set; } = default!;
+    [BindProperty]
+    public RequestDto RequestInfo { get; set; } = default!; 
+    public string message = string.Empty;
+    
+    public async Task<IActionResult> OnGet(string id) 
+    {
+        RequestInfo = await _requestService.GetRequestById(Guid.Parse(id));
+        return Page();
+    }
+
+    public async Task<IActionResult> OnPostCreate()
+    {
+        if (RequestInfo.Id == Guid.Empty)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid Request.");
+            return Page();
+        }
+
+        RequestInfo = await _requestService.GetRequestById(RequestInfo.Id);
+
+        if (RequestInfo == null)
+        {
+            ModelState.AddModelError(string.Empty, "Request not found.");
+            return Page();
+        }
+        EventModel.AccessToken = "ya29.a0AeDClZAVXiaLxr62-WRZN1wNAyYLqW1kRqD9UCQHFbhFl9trnLDnjvjAvk3ZSsg9QUFpjVU9YHO7lh5NxCdl_kCrmFevvWlZ6pVzlIKGsCkvB33H-Ly-Ily0wTAKshcwwSgbzHOSWoQkF5aRBifWCMEZDUyGezTJ5R6E7vl3aCgYKAVASARESFQHGX2Miz-eE9h4YxK-Zpo4rfzYV3Q0175";
+        EventModel.MentorId = RequestInfo.MentorId;
+        EventModel.Start = RequestInfo.Start.ToString("MM/dd/yyyy HH:mm");
+        EventModel.End = RequestInfo.End.ToString("MM/dd/yyyy HH:mm");
+        EventModel.RequestId = RequestInfo.Id;
+        var result = await _calendarEventService.CreateCalendarEventOnelFlow(EventModel);
+        if (result.IsSuccess)
+        {
+            message = "Calendar Event Created Successfully";
+        }
+        else
+        {
+            message = result.Message;
+        }
+       return Page();
+    }
+}
