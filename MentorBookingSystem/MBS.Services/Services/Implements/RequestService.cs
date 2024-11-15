@@ -1,9 +1,9 @@
 using Mapster;
+using MBS.BusinessObject.Entities;
 using MBS.BusinessObject.Enums;
 using MBS.DataAccess.Pagination;
 using MBS.Repositories.Interfaces;
 using MBS.Services.Dtos;
-using MBS.Services.Models.Responses;
 using MBS.Services.Models.Responses.Requests;
 using MBS.Services.Services.Interfaces;
 
@@ -12,14 +12,29 @@ namespace MBS.Services.Services.Implements;
 public class RequestService : IRequestService
 {
     private readonly IRequestRepository _requestRepository;
+    private readonly ICalendarEventRepository _eventRepository;
+    private readonly IGroupRepository _groupRepository;
+    private readonly IStudentRepository _studentRepository;
 
-    public RequestService(IRequestRepository requestRepository)
+
+    public RequestService(
+        IRequestRepository requestRepository,
+        ICalendarEventRepository eventRepository,
+        IGroupRepository groupRepository,
+        IStudentRepository studentRepository)
     {
-        _requestRepository = requestRepository; 
+        _requestRepository = requestRepository;
+        _eventRepository = eventRepository;
+        _groupRepository = groupRepository;
+        _studentRepository = studentRepository;
     }
-    public async Task<Pagination<RequestDto>> GetRequestsByProjectIdPaginationAsync(Guid projectId, int pageNumber, int pageSize,  string sortOrder = "desc", string? projectStatus = null)
+
+    public async Task<Pagination<RequestDto>> GetRequestsByProjectIdPaginationAsync(Guid projectId, int pageNumber,
+        int pageSize, string sortOrder = "desc", string? projectStatus = null)
     {
-        var request = await _requestRepository.GetRequestByProjectIdPaginationAsync(projectId, pageNumber, pageSize, sortOrder, projectStatus);
+        var request =
+            await _requestRepository.GetRequestByProjectIdPaginationAsync(projectId, pageNumber, pageSize, sortOrder,
+                projectStatus);
         return request.Adapt<Pagination<RequestDto>>();
     }
 
@@ -45,7 +60,20 @@ public class RequestService : IRequestService
         };
         return paginationParse;
     }
-    
+
+    public async Task<bool> CreateProjectRequest(Request request)
+    {
+        try
+        {
+            //Create request
+            var addResult = await _requestRepository.CreateAsync(request);
+            return addResult;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
 
     public async Task<bool> UpdateRequestStatus(Guid requestId, RequestStatusEnum status)
     {
@@ -70,11 +98,18 @@ public class RequestService : IRequestService
             {
                 throw new NullReferenceException("Request does not exist");
             }
+
             return request.Adapt<RequestDto>();
         }
         catch (Exception e)
         {
             return null;
         }
+    }
+
+    public async Task<IEnumerable<RequestDto>> GetRequestsByProjectId(Guid projectId, string? status = null)
+    {
+        var request = await _requestRepository.GetRequestByProjectIdAsync(projectId, status);
+        return request.Adapt<List<RequestDto>>();
     }
 }

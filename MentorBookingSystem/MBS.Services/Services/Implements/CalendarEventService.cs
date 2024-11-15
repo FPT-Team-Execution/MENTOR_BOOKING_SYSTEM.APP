@@ -37,7 +37,7 @@ namespace MBS.Services.Services.Implements
         }
 
 
-        public Task<IEnumerable<CalendarEvent>> GetCalendarEventByMentorId(string mentorId, DateTime startDate, DateTime endDate)
+        public Task<IEnumerable<CalendarEvent>> GetCalendarEventsByMentorId(string mentorId, DateTime startDate, DateTime endDate)
         {
             return _calendarEventRepository.GetCalendarEventsByMentorIdAsync(mentorId, startDate, endDate);
         }

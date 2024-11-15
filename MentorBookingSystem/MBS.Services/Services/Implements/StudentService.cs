@@ -17,6 +17,12 @@ public class StudentService : IStudentService
         _studentRepository = studentRepository;
     }
 
+    public async Task<StudentDto> GetStudentByIdAsync(string studentId)
+    {
+        var student = await _studentRepository.GetStudentByIdAsync(studentId);
+        return student.Adapt<StudentDto>();
+    }
+
     public async Task<Pagination<StudentDto>> GetStudentsAsync(int page, int size, string sortOrder = "asc")
     {
         var students = await _studentRepository.GetStudentsAsync(page, size, sortOrder);

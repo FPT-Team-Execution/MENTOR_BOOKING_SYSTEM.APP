@@ -9,9 +9,11 @@ public class RequestDto
 {
     public Guid Id { get; set; } = Guid.Empty;
     [MaxLength(100)]
+    [Required]
     public string Title { get; set; } = string.Empty;
-
+    [Required]
     public DateTime Start { get; set; } 
+    [Required]
     public DateTime End { get; set; }
     public  string MentorId { get; set; } = string.Empty;
     public string MentorName { get; set; } = string.Empty;
