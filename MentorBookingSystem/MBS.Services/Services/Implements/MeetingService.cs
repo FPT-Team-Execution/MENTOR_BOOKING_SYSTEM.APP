@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mapster;
 using MBS.Repositories.Interfaces;
 using MBS.Services.Dtos;
 
@@ -33,13 +34,9 @@ namespace MBS.Services.Services.Implements
 
         public async Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(string meetingId, int page, int size)
         {
-            var result = await _meetingRepository.
+            var result = await _meetingRepository.GetPageListMeeting(page, size);
+            return result.Adapt<Pagination<MeetingDto>>();
         }
         
-        public async Task<Pagination<MajorDto>> GetMentorMajorsAsync(string mentorId, int page, int size)
-        {
-            var result = await _meetingRepository.Ge(mentorId, page, size);
-            return result.Adapt<Pagination<MajorDto>>();
-        }
     }
 }
