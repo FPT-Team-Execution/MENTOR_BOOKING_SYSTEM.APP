@@ -60,4 +60,21 @@ public class RequestService : IRequestService
             return false;
         }
     }
+
+    public async Task<RequestDto> GetRequestById(Guid requestId)
+    {
+        try
+        {
+            var request = await _requestRepository.GetRequestById(requestId);
+            if (request == null)
+            {
+                throw new NullReferenceException("Request does not exist");
+            }
+            return request.Adapt<RequestDto>();
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
 }
