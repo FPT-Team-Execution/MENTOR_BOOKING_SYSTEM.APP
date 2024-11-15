@@ -35,8 +35,28 @@ namespace MBS.Services.Services.Implements
         public async Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(string meetingId, int page, int size)
         {
             var result = await _meetingRepository.GetPageListMeeting(page, size);
-            return result.Adapt<Pagination<MeetingDto>>();
+            var listToShow = new List<MeetingDto>();
+            foreach (var item in result.Items)
+            {
+                var meetingDto = new MeetingDto();
+                meetingDto.Id = item.Id;
+                meetingDto.title = item.Request.Title;
+                meetingDto.MeetUp = item.MeetUp;
+                meetingDto.Description = item.Description;
+                meetingDto.Location = item.Location;
+                meetingDto.Status = item.Status.ToString();
+                listToShow.Add(meetingDto);
+            }
+
+            var pagination = new Pagination<MeetingDto>()
+            {
+                Items = listToShow,
+                PageIndex = page,
+                PageSize = size,
+                TotalPages = result.TotalPages,
+                TotalItems = result.TotalItems
+            };
+            return pagination;
         }
-        
     }
 }
