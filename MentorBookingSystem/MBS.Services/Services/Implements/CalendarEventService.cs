@@ -1,4 +1,4 @@
-﻿using Mapster;
+using Mapster;
 using MBS.DataAccess.Pagination;
 using MBS.Repositories.Implements;
 using MBS.Repositories.Interfaces;
@@ -703,7 +703,7 @@ namespace MBS.Services.Services.Implements
             }
                 
         }
-        catch (Exception e)
+            catch (Exception e)
         {
             return new BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>
             {
