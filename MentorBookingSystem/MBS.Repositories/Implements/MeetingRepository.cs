@@ -30,7 +30,7 @@ namespace MBS.Repositories.Implements
 
         public async Task<Meeting?> GetMeetingByRequestId(string requestId)
         {
-            return await  _dao.SingleOrDefaultAsync(meeting => meeting.Id.ToString() == requestId );
+            return await _dao.SingleOrDefaultAsync(meeting => meeting.RequestId.ToString() == requestId );
         }
 
         public async Task<IEnumerable<Meeting>> GetMeetingsByRequests(IEnumerable<Guid> requestIds)
