@@ -13,8 +13,8 @@ using MBS.Services.Models;
 using MBS.Services.Models.Requests.Student;
 using MBS.Services.Models.Responses.Major;
 using MBS.Services.Services.Interfaces;
+using MBS.Services.Shared;
 using MBS.Services.Utils;
-using MBS.Services.Utils.Shared;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 

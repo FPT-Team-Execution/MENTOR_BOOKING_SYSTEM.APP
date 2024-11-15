@@ -1,17 +1,23 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using MBS.BusinessObject.Entities;
+using MBS.BusinessObject.Enums;
 using MBS.Externals.Models.Email;
+using MBS.Externals.Models.Google.GoogleOAuth.Response;
+using MBS.Externals.Services.Interfaces;
 using MBS.Externals.Templates;
 using MBS.Razor.Pages.AdminPage;
 using MBS.Services.Constants;
 using MBS.Services.Constants.Enums;
+using MBS.Services.Models;
 using MBS.Services.Models.Requests.Auth;
 using MBS.Services.Models.Sessions;
 using MBS.Services.Services.Interfaces;
+using MBS.Services.Shared;
 using MBS.Services.Utils;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Newtonsoft.Json;
@@ -22,13 +28,16 @@ namespace MBS.Razor.Pages
     {
         private readonly IClaimService _claimService;
         private IAuthService _authService;
+        private readonly IGoogleService _googleService;
         private IConfiguration _configuration;
-
-        public LoginModel(IClaimService claimService, IAuthService authService, IConfiguration configuration)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public LoginModel(IClaimService claimService, IAuthService authService, IConfiguration configuration, IGoogleService googleService, UserManager<ApplicationUser> userManager)
         {
             this._authService = authService;
             _configuration = configuration;
             _claimService = claimService;
+            _googleService = googleService;
+            _userManager = userManager;
         }
 
         [BindProperty] public LoginRequest LoginRequest { get; set; }
@@ -83,9 +92,9 @@ namespace MBS.Razor.Pages
             //save it to cookie
             await _claimService.SignInAsync(claims);
             //append access token
-            _claimService.AppendCookie("USER_ID", user.Id);
-            _claimService.AppendCookie("USER_EMAIL", user.Email);
-            _claimService.AppendCookie("USER_ROLE", userRole);
+            _claimService.AppendCookie(CookieNames.UserId, user.Id);
+            _claimService.AppendCookie(CookieNames.UserEmail, user.Email);
+            _claimService.AppendCookie(CookieNames.UserRole, userRole);
             //var claims = GetClaims(response.ResponseModel.JwtToken.AccessToken);
             //await _claimService.SignInAsync(claims);
             TempData["SuccessMessage"] = "Login successfully";
@@ -113,15 +122,62 @@ namespace MBS.Razor.Pages
         /// </summary>
         public async Task<IActionResult> OnGetCallback(string code, string state, string scopes)
         {
-            //take token
-            var response = await _authService.LoginWithGoogleAsync(code);
-            var accessToken = response.ResponseRequestModel.jwtModel.AccessToken;
-            var claims = GetClaims(accessToken);
-            //save it to cookie
-            await _claimService.SignInAsync(claims);
-            //append access token
-            _claimService.AppendCookie("MBS", accessToken);
-            return Redirect(RouteEndpoints.Mentor);
+            try
+            {
+                //get return url from appsettings
+                var googleAuthSettings = _configuration.GetSection("Google:Auth");
+                var redirectUrl = googleAuthSettings["RedirectUrl"];
+
+                //get auth token
+                var tokenResponse = await _googleService.GetTokenGoogleUserAsync(code, redirectUrl!);
+                if (!tokenResponse.IsSuccess)
+                {
+                    SaveTempDataString(TempDataKeys.ErrorMessage, "Login by Google failed!");
+                    return Redirect(RouteEndpoints.Login);
+                }
+
+                var gtokenResponse = (GoogleTokenResponse)tokenResponse;
+                var profileResponse =
+                    await _googleService.GetProfileGoogleUserAsync(gtokenResponse.access_token);
+                if (!profileResponse.IsSuccess)
+                {
+                    SaveTempDataString(TempDataKeys.ErrorMessage, "Login by Google failed!");
+                    return Redirect(RouteEndpoints.Login);
+                }
+
+                //Check user is student or not 
+                var profile = (GoogleUserInfoResponse)profileResponse;
+                var studentCheck = await _userManager.FindByEmailAsync(profile.email);
+                var studentRole = await _userManager.GetRolesAsync(studentCheck!);
+                if (studentCheck != null && studentRole.Contains(UserRoleEnum.Student.ToString()))
+                {
+                    SaveTempDataString(TempDataKeys.ErrorMessage, "Only mentor allowed to login by Google");
+                    return Redirect(RouteEndpoints.Login);
+                }
+                //SignUp Or Sign In 
+
+                var user = await _authService.LoginWithGoogleAsync(profile);
+                if (!profileResponse.IsSuccess)
+                {
+                    SaveTempDataString(TempDataKeys.ErrorMessage, "Login by Google failed!");
+                    return Redirect(RouteEndpoints.Login);
+                }
+
+                var userRole = await _authService.GetUserRoleAsync(user);
+                //Save access_token of google to cookie
+                var token = (GoogleTokenResponse)tokenResponse;
+                _claimService.AppendCookie(CookieNames.UserId, user.Id);
+                _claimService.AppendCookie(CookieNames.UserEmail, user.Email);
+                _claimService.AppendCookie(CookieNames.UserRole, userRole);
+                _claimService.AppendCookie(CookieNames.GoogleAccessToken, token.access_token);
+
+                return Redirect(RouteEndpoints.Mentor);
+            }
+            catch (Exception e)
+            {
+                SaveTempDataString(TempDataKeys.ErrorMessage, "Error. Failed");
+                return Redirect(RouteEndpoints.Login);
+            }
         }
 
         /// <summary>

@@ -2,7 +2,7 @@ using System.Security.Claims;
 using MBS.Services.Constants;
 using MBS.Services.Constants.Enums;
 using MBS.Services.Services.Interfaces;
-using MBS.Services.Utils.Shared;
+using MBS.Services.Shared;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MBS.Razor.Pages;

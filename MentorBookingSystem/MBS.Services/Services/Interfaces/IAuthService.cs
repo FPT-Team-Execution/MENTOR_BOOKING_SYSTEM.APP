@@ -1,9 +1,6 @@
 ﻿using MBS.BusinessObject.Entities;
-using MBS.Services.Models;
-using MBS.Services.Models.Requests.Auth;
-using MBS.Services.Models.Responses;
-using MBS.Services.Models.Responses.Auth;
-using MBS.Services.Models.Responses.Auth.GoogleAuth;
+using MBS.Externals.Models.Google.GoogleOAuth.Response;
+using GoogleTokenResponse = MBS.Services.Models.Responses.Auth.GoogleAuth.GoogleTokenResponse;
 
 namespace MBS.Services.Services.Interfaces;
 
@@ -15,8 +12,7 @@ public interface IAuthService
     public Task<IList<string>> GetUserRolesAsync(ApplicationUser user);
     public Task<string> GetUserRoleAsync(ApplicationUser user);
     public string GetGoogleRedirectUrl();
-    public Task<BaseModel<GoogleSignInResponse>> LoginWithGoogleAsync(string code);
-
+    Task<ApplicationUser?> LoginWithGoogleAsync(GoogleUserInfoResponse gUserInfo);
     // public Task<BaseModel<RegisterResponse, RegisterRequest>> RegisterAsync(RegisterRequest request);
     public Task<bool> CreateUserAsync(ApplicationUser user, string password);
     public Task<bool> AddToRoleAsync(ApplicationUser user, string role);
