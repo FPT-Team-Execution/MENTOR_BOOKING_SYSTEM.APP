@@ -2,6 +2,7 @@
 using MBS.Repositories.Interfaces;
 using MBS.Services.Dtos;
 using MBS.Services.Models.Requests.CalendarEvent;
+using MBS.Services.Services.Implements;
 using MBS.Services.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -50,7 +51,7 @@ public class CreateMeeting : PageModel
         EventModel.Start = RequestInfo.Start.ToString("MM/dd/yyyy HH:mm");
         EventModel.End = RequestInfo.End.ToString("MM/dd/yyyy HH:mm");
         EventModel.RequestId = RequestInfo.Id;
-        _calendarEventService.CreateCalendarEventOnelFlow(EventModel);
+        await _calendarEventService.CreateCalendarEventOnelFlow(EventModel);
        return Page();
     }
 }
