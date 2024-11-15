@@ -9,7 +9,7 @@
     string pageName = "Index";
     //Student Pagination
     var requestPagination = Model.GetTempData<Pagination<RequestResponse>>(TempDataKeys.MentorKeys.RequestPagination)! ?? Model.RequestPagination;
-    var requests = requestPagination.Items.ToArray();
+    var requests = !requestPagination.Items.Any() ? [] : requestPagination.Items.ToArray();
     //Get search & sort Order
     string search = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.search;
 
@@ -63,7 +63,9 @@
                     {
                     <div class="mt-1">
                         <button type="button" class="btn btn-success btn-sm">Accept</button>
-                        <button type="button" class="btn btn-danger btn-sm">Deny</button>
+                        <form method="post" asp-page-handler="Deny">
+                            <button type="submit" class="btn btn-danger btn-sm">Deny</button>
+                        </form>
                     </div>
                     }
                 </td>
