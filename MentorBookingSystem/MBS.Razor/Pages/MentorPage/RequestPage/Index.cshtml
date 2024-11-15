@@ -59,7 +59,7 @@
                 <td>@request.End</td>
                 <td>
                     @request.Status.ToString()
-                    @if (request.Status.ToString() == "Pending" || true)
+                    @if (request.Status.ToString() == "Pending")
                     {
                         <div class="mt-1">
                             <a asp-page="/MentorPage/MeetingPage/CreateMeeting" asp-route-id="@request.RequestId.ToString()">
