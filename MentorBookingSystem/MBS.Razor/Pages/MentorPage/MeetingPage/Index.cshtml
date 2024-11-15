@@ -1,19 +1,81 @@
 @page
-@model MBS.Razor.Pages.MentorPage.MeetingPage.Index
+@using MBS.Services.Dtos
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MBS.Razor.Pages.MentorPage.MeetingPage.IndexModel
 
 @{
     Layout = "Shared/_LayoutMentor";
+    var meetingPagination = Model.MeetingPagination;
+    var meetings = !meetingPagination.Items.Any() ? new List<MeetingDto>() : meetingPagination.Items;
+    int pageSize = Model.PageSize;
+    int pageIndex = meetingPagination.PageIndex;
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
 <div>
-    <h1>This is Mentor Meeting Page</h1>
+    <h3 class="mt-4">Meeting List</h3>
+    <div class="table-responsive">
+        <table class="table table-hover mt-3">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Title</th>
+                <th scope="col">Description</th>
+                <th scope="col">Location</th>
+                <th scope="col">MeetUp</th>
+                <th scope="col">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (!meetings.Any())
+            {
+            <tr>
+                <td colspan="6" class="text-center">No meetings available</td>
+            </tr>
+            }
+            else
+            {
+            foreach (var meeting in meetings)
+            {
+            <tr>
+                <td>@meeting.Id</td>
+                <td>@meeting.title</td>
+                <td>@meeting.Description</td>
+                <td>@meeting.Location</td>
+                <td>@meeting.MeetUp</td>
+                <td>@meeting.Status</td>
+            </tr>
+            }
+            }
+            </tbody>
+        </table>
+    </div>
+
+    <form method="get" class="d-flex justify-content-between align-items-center mt-3">
+        <div>
+            <label for="pageSize">Page Size:</label>
+            <select id="pageSize" name="pageSize" class="form-select" onchange="this.form.submit()">
+                <option value="5" @(pageSize == 5 ? "selected" : "")>5</option>
+                <option value="10" @(pageSize == 10 ? "selected" : "")>10</option>
+                <option value="15" @(pageSize == 15 ? "selected" : "")>15</option>
+            </select>
+        </div>
+
+        <div>
+            <nav aria-label="Pagination">
+                <ul class="pagination mb-0">
+                    <li class="page-item @(pageIndex == 1 ? "disabled" : "")">
+                        <a class="page-link" href="?pageIndex=@(pageIndex - 1)&pageSize=@pageSize">Previous</a>
+                    </li>
+                    @for (int i = 1; i <= meetingPagination.TotalPages; i++)
+                    {
+                    <li class="page-item @(pageIndex == i ? "active" : "")">
+                        <a class="page-link" href="?pageIndex=@i&pageSize=@pageSize">@i</a>
+                    </li>
+                    }
+                    <li class="page-item @(pageIndex == meetingPagination.TotalPages ? "disabled" : "")">
+                        <a class="page-link" href="?pageIndex=@(pageIndex + 1)&pageSize=@pageSize">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </form>
 </div>
-</body>
-</html>

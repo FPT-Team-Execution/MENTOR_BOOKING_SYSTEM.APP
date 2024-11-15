@@ -4,11 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MBS.DataAccess.Pagination;
+using MBS.Services.Dtos;
 
 namespace MBS.Services.Services.Interfaces
 {
     public interface IMeetingService
     {
         Task<IResponse> GetMeetingAsync(int page, int size);
+
+        Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(string meetingId, int page, int size);
     }
 }

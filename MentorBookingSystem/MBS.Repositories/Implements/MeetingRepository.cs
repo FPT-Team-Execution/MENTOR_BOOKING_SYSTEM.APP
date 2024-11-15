@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MBS.DataAccess.Pagination;
+using Microsoft.EntityFrameworkCore;
 
 namespace MBS.Repositories.Implements
 {
@@ -15,6 +17,15 @@ namespace MBS.Repositories.Implements
         {
             return await _dao.GetListAsync(
                predicate: m => m.RequestId == requestId);
+        }
+
+        public async Task<Pagination<Meeting>> GetPageListMeeting(int page, int size)
+        {
+            return await _dao.GetPagingListAsync(
+                page: page,
+                size: size,
+                include: source => source.Include(s => s.Request)
+            );
         }
 
         public async Task<IEnumerable<Meeting>> GetMeetingsByRequests(IEnumerable<Guid> requestIds)
