@@ -25,6 +25,7 @@ public static class DataAccessDependency
         services.AddScoped<IProgressRepository, ProgressRepository>();
         services.AddScoped<ICalendarEventRepository, CalendarEventRepository>();
         services.AddScoped<IMeetingRepository, MeetingRepository>();
+        services.AddScoped<IPointTransactionRepository, PointTransactionRepository>();
     }
 
     public static void AddDatabase(this IServiceCollection services, IConfiguration configuration)
