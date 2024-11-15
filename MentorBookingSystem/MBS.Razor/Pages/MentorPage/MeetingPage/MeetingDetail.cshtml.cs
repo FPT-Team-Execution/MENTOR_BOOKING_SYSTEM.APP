@@ -18,21 +18,19 @@ public class MeetingDetail : PageModel
         _requestService = requestService;
     }
     
-    private RequestDto RequestInfo { get; set; }
-    private MeetingDto MeetingInfo { get; set; }
+    public RequestDto RequestInfo { get; set; }
+    public MeetingDto MeetingInfo { get; set; }
     
     
     
     public async Task<IActionResult> OnGet(string id)
     {
-        RequestInfo = await _requestService.GetRequestById(Guid.Parse(id));
-        if (RequestInfo == null)
+        MeetingInfo = await _meetingService.GetMeetingById(id);
+        if (MeetingInfo == null)
         {
             return NotFound();
         }
-        MeetingInfo = await _meetingService.GetMeetingByRequestId(RequestInfo.Id.ToString());
-        
+        RequestInfo = await _requestService.GetRequestById(MeetingInfo.RequestId);
         return Page();
-        
     }
 }

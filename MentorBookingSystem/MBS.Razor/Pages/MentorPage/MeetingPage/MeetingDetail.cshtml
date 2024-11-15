@@ -2,18 +2,45 @@
 @model MBS.Razor.Pages.MentorPage.MeetingDetail
 
 @{
-    Layout = null;
+    Layout = "Shared/_LayoutMentor";
 }
 
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
-    
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3>@Model.RequestInfo.Title</h3>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Start Time:</strong>
+                    <p>@Model.RequestInfo.Start</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>End Time:</strong>
+                    <p>@Model.RequestInfo.End</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-12">
+                    <strong>Description:</strong>
+                    <p>@Model.MeetingInfo.Description</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <strong>Location:</strong>
+                    <p>@Model.MeetingInfo.Location</p>
+                </div>
+                <div class="col-md-6">
+                    <strong>Meet Up Link:</strong>
+                    <p>
+                        <a href="@Model.MeetingInfo.MeetUp" target="_blank" class="text-decoration-none">
+                            @Model.MeetingInfo.MeetUp
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</body>
-</html>
