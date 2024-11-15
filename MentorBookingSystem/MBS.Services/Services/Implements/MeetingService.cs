@@ -32,7 +32,7 @@ namespace MBS.Services.Services.Implements
             return response;
         }
 
-        public async Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(string meetingId, int page, int size)
+        public async Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(int page, int size)
         {
             var result = await _meetingRepository.GetPageListMeeting(page, size);
             var listToShow = new List<MeetingDto>();

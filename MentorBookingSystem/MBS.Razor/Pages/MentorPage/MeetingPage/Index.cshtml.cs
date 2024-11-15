@@ -23,6 +23,6 @@ public class IndexModel : PageModel
         PageIndex = pageIndex;
         PageSize = pageSize;
 
-        MeetingPagination = await _meetingService.GetMeetingsPaginationAsync("", pageIndex, pageSize);
+        MeetingPagination = await _meetingService.GetMeetingsPaginationAsync(pageIndex, pageSize);
     }
 }
