@@ -28,25 +28,25 @@ namespace MBS.Externals.Services.Implements
             _configuration = configuration;
         }
 
-        public string GenerateOauthUrl()
-        {
-            string authenticateUrl = _configuration["Google:Authentication:AuthUrl"]!;
-            string calendarScope = _configuration["Google:Authentication:Scope:calendar"]!;
-            string profileScope = _configuration["Google:Authentication:Scope:profile"]!;
-            string emailScope = _configuration["Google:Authentication:Scope:email"]!;
-            string meetingScope = _configuration["Google:Authentication:Scope:meeting"]!;
-            string scope = "scope=" + Uri.EscapeDataString($"{calendarScope} {profileScope} {emailScope} {meetingScope}");
-            string redirectUri = "redirect_uri=" + _configuration["Google:Authentication:CallbackUrl"]!;
-            string accessType = "access_type=" + "offline";
-            string responseType = "response_type=" + "code";
-            string clientId = "client_id=" + _configuration["Google:Authentication:ClientId"]!;
-            //string approvalPrompt = "approval_prompt=" + "force";
-
-            //string finalAuthUrl = $"{authenticateUrl}?{scope}&{responseType}&{clientId}&{accessType}&{approvalPrompt}&{redirectUri}";
-            string finalAuthUrl = $"{authenticateUrl}?{scope}&{responseType}&{clientId}&{accessType}&{redirectUri}";
-
-            return finalAuthUrl;
-        }
+        // public string GenerateOauthUrl()
+        //          {
+        //              string authenticateUrl = _configuration["Google:Auth:AuthUrl"]!;
+        //              string calendarScope = _configuration["Google:Auth:Scopes:Calendar"]!;
+        //              string profileScope = _configuration["Google:Auth:Scopes:Profile"]!;
+        //              string emailScope = _configuration["Google:Auth:Scopes:Email"]!;
+        //              string meetingScope = _configuration["Google:Auth:Scopes:Meeting"]!;
+        //              string scope = "scope=" + Uri.EscapeDataString($"{calendarScope} {profileScope} {emailScope} {meetingScope}");
+        //              string redirectUri = "redirect_uri=" + _configuration["Google:Auth:CallbackUrl"]!;
+        //              string accessType = "access_type=" + "offline";
+        //              string responseType = "response_type=" + "code";
+        //              string clientId = "client_id=" + _configuration["Google:Authentication:ClientId"]!;
+        //              //string approvalPrompt = "approval_prompt=" + "force";
+        //  
+        //              //string finalAuthUrl = $"{authenticateUrl}?{scope}&{responseType}&{clientId}&{accessType}&{approvalPrompt}&{redirectUri}";
+        //              string finalAuthUrl = $"{authenticateUrl}?{scope}&{responseType}&{clientId}&{accessType}&{redirectUri}";
+        //  
+        //              return finalAuthUrl;
+        //          }
 
         public async Task<GoogleResponse> AuthenticateGoogleUserAsync(HttpContext context)
         {
@@ -72,12 +72,12 @@ namespace MBS.Externals.Services.Implements
 
         public async Task<GoogleResponse> GetTokenGoogleUserAsync(string authenticatedCode, string externalCallbackUri)
         {
-            string url = _configuration["Google:Authentication:TokenUrl"]!;
+            string url = _configuration["Google:Auth:TokenUrl"]!;
             var requestBody = new Dictionary<string, string>
             {
                 { "code", authenticatedCode },
-                { "client_id", _configuration["Google:Authentication:ClientId"]! },
-                { "client_secret", _configuration["Google:Authentication:ClientSecret"]! },
+                { "client_id", _configuration["Google:Auth:ClientId"]! },
+                { "client_secret", _configuration["Google:Auth:ClientSecret"]! },
                 //{ "redirect_uri", _configuration["Google:Authentication:CallbackUrl"]! },
                 { "redirect_uri", externalCallbackUri },
                 { "grant_type", "authorization_code" }

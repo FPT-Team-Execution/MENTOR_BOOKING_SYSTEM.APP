@@ -4,7 +4,7 @@ using MBS.Razor.Pages.AdminPage.ProjectPage.Models;
 using MBS.Services.Constants;
 using MBS.Services.Models.Responses.Project;
 using MBS.Services.Services.Interfaces;
-using MBS.Services.Utils.Shared;
+using MBS.Services.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 

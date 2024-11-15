@@ -1,17 +1,17 @@
-﻿using MBS.BusinessObject.Entities;
+﻿using System.Transactions;
+using MBS.BusinessObject.Entities;
+using MBS.BusinessObject.Enums;
 using MBS.Externals.Models.Email;
+using MBS.Externals.Models.Google.GoogleOAuth.Response;
 using MBS.Externals.Services.Interfaces;
 using MBS.Externals.Templates;
-using MBS.Services.Constants;
+using MBS.Repositories.Interfaces;
 using MBS.Services.Models;
-using MBS.Services.Models.Requests.Auth;
-using MBS.Services.Models.Responses;
-using MBS.Services.Models.Responses.Auth;
-using MBS.Services.Models.Responses.Auth.GoogleAuth;
 using MBS.Services.Services.Interfaces;
-using MBS.Services.Utils;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using GoogleTokenResponse = MBS.Services.Models.Responses.Auth.GoogleAuth.GoogleTokenResponse;
 
 namespace MBS.Services.Services.Implements;
 
@@ -21,13 +21,23 @@ public class AuthService : IAuthService
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ITemplateService _templateService;
     private readonly IEmailService _emailService;
+    private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IMentorRepository _mentorRepository;
 
-    public AuthService(IConfiguration configuration, UserManager<ApplicationUser> userManager, ITemplateService templateService, IEmailService emailService)
+    public AuthService(
+        IConfiguration configuration,
+        UserManager<ApplicationUser> userManager,
+        ITemplateService templateService,
+        IEmailService emailService,
+        SignInManager<ApplicationUser> signInManager,
+        IMentorRepository mentorRepository)
     {
         _configuration = configuration;
         _userManager = userManager;
         _templateService = templateService;
         _emailService = emailService;
+        _signInManager = signInManager;
+        _mentorRepository = mentorRepository;
     }
     // public async Task<BaseModel<LoginResponse, LoginRequest>> LoginAsync(LoginRequest request)
     // {
@@ -69,10 +79,11 @@ public class AuthService : IAuthService
         var calendarScope = Uri.EscapeDataString(googleAuthSettings["Scopes:Calendar"]!);
         var profileScope = Uri.EscapeDataString(googleAuthSettings["Scopes:Profile"]!);
         var emailScope = Uri.EscapeDataString(googleAuthSettings["Scopes:Email"]!);
+        var meetingScope = Uri.EscapeDataString(googleAuthSettings["Scopes:Meeting"]!);
 
         #endregion
 
-        var scope = $"{calendarScope} {profileScope} {emailScope}";
+        var scope = $"{calendarScope} {profileScope} {emailScope} {meetingScope}";
         var responseType = googleAuthSettings["ResponseType"];
         //* prompt=consent is optional based on business
         //* state is optional
@@ -81,25 +92,11 @@ public class AuthService : IAuthService
         return googleAuthUrl;
     }
 
-    public async Task<BaseModel<GoogleSignInResponse>> LoginWithGoogleAsync(string code)
+    public async Task<ApplicationUser?> LoginWithGoogleAsync(GoogleUserInfoResponse gUserInfo)
     {
-        var googleAuthSettings = _configuration.GetSection("Google:Auth");
-        var queryParams = new Dictionary<string, string>
-        {
-            { "code", code },
-            { "callbackUri", googleAuthSettings["RedirectUrl"]! },
-        };
-        var headers = new Dictionary<string, string>
-        {
-            { "Accept-Charset", "utf-8" },
-        };
-        var result = await WebUtils.GetAsync(
-            url: ApiEndPoints.LoginWithGoogleUrl,
-            headers: headers,
-            queryParams: queryParams!
-        );
-        var response = WebUtils.HandleResponse<BaseModel<GoogleSignInResponse>>(result);
-        return response;
+        //Login Or Sign Up for account
+        var result = await LoginOrSignUpExternal(gUserInfo);
+        return result;
     }
 
     public async Task<bool> CreateUserAsync(ApplicationUser user, string password)
@@ -137,4 +134,73 @@ public class AuthService : IAuthService
     //     var response = WebUtils.HandleResponse<BaseModel<RegisterResponse, RegisterRequest>>(result);
     //     return response;
     // }
+
+    private async Task<ApplicationUser?> LoginOrSignUpExternal(GoogleUserInfoResponse gUserInfo)
+    {
+        try
+        {
+            //Try Sign in by external information
+            var tryExternalLogin =
+                await _signInManager.ExternalLoginSignInAsync("Google", gUserInfo.sub, true);
+            //if success, get info user and return result
+            if (tryExternalLogin.Succeeded)
+            {
+                var user = await _userManager.FindByLoginAsync("Google", gUserInfo.sub);
+                if (user == null)
+                    return null;
+
+                return user;
+            }
+
+            //if user is new -> create new account
+            var userCreate = new ApplicationUser
+            {
+                Email = gUserInfo.email,
+                UserName = gUserInfo.email,
+                FullName = gUserInfo.name,
+                AvatarUrl = gUserInfo.picture,
+                EmailConfirmed = gUserInfo.email_verified,
+                //TODO: get more info from email
+            };
+            
+            using (var transactionScope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            {
+                //create user, add role,add external login 
+                //* create user
+                var createResult = await _userManager.CreateAsync(userCreate);
+                if (!createResult.Succeeded)
+                    return null;
+
+                //create mentor
+                var mentorCreate = new Mentor()
+                {
+                    UserId = userCreate.Id,
+                };
+                var addMentorResult = await _mentorRepository.CreateAsync(mentorCreate);
+                if (!addMentorResult)
+                {
+                    return null;
+                }
+
+                //*add role
+                var user = await _userManager.FindByEmailAsync(userCreate.Email);
+                await _userManager.AddToRoleAsync(user, UserRoleEnum.Mentor.ToString());
+                //*Add external login
+                var userLoginInfo = new UserLoginInfo(providerKey: gUserInfo.sub, loginProvider: "Google",
+                    displayName: "Google");
+                var addResult = await _userManager.AddLoginAsync(userCreate, userLoginInfo);
+                if (addResult.Succeeded)
+                {
+                    transactionScope.Complete();
+                    return user;
+                }
+            }
+
+            return null;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
 }

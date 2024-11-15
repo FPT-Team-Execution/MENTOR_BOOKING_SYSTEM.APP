@@ -12,7 +12,7 @@ namespace MBS.Externals.Services.Interfaces
 {
     public interface IGoogleService
     {
-        String GenerateOauthUrl();
+        // String GenerateOauthUrl();
         //* Google Auth
         Task<GoogleResponse> AuthenticateGoogleUserAsync(HttpContext context);
         Task<GoogleResponse> GetTokenGoogleUserAsync(string authenticatedCode, string externalCallbackUri);

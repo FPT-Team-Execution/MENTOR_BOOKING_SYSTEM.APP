@@ -11,8 +11,8 @@ using MBS.Services.Models.Responses.Degree;
 using MBS.Services.Models.Responses.Major;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Services.Interfaces;
+using MBS.Services.Shared;
 using MBS.Services.Utils;
-using MBS.Services.Utils.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
