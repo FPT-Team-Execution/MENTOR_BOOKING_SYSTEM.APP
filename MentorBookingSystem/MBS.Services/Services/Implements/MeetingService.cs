@@ -58,5 +58,17 @@ namespace MBS.Services.Services.Implements
             };
             return pagination;
         }
+
+        public async Task<MeetingDto> GetMeetingByRequestId(string requestId)
+        {
+            var meeting = await _meetingRepository.GetMeetingByRequestId(requestId);
+            return meeting.Adapt<MeetingDto>();
+        }
+
+        public async Task<MeetingDto> GetMeetingById(string id)
+        {
+            var meeting = await _meetingRepository.GetMeetingId(id);
+            return meeting.Adapt<MeetingDto>();
+        }
     }
 }

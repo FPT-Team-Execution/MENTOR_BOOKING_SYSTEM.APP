@@ -1,4 +1,4 @@
-﻿using MBS.Services.Models;
+using MBS.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +14,10 @@ namespace MBS.Services.Services.Interfaces
         Task<IResponse> GetMeetingAsync(int page, int size);
 
         Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(int page, int size);
+        Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(string meetingId, int page, int size);
+        
+        Task<MeetingDto> GetMeetingByRequestId(string requestId);
+        
+        Task<MeetingDto> GetMeetingById(string id);
     }
 }

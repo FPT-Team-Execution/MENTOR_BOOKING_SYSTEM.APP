@@ -8,4 +8,5 @@ public class MeetingDto
     public string Location { get; set; }
     public string MeetUp { get; set; }
     public string Status { get; set; }
+    public Guid RequestId { get; set; }
 }
