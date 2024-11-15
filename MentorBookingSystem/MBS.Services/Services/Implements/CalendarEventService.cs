@@ -308,9 +308,41 @@ namespace MBS.Services.Services.Implements
             return newEvents;
         }
         
-        public Task<BaseModel<CalendarEventResponseModel>> GetCalendarEventId(string calendarEventId)
+        public async Task<BaseModel<CalendarEventResponseModel>> GetCalendarEventId(string calendarEventId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var calendarEvent = await _calendarEventRepository.GetByIdAsync(calendarEventId, "Id");
+                if (calendarEvent == null)
+                    return new BaseModel<CalendarEventResponseModel>
+                    {
+                        Message = "Not found for calendar event",
+                        IsSuccess = false,
+                        StatusCode = StatusCodes.Status404NotFound,
+                        ResponseRequestModel = null
+                    };
+
+                return new BaseModel<CalendarEventResponseModel>
+                {
+                    Message = "Get calendar event successfully",
+                    IsSuccess = true,
+                    StatusCode = StatusCodes.Status200OK,
+                    ResponseRequestModel = new CalendarEventResponseModel
+                    {
+                        CalendarEvent = calendarEvent
+                    }
+                };
+            }
+            catch (Exception e)
+            {
+                return new BaseModel<CalendarEventResponseModel>
+                {
+                    Message = e.Message,
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                    ResponseRequestModel = null,
+                };
+            }
         }
 
         public Task<BaseModel<GetBusyEventResponse, GetBusyEventRequestModel>> GetBusyEvent(GetBusyEventRequestModel request)
