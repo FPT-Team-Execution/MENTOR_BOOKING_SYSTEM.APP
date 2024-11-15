@@ -30,7 +30,7 @@ public class MeetingDetail : PageModel
         {
             return NotFound();
         }
-        
+        MeetingInfo = await _meetingService.GetMeetingByRequestId(RequestInfo.Id.ToString());
         
         return Page();
         
