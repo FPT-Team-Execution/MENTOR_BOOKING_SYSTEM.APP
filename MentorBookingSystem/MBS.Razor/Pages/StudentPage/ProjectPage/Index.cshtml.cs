@@ -11,6 +11,7 @@ using MBS.Services.Services.Interfaces;
 using MBS.Services.Shared;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace MBS.Razor.Pages.StudentPage.ProjectPage;
 
@@ -62,7 +63,9 @@ public class Index : BaseAdminPage
     public List<ProgressDto> Complete { get; set; } = new();
     public List<ProgressDto> NotComplete { get; set; } = new();
 
-
+    [BindProperty]
+    public RequestDto Request { get; set; }
+    
     //TODO: add search name
     public string SearchName { get; set; } = string.Empty;
 
@@ -100,14 +103,7 @@ public class Index : BaseAdminPage
         SaveTempData(TempDataKeys.StudentKeys.Project, Project);
 
         //*get request by project id
-        var request =
-            await _reqService.GetRequestsByProjectIdPaginationAsync(group.ProjectId, PageIndex, Size, SortOrder);
-        RequestsPagination = request;
-
-        SaveTempData(TempDataKeys.StudentKeys.RequestPagination, RequestsPagination);
-        SaveTempData(TempDataKeys.PageIndex, PageIndex);
-        SaveTempData(TempDataKeys.PageSize, Size);
-        SaveTempData(TempDataKeys.SortOrder, SortOrder);
+        await LoadRequests(Project.Id);
 
         //* get processes by process
         var progresses = await _progressService.GetProgressByProjectIdAsync(Project.Id);
@@ -137,6 +133,17 @@ public class Index : BaseAdminPage
         SaveTempData(TempDataKeys.StudentKeys.Mentor, Mentor);
     }
 
+    public async Task LoadRequests(Guid projectId)
+    {
+        var request =
+            await _reqService.GetRequestsByProjectIdPaginationAsync(projectId, PageIndex, Size, SortOrder);
+        RequestsPagination = request;
+
+        SaveTempData(TempDataKeys.StudentKeys.RequestPagination, RequestsPagination);
+        SaveTempData(TempDataKeys.PageIndex, PageIndex);
+        SaveTempData(TempDataKeys.PageSize, Size);
+        SaveTempData(TempDataKeys.SortOrder, SortOrder);
+    }
     public async Task<IActionResult> OnGetAsync()
     {
         try
@@ -157,11 +164,13 @@ public class Index : BaseAdminPage
     {
     }
 
-    public async Task<IActionResult> OnPostCreateRequest(string title, string mentorId, DateTime start, DateTime end)
+    public async Task<IActionResult> OnPostCreateRequest(string title, DateTime start, DateTime end)
     {
         //Check validate
         if (!ModelState.IsValid)
         {
+            var invalidEntry = ModelState.First(e => e.Value!.ValidationState == ModelValidationState.Invalid);
+            SaveTempDataString(TempDataKeys.ErrorMessage, invalidEntry.Value.Errors.FirstOrDefault()!.ErrorMessage);
             return Page();
         }
 
@@ -170,6 +179,12 @@ public class Index : BaseAdminPage
             SaveTempDataString(TempDataKeys.ErrorMessage, "Invalid start and end time!");
             return Page();
         }
+        if (start <= DateTime.Now.AddHours(1).Date.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute))
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Request is valid from 1 hour later");
+            return Page();
+        }
+
 
         //get project
         var project = GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
@@ -195,10 +210,23 @@ public class Index : BaseAdminPage
         {
             return Redirect(RouteEndpoints.Login);
         }
-
+        //Check request overlap
+        var requests = await _reqService.GetRequestsByProjectId(project.Id, RequestStatusEnum.Pending.ToString());
+        var requestDtos = requests.ToList();
+        if (requestDtos.Any())
+        {
+            foreach (var request in requestDtos)
+            {
+                if (start < request.End && end > request.Start)
+                {
+                    SaveTempDataString(TempDataKeys.ErrorMessage, "There is pending request at this time");
+                    return Page();
+                }
+            }
+        }
         //check overlap
         var dateRange = ConvertUtils.GetStartEndTime(start);
-        var existedEvents = await _calendarEventService.GetCalendarEventsByMentorId(mentorId, dateRange.Start,
+        var existedEvents = await _calendarEventService.GetCalendarEventsByMentorId(mentor.Id, dateRange.Start,
             dateRange.End);
 
         var isOverlapped = IsOverlapping(start, end, existedEvents.Where(x => x.Start >= DateTime.Now).ToList());
@@ -247,7 +275,7 @@ public class Index : BaseAdminPage
                 Id = Guid.NewGuid(),
                 ProjectId = project.Id,
                 CreaterId = studentId,
-                MentorId = mentorId,
+                MentorId = mentor.Id,
                 Start = start,
                 End = end,
                 Title = title,
@@ -263,7 +291,7 @@ public class Index : BaseAdminPage
             transactionScope.Complete();
         }
 
-
+        await LoadRequests(project.Id);
         SaveTempDataString(TempDataKeys.SuccessMessage, "Add successfully");
         return Page();
     }

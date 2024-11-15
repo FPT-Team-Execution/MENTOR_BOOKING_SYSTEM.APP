@@ -1,5 +1,4 @@
 @page
-@using System.Diagnostics
 @using MBS.BusinessObject.Enums
 @using MBS.DataAccess.Pagination
 @using MBS.Externals.Utils
@@ -48,6 +47,8 @@
     //Get size and index
     int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
     int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
+    
+    var requestModel = Model.Request;
 }
 
 <div class="row">
@@ -174,7 +175,7 @@
                                             <p class="card-subtitle mt-2 mb-3">
                                                 <b>Industry: </b>@(mentor.Industry)
                                             </p>
-                                            <button class="btn btn-icon btn-primary" type="button">
+                                            <button class="btn btn-icon btn-primary" type="button" id="createRequestBtn" data-toggle="modal" data-target="#requestFormModal">
                                                 <span class="btn-inner--text"><i class="fas fa-comment-dots"></i> Create Request</span>
                                             </button>
                                         </div>
@@ -297,8 +298,8 @@
                                         <td>@request.Title</td>
                                         <td>@request.MentorName</td>
                                         <td>@request.CreaterName</td>
-                                        <td>@(ConvertUtils.FormatDateTimeToString(request.Start))</td>
-                                        <td>@(ConvertUtils.FormatDateTimeToString(request.End))</td>
+                                        <td>@(ConvertUtils.FormatDateTimeToString(request.Start, "yyyy-MM-dd HH:mm"))</td>
+                                        <td>@(ConvertUtils.FormatDateTimeToString(request.End,"yyyy-MM-dd HH:mm"))</td>
                                         <td>@(ConvertUtils.FormatDateTimeToString(request.CreatedOn))</td>
                                         @* <p class="card-subtitle badge badge-counter"> *@
                                         @*     <span class="badge @(requestBgColor) text-white fs-4 p-3"> *@
@@ -318,5 +319,100 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="requestFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Create Request Form</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" asp-page-handler="CreateRequest">
+                    <div class="modal-body">
+                        @* Title Field *@
+                        <div class="mb-3">
+                            <label asp-for="@requestModel.Title" class="form-label"></label>
+                            <input asp-for="@requestModel.Title" class="form-control" maxlength="100" name="title" id="requestTitle" />
+                            <span asp-validation-for="@requestModel.Title" class="text-danger"></span>
+                        </div>
 
+                        @* Start Date *@
+                        <div class="mb-3">
+                            <label asp-for="@requestModel.Start" class="form-label"></label>
+                            <input asp-for="@requestModel.Start" class="form-control" type="datetime-local" id="start" name="start"/>
+                            <span asp-validation-for="@requestModel.Start" class="text-danger"></span>
+                        </div>
+
+                        @* End Date *@
+                        <div class="mb-3">
+                            <label asp-for="@requestModel.End" class="form-label"></label>
+                            <input asp-for="@requestModel.End" class="form-control" type="datetime-local" id="end" name="end" />
+                            <span asp-validation-for="@requestModel.End" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary" onclick="validateAndSubmit()">Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
+<script>
+    function validateAndSubmit() {
+        var title = document.getElementById("requestTitle").value.trim();
+        console
+        // Kiểm tra xem input title có rỗng không
+        //Rỗng -> ko đóng title
+        return title !== "";
+        
+    }
+
+    // Function to format a date to "YYYY-MM-DDTHH:mm" and adjust to Asia timezone (UTC+7)
+    function formatDateTime(date) {
+        // Adjust to Asia Time (UTC+7)
+        const asiaDate = new Date(date.getTime() + (7) * 60 * 60 * 1000); // Add 7 hours to UTC and 1 hour later
+        return asiaDate.toISOString().slice(0, 16);
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const startInput = document.getElementById("start");
+        const endInput = document.getElementById("end");
+
+        // Set the default Start and End values
+        const now = new Date();
+        const oneHoursLater = new Date(now.getTime() + 60 * 60 * 1000); // Now + 1 hour in Asia timezone
+
+        startInput.value = formatDateTime(now);
+        endInput.value = formatDateTime(oneHoursLater);
+
+        // Set min values
+        const minDateTime = formatDateTime(now);
+        startInput.min = minDateTime;
+        endInput.min = minDateTime;
+
+        // Update End when Start changes
+        startInput.addEventListener("change", function () {
+            const startDate = new Date(startInput.value);
+            if (!isNaN(startDate.getTime())) {
+                const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // +1 hour
+                endInput.value = formatDateTime(endDate);
+            }
+        });
+
+        // Update Start when End changes
+        endInput.addEventListener("change", function () {
+            const endDate = new Date(endInput.value);
+            if (!isNaN(endDate.getTime())) {
+                const startDate = new Date(endDate.getTime() - 60 * 60 * 1000); // -1 hour
+                startInput.value = formatDateTime(startDate);
+            }
+        });
+    });
+    
+
+</script>
+
