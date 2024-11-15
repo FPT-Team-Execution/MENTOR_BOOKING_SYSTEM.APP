@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MBS.DataAccess.Pagination;
+using Microsoft.EntityFrameworkCore;
 
 namespace MBS.Repositories.Implements
 {
@@ -22,7 +23,8 @@ namespace MBS.Repositories.Implements
         {
             return await _dao.GetPagingListAsync(
                 page: page,
-                size: size
+                size: size,
+                include: source => source.Include(s => s.Request)
             );
         }
 
