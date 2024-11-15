@@ -58,13 +58,13 @@
                 <td>@request.Start</td>
                 <td>@request.End</td>
                 <td>
-                    @request.Status
-                    @if (request.Status.ToString() == "Pending")
+                    @request.Status.ToString()
+                    @if (request.Status.ToString() == "Pending" || true)
                     {
                     <div class="mt-1">
                         <button type="button" class="btn btn-success btn-sm">Accept</button>
                         <form method="post" asp-page-handler="Deny">
-                            <input hidden name="userId" value="@request.RequestId"/>
+                            <input hidden type="text" name="userId" value="@request.RequestId"/>
                             <button type="submit" class="btn btn-danger btn-sm">Deny</button>
                         </form>
                     </div>
