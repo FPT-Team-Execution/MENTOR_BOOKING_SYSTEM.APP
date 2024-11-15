@@ -171,6 +171,7 @@ namespace MBS.Razor.Pages
                 _claimService.AppendCookie(CookieNames.UserRole, userRole);
                 _claimService.AppendCookie(CookieNames.GoogleAccessToken, token.access_token);
 
+                SaveTempDataString(TempDataKeys.ErrorMessage, "Login Successful!");
                 return Redirect(RouteEndpoints.Mentor);
             }
             catch (Exception e)
