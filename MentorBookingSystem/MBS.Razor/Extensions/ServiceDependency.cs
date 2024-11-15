@@ -30,6 +30,8 @@ public static class ServiceDependency
         services.AddScoped<ITemplateService, TemplateService>();
         services.AddScoped<ICalendarEventService, CalendarEventService>();
         services.AddScoped<IGoogleService, GoogleService>();
+        services.AddScoped<IPointTransactionService, PointTransactionService>();
+
     }
 
     public static void AddMapper(this IServiceCollection services)
