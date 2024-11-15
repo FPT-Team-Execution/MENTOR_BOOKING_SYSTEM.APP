@@ -492,9 +492,54 @@ namespace MBS.Services.Services.Implements
         }
         }
 
-        public Task<BaseModel> DeleteCalendarEvent(string calendarEventId)
+        public async Task<BaseModel> DeleteCalendarEvent(string calendarEventId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                //check meeting status related to canlendar event ~ Cancled
+                var calendarEvent =
+                    await _calendarEventRepository.GetEventByIdAsync(calendarEventId);
+                if (calendarEvent == null)
+                    return new BaseModel
+                    {
+                        Message = "Not found for calendar event",
+                        IsSuccess = false,
+                        StatusCode = StatusCodes.Status404NotFound,
+                    };
+                // if (calendarEvent.Meeting!.Status != MeetingStatusEnum.Canceled)
+                //     return new BaseModel<DeleteCalendarEventResponseModel>
+                //     {
+                //         Message = MessageResponseHelper.InvalidMeetingSatus(calendarEvent.MeetingId.ToString()),
+                //         IsSuccess = false,
+                //         StatusCode = StatusCodes.Status400BadRequest,
+                //     };
+
+                //update calendarEvent to cancled (deleted)
+                calendarEvent.Status = EventStatus.Cancleled;
+                var updateResult = _calendarEventRepository.Update(calendarEvent);
+                if (updateResult)
+                    return new BaseModel
+                    {
+                        Message = "",
+                        IsSuccess = true,
+                        StatusCode = StatusCodes.Status204NoContent,
+                    };
+                return new BaseModel
+                {
+                    Message = "Delete calendar event fail",
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+            }
+            catch (Exception e)
+            {
+                return new BaseModel
+                {
+                    Message = e.Message,
+                    IsSuccess = false,
+                    StatusCode = StatusCodes.Status500InternalServerError,
+                };
+            }
         }
 
         public Task<BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>> CreateCalendarEventOnelFlow(CreateCalendarEventOneFlowRequest request)
