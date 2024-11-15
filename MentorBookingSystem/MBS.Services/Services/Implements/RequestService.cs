@@ -45,4 +45,19 @@ public class RequestService : IRequestService
         };
         return paginationParse;
     }
+    
+
+    public async Task<bool> UpdateRequestStatus(Guid requestId, RequestStatusEnum status)
+    {
+        try
+        {
+            var request = await _requestRepository.GetRequestById(requestId);
+            request.Status = status;
+            return _requestRepository.Update(request);
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
 }

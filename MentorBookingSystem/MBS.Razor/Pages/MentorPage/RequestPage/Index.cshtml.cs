@@ -76,4 +76,9 @@ public class Index : BaseMentorPage
 
         return Page();
     }
+    
+    public IActionResult OnPostDeny(int userId)
+    {
+        return Page();
+    }
 }
