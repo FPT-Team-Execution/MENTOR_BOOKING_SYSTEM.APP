@@ -70,12 +70,12 @@ namespace MBS.Services.Services.Implements
             var mentor = await _mentorRepository.GetMentorByIdAsync(id);
             return mentor.Adapt<MentorDto>();
         }
-        async Task<IEnumerable<MentorsResponse>> IMentorService.GetMentorsAsync()
+        async Task<IEnumerable<MentorDto>> IMentorService.GetMentorsAsync()
         {
             var result = await _mentorRepository.GetMentorsAsync();
-            var responseList = new List<MentorsResponse>();
+            var responseList = new List<MentorDto>();
             foreach (var mentor in result) {
-                var objectParse = new MentorsResponse
+                var objectParse = new MentorDto
                 {
                     Id = mentor.UserId,
                     Email = mentor.User.Email,

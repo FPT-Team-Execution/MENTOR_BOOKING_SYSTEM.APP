@@ -2,6 +2,7 @@ using Mapster;
 using MBS.DataAccess.Pagination;
 using MBS.Razor.Pages.AdminPage.ProjectPage.Models;
 using MBS.Services.Constants;
+using MBS.Services.Dtos;
 using MBS.Services.Models.Responses.Project;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Shared;
@@ -12,7 +13,7 @@ namespace MBS.Razor.Pages.MentorPage.ProjectPage;
 
 public class Index : BaseMentorPage
 {
-    public Pagination<ProjectResponse> ProjectPagination { get; set; } = new();
+    public Pagination<ProjectDto> ProjectPagination { get; set; } = new();
     [BindProperty] public ProjectModel ChosenProject { get; set; } = new();
 
     public string SortOrder { get; set; } = "asc";

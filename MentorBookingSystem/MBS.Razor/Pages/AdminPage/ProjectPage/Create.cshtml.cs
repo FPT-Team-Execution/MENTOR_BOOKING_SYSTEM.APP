@@ -1,4 +1,5 @@
 using MBS.Services.Constants;
+using MBS.Services.Dtos;
 using MBS.Services.Models.Requests.Project;
 using MBS.Services.Models.Responses.Mentor;
 using MBS.Services.Services.Interfaces;
@@ -15,7 +16,7 @@ namespace MBS.Razor.Pages.AdminPage.ProjectPage
         [BindProperty]
         public CreateProjectModel Project { get; set; }
 
-        public List<MentorsResponse> Mentors { get; set; } // List to hold mentors
+        public List<MentorDto> Mentors { get; set; } // List to hold mentors
 
         public CreateModel(IProjectService projectService, IMentorService mentorService)
         {
@@ -25,7 +26,7 @@ namespace MBS.Razor.Pages.AdminPage.ProjectPage
 
         public async Task OnGetAsync()
         {
-            IEnumerable<MentorsResponse> mentors = await _mentorService.GetMentorsAsync();
+            IEnumerable<MentorDto> mentors = await _mentorService.GetMentorsAsync();
             Mentors = mentors.ToList();
         }
 
