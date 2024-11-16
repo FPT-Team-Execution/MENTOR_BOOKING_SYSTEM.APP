@@ -1,415 +1,131 @@
 ﻿@page
 @model MBS.Razor.Pages.AdminPage.RequestPage.Index
-
+@using MBS.DataAccess.Pagination
+@using MBS.Services.Models.Responses.Requests
+@using MBS.Services.Shared
 @{
     Layout = "Shared/_LayoutAdmin";
+    string pageName = "Index";
+    //Admin Pagination
+    var requestPagination = Model.GetTempData<Pagination<RequestResponse>>(TempDataKeys.AdminKeys.RequestPagination)! ?? Model.RequestPagination;
+    var requests = !requestPagination.Items.Any() ? Array.Empty<RequestResponse>() : requestPagination.Items.ToArray();
+    //Get search & sort Order
+    string search = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.search;
+
+    //Get size and index
+    int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
 }
 
-<div class="row my-4 h-100">
-<div class="col-lg-12">
-<div class="card">
-<div class="row align-items-center m-3">
-    <div class="col">
-        <h5 class="font-weight-bold">Project Request</h5>
+<body>
+    <div>
+        <div class="row align-items-center m-2">
+            <div class="col">
+                <h5>Requests</h5>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover ">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Title</th>
+                        <th scope="col">Project Name</th>
+                        <th scope="col">Start</th>
+                        <th scope="col">End</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (!requests.Any())
+                        {
+                            <tr>
+                                <td colspan="8">No requests available</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            for (int i = 0; i < requests.Count(); i++)
+                            {
+                                var request = requests[i];
+                                var index = requestPagination.PageSize * (pageIndex - 1) + (i + 1);
+                                <tr id="@i" role="button">
+                                    <th scope="row">@index</th>
+                                    <td>@request.Title</td>
+                                    <td>@request.ProjectName</td>
+                                    <td>@request.Start</td>
+                                    <td>@request.End</td>
+                                    <td>
+                                        @request.Status.ToString()
+                                        @if (request.Status.ToString() == "Pending")
+                                        {
+                                            <div class="mt-1">
+                                                <a asp-page="/MentorPage/MeetingPage/CreateMeeting" asp-route-id="@request.RequestId.ToString()">
+                                                    <button type="button" class="btn btn-success btn-sm">Accept</button>
+                                                </a>
+                                                <form method="post" asp-page-handler="Deny">
+                                                    <input hidden type="text" name="userId" value="@request.RequestId" />
+                                                    <button type="submit" class="btn btn-danger btn-sm">Deny</button>
+                                                </form>
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            @* Pagination Navigaion *@
+            <form id="paginationForm" method="post" asp-page-handler="PageNavigate" class="d-flex justify-content-center">
+                <input type="hidden" id="hiddenPageIndex" name="pageIndex" value="@requestPagination.PageIndex" />
+
+                <!-- Page Size Dropdown -->
+                <nav aria-label="page size" class="me-3 mr-2">
+                    <select class="form-control" name="size" asp-for="@Model.Size" onchange="onChangeSubmit()">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                    </select>
+                </nav>
+
+                <!-- Pagination Controls -->
+                <nav aria-label="Pagination">
+                    <ul class="pagination mb-0">
+                        <li class="page-item">
+                            <button type="button" class="page-link @(requestPagination.TotalItems <= pageSize ? "disable" : "") " aria-label="Previous" @(requestPagination.PageIndex == 1 ? "disabled" : "") onclick="updatePageIndex(@(requestPagination.PageIndex - 1))">
+                                <span aria-hidden="true">Prev</span>
+                            </button>
+                        </li>
+                        @for (int i = 1; i <= requestPagination.TotalPages; i++)
+                        {
+                            <li class="page-item @(requestPagination.PageIndex == i ? "active" : "")">
+                                <button type="button" class="page-link" onclick="updatePageIndex(@i)">@i</button>
+                            </li>
+                        }
+                        <li class="page-item">
+                            <button type="button" class="page-link @(requestPagination.TotalItems <= pageSize ? "disable" : "")" aria-label="Next" @(requestPagination.PageIndex == requestPagination.TotalPages ? "disabled" : "") onclick="updatePageIndex(@(requestPagination.PageIndex + 1))">
+                                <span aria-hidden="true">Next</span>
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
+            </form>
+        </div>
     </div>
-    <div class="col-auto d-flex align-items-end">
+</body>
 
-        <div class="mr-3">
-            <span for="startDate" class="text-muted">Start</span>
-            <input type="date" class="form-control" id="startDate" onchange="updateEndDate()">
-        </div>
-        <div class="mr-3">
-            <span for="endDate" class="text-muted">End</span>
-            <input type="date" class="form-control" id="endDate">
-        </div>
-
-        <div class="mr-3">
-            <span class="text-muted">Request type</span>
-            <select id="mentorStatus" class="form-control">
-                <option value="null">All</option>
-                <option value="Personal">Personal</option>
-                <option value="Project">Project</option>
-            </select>
-        </div>
-        <div class="form-inline border rounded shadow-sm">
-            <div class="input-group">
-                <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                       aria-label="Search" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button">
-                        <i class="fas fa-search fa-sm"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-        <a class="btn btn-primary ml-3" type="button" asp-page="@RouteEndpoints.AdminRequestCreate">
-            Create
-        </a>
-    </div>
-</div>
-
-
-<div class="table-responsive">
-<table class="table table-hover ">
-<thead>
-<tr>
-    <th scope="col">Id</th>
-    <th scope="col">Name</th>
-    <th scope="col">Email</th>
-    <th scope="col">University</th>
-    <th scope="col">Major</th>
-    <th scope="col">Balance</th>
-    <th scope="col">Avatar</th>
-    <th scope="col">Status</th>
-</tr>
-</thead>
-<tbody>
-<tr role="button">
-    <th scope="row">1</th>
-    <td>Elite Admin</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>150</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-
-    <td>
-        <span class="badge bg-success text-white">Active</span>
-    </td>
-
-</tr>
-<tr>
-    <th scope="row">2</th>
-    <td>Real Homes WP Theme</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>1500</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-    <td>
-        <span class="badge bg-secondary text-white">UnActive</span>
-    </td>
-
-</tr>
-<tr>
-    <th scope="row">3</th>
-    <td>MedicalPro WP Theme</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>150</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-    <td>
-        <span class="badge bg-success text-white">Active</span>
-    </td>
-
-</tr>
-<tr>
-    <th scope="row">4</th>
-    <td>Hosting Press HTML</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>150</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-    <td>
-        <span class="badge bg-success text-white">Active</span>
-    </td>
-</tr>
-<tr>
-    <th scope="row">5</th>
-    <td>Real Homes WP Theme</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>150</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-    <td>
-        <span class="badge bg-secondary text-white">UnActive</span>
-    </td>
-
-</tr>
-<tr>
-    <th scope="row">6</th>
-    <td>Real Homes WP Theme</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>150</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-    <td>
-        <span class="badge bg-secondary text-white">UnActive</span>
-    </td>
-
-</tr>
-<tr>
-    <th scope="row">7</th>
-    <td>Real Homes WP Theme</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>150</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-    <td>
-        <span class="badge bg-secondary text-white">UnActive</span>
-    </td>
-
-</tr>
-<tr>
-    <th scope="row">8</th>
-    <td>Real Homes WP Theme</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>150</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-    <td>
-        <span class="badge bg-secondary text-white">UnActive</span>
-    </td>
-
-</tr>
-<tr>
-    <th scope="row">9</th>
-    <td>Real Homes WP Theme</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>150</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-    <td>
-        <span class="badge bg-secondary text-white">UnActive</span>
-    </td>
-
-</tr>
-<tr>
-    <th scope="row">10</th>
-    <td>Real Homes WP Theme</td>
-    <td>HostingPressHTML@gmail.com</td>
-    <td>FPT University</td>
-    <td>Software Engineer</td>
-    <td>150</td>
-    <td>
-        <div class="dropdown no-arrow text-center">
-            <a class="dropdown-toggle" href="#" id="alertsDropdown" role="button"
-               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="fas fa-solid fa-image"></i>
-            </a>
-            <!-- Dropdown - Alerts -->
-            <div class="dropdown-list dropdown-menu dropdown-menu-left shadow animated--grow-in"
-                 aria-labelledby="alertsDropdown">
-                <a class="dropdown-item d-flex align-items-center" href="#">
-                    <div class="me-3">
-                        <img src="https://via.placeholder.com/150" alt="Transaction Image" width="150" height="150">
-                    </div>
-                </a>
-            </div>
-        </div>
-    </td>
-    <td>
-        <span class="badge bg-secondary text-white">UnActive</span>
-    </td>
-
-</tr>
-</tbody>
-</table>
-</div>
-@* Pagination Navigaion *@
-<nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center mb-4">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">Prev</span>
-            </a>
-        </li>
-
-        <li class="page-item active">
-            <a class="page-link" href="#">1</a>
-        </li>
-
-        <li class="page-item">
-            <a class="page-link" href="#">2</a>
-        </li>
-
-        <li class="page-item">
-            <a class="page-link" href="#">3</a>
-        </li>
-
-        <li class="page-item">
-            <a class="page-link" href="#">4</a>
-        </li>
-
-        <li class="page-item">
-            <a class="page-link" href="#">5</a>
-        </li>
-
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">Next</span>
-            </a>
-        </li>
-    </ul>
-</nav>
-</div>
-</div>
-</div>
-
-@section Scripts
-{
+@section Scripts {
     <script>
-    function updateEndDate() { 
-        const startDateInput = document.getElementById("startDate");
-        const endDateInput = document.getElementById("endDate");
-        const startDate = new Date(startDateInput.value);
-        // Set the minimum end date to the selected start date
-        if (startDateInput.value) {
-            endDateInput.setAttribute("min", startDate.toISOString().split("T")[0]);
-        } else {
-            endDateInput.min = null;
+        function updatePageIndex(newIndex) {
+            document.getElementById('hiddenPageIndex').value = newIndex;
+            document.getElementById('paginationForm').submit();
         }
-    }
+
+        function onChangeSubmit() {
+            document.getElementById('paginationForm').submit();
+        }
     </script>
+
 }
