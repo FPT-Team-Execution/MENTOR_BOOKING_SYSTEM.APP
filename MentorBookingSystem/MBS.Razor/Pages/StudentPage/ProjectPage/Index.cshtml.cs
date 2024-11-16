@@ -27,7 +27,7 @@ public class Index : BaseAdminPage
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IStudentService _studentService;
     private readonly IPointTransactionService _pointTransactionService;
-
+    private readonly IMeetingService _meetingService;
     public Index(
         IGroupService groupService,
         IClaimService claimService,
@@ -38,7 +38,8 @@ public class Index : BaseAdminPage
         ICalendarEventService calendarEventService,
         UserManager<ApplicationUser> userManager,
         IStudentService studentService,
-        IPointTransactionService pointTransactionService
+        IPointTransactionService pointTransactionService,
+        IMeetingService meetingService
     )
     {
         _groupService = groupService;
@@ -51,6 +52,7 @@ public class Index : BaseAdminPage
         _userManager = userManager;
         _studentService = studentService;
         _pointTransactionService = pointTransactionService;
+        _meetingService = meetingService;
     }
 
     public ProjectDto Project { get; set; } = new();
@@ -135,8 +137,18 @@ public class Index : BaseAdminPage
 
     public async Task LoadRequests(Guid projectId)
     {
-        var request =
-            await _reqService.GetRequestsByProjectIdPaginationAsync(projectId, PageIndex, Size, SortOrder);
+        var request = await _reqService.GetRequestsByProjectIdPaginationAsync(projectId, PageIndex, Size, SortOrder);
+        var items = request.Items.ToList(); 
+        foreach (var requestItem in items)
+        {
+            if (requestItem.Status == RequestStatusEnum.Accepted.ToString())
+            {
+                var meetingByRequestId = await _meetingService.GetMeetingByRequestId(requestItem.Id.ToString());
+                requestItem.MeetingLink = meetingByRequestId.MeetUp;
+            }
+        }
+        request.Items = items; 
+
         RequestsPagination = request;
 
         SaveTempData(TempDataKeys.StudentKeys.RequestPagination, RequestsPagination);
