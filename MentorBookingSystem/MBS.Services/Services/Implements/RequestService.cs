@@ -1,3 +1,4 @@
+using Azure;
 using Mapster;
 using MBS.BusinessObject.Entities;
 using MBS.BusinessObject.Enums;
@@ -111,5 +112,31 @@ public class RequestService : IRequestService
     {
         var request = await _requestRepository.GetRequestByProjectIdAsync(projectId, status);
         return request.Adapt<List<RequestDto>>();
+    }
+
+    public async Task<Pagination<RequestResponse>> GetAllRequestPagination(int page, int size, string sortOder)
+    {
+        var result = await _requestRepository.GetRequestPaginationAsync(page, size, sortOder);
+        //var response = result.Items.ToList();
+        var response = result.Items.Select(p => new RequestResponse
+        {
+            RequestId = p.Id,
+            Title = p.Title,
+            Start = p.Start,
+            End = p.End,
+            Status = p.Status,
+            ProjectName = p.Project.Title ?? "No Project"   
+        }).ToList();
+        var paginationParse = new Pagination<RequestResponse>
+        {
+            Items = response,
+            PageIndex = page,
+            PageSize = size,
+            TotalItems = result.TotalItems,
+            TotalPages = result.TotalPages
+        };
+        return paginationParse;
+
+        //return request.Adapt<Pagination<RequestResponse>>();
     }
 }

@@ -69,6 +69,12 @@ public class TempDataKeys
         public const string ChosenMeeting = "ChosenMeeting";
 
         #endregion
+
+        #region Request Page
+
+        public const string RequestPagination = "RequestPagination";
+
+        #endregion
     }
 
     public class StudentKeys

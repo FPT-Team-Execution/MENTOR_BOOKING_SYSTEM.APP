@@ -16,4 +16,5 @@ public interface IRequestService
     Task<bool> CreateProjectRequest(Request request);
     Task<IEnumerable<RequestDto>> GetRequestsByProjectId(Guid projectId, string? status = null);
 
+    public Task<Pagination<RequestResponse>> GetAllRequestPagination(int page, int size, string sortOrder);
 }
