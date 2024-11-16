@@ -139,4 +139,28 @@ public class RequestService : IRequestService
 
         //return request.Adapt<Pagination<RequestResponse>>();
     }
+
+    public async Task<Pagination<RequestResponse>> GetAllRequestByStudentId(string studentId, int page, int size)
+    {
+        var result = await _requestRepository.GetRequestsByStudentId(studentId, page, size);
+        var response = result.Items.Where(q => q.CreaterId == studentId).Select(p => new RequestResponse
+        {
+            RequestId = p.Id,
+            Title = p.Title,
+            Start = p.Start,
+            End = p.End,
+            Status = p.Status,
+            ProjectName = p.Project.Title ?? "No Project"
+        }).ToList();
+        var paginationParse = new Pagination<RequestResponse>
+        {
+            Items = response,
+            PageIndex = page,
+            PageSize = size,
+            TotalItems = result.TotalItems,
+            TotalPages = result.TotalPages
+        };
+        return paginationParse;
+    }
+
 }
