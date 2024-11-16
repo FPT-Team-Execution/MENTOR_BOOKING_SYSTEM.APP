@@ -112,4 +112,10 @@ public class RequestService : IRequestService
         var request = await _requestRepository.GetRequestByProjectIdAsync(projectId, status);
         return request.Adapt<List<RequestDto>>();
     }
+
+    public async Task<Pagination<RequestResponse>> GetAllRequestPagination(int page, int size, string sortOder)
+    {
+        var request = await _requestRepository.GetRequestPaginationAsync(page, size, sortOder);
+        return request.Adapt<Pagination<RequestResponse>>();
+    }
 }
