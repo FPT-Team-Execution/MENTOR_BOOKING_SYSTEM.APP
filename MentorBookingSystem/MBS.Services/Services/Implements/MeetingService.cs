@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Spreadsheet;
 using Mapster;
 using MBS.Repositories.Interfaces;
 using MBS.Services.Dtos;
@@ -57,9 +58,20 @@ namespace MBS.Services.Services.Implements
             return newPagination;
         }
 
-        public Task<Pagination<MeetingDto>> GetMeetingsPageList(int page, int size)
+        public async Task<Pagination<MeetingDto>> GetMeetingsPageList(int page, int size)
         {
-            throw new NotImplementedException();
+            var result = await _meetingRepository.GetPageListMeetings(page, size);
+            var itemsResponse = new List<MeetingDto>();
+            foreach (var item in result.Items)
+            {
+                var itemDTO = new MeetingDto();
+                itemDTO.title = item.Request.Title;
+                itemDTO.Description = item.Description;
+                itemDTO.Location = item.Location;
+                itemDTO.Status = item.Status.ToString();
+                itemDTO.MeetUp = item.MeetUp;
+                itemDTO.RequestId = item.RequestId;
+            }
         }
 
         public async Task<MeetingDto> GetMeetingByRequestId(string requestId)
