@@ -377,54 +377,62 @@
 <script>
     function validateAndSubmit() {
         var title = document.getElementById("requestTitle").value.trim();
-        console
         // Kiểm tra xem input title có rỗng không
-        //Rỗng -> ko đóng title
+        // Rỗng -> không đóng title
         return title !== "";
-        
     }
 
     // Function to format a date to "YYYY-MM-DDTHH:mm" and adjust to Asia timezone (UTC+7)
     function formatDateTime(date) {
-        // Adjust to Asia Time (UTC+7)
-        const asiaDate = new Date(date.getTime() + (7) * 60 * 60 * 1000); // Add 7 hours to UTC and 1 hour later
+        const asiaDate = new Date(date.getTime() + 7 * 60 * 60 * 1000); // Adjust to UTC+7
         return asiaDate.toISOString().slice(0, 16);
+    }
+
+    // Function to compare only the date part (ignoring time)
+    function isSameDate(date1, date2) {
+        return (
+            date1.getFullYear() === date2.getFullYear() &&
+            date1.getMonth() === date2.getMonth() &&
+            date1.getDate() === date2.getDate()
+        );
     }
 
     document.addEventListener("DOMContentLoaded", function () {
         const startInput = document.getElementById("start");
         const endInput = document.getElementById("end");
 
-        // Set the default Start and End values
+        // Set default Start and End values
         const now = new Date();
-        const oneHoursLater = new Date(now.getTime() + 60 * 60 * 1000); // Now + 1 hour in Asia timezone
+        const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000);
 
         startInput.value = formatDateTime(now);
-        endInput.value = formatDateTime(oneHoursLater);
+        endInput.value = formatDateTime(oneHourLater);
 
         // Set min values
         const minDateTime = formatDateTime(now);
         startInput.min = minDateTime;
         endInput.min = minDateTime;
 
-        // Update End when Start changes
+        // Update End when Start changes, but only if the date part changes
         startInput.addEventListener("change", function () {
             const startDate = new Date(startInput.value);
-            if (!isNaN(startDate.getTime())) {
-                const endDate = new Date(startDate.getTime() + 60 * 60 * 1000); // +1 hour
-                endInput.value = formatDateTime(endDate);
+            const endDate = new Date(endInput.value);
+
+            if (!isNaN(startDate.getTime()) && !isSameDate(startDate, endDate)) {
+                const newEndDate = new Date(startDate.getTime() + 60 * 60 * 1000); // +1 hour
+                endInput.value = formatDateTime(newEndDate);
             }
         });
 
-        // Update Start when End changes
+        // Update Start when End changes, but only if the date part changes
         endInput.addEventListener("change", function () {
             const endDate = new Date(endInput.value);
-            if (!isNaN(endDate.getTime())) {
-                const startDate = new Date(endDate.getTime() - 60 * 60 * 1000); // -1 hour
-                startInput.value = formatDateTime(startDate);
+            const startDate = new Date(startInput.value);
+
+            if (!isNaN(endDate.getTime()) && !isSameDate(endDate, startDate)) {
+                const newStartDate = new Date(endDate.getTime() - 60 * 60 * 1000); // -1 hour
+                startInput.value = formatDateTime(newStartDate);
             }
         });
     });
-    
-
 </script>

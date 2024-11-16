@@ -191,7 +191,9 @@ public class Index : BaseAdminPage
             SaveTempDataString(TempDataKeys.ErrorMessage, "Invalid start and end time!");
             return Page();
         }
-        if (start <= DateTime.Now.AddHours(1).Date.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute))
+
+        var hourLater = DateTime.Now.AddHours(1);
+        if (start < hourLater)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Request is valid from 1 hour later");
             return Page();
@@ -304,7 +306,9 @@ public class Index : BaseAdminPage
 
             transactionScope.Complete();
         }
-
+        //clear request info
+        Request = new RequestDto();
+        
         await LoadRequests(project.Id);
         SaveTempDataString(TempDataKeys.SuccessMessage, "Add successfully");
         return Page();
