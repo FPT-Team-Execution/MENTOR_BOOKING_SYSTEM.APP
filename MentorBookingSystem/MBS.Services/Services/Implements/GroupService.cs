@@ -5,6 +5,7 @@ using MBS.Services.Models.Responses.Group;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Utils;
 using Mapster;
+using MBS.BusinessObject.Entities;
 using MBS.Repositories.Interfaces;
 using MBS.Services.Dtos;
 using MBS.DataAccess.Pagination;
@@ -49,17 +50,24 @@ namespace MBS.Services.Services.Implements
             return response;
         }
 
-        public async Task<IResponse> CreateNewGroupAsync(CreateNewGroupRequestModel request)
+        public async Task<bool> CreateNewGroupAsync(CreateNewGroupRequestModel request)
         {
-            var result = await WebUtils.PostAsync(
-                ApiEndPoints.GroupUrl,
-                request,
-                token: WebUtils.AccessToken
-            );
-
-            var response = WebUtils.HandleResponse<BaseModel<GroupResponse>>(result);
-            return response;
+            try
+            {
+                Group group = new Group()
+                {
+                    ProjectId = request.ProjectId,
+                    StudentId = request.StudentId,
+                    PositionId = request.PositionId,
+                };
+                var result =  await _groupRepository.Create(group);
+                return result;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            
         }
-
     }
 }
