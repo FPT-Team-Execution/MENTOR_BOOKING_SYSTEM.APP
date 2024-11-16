@@ -87,6 +87,7 @@ public static class RouteEndpoints
 
     public const string Student = "/StudentPage";
     public const string StudentProject = "/StudentPage/ProjectPage/Index";
+    public const string StudentMeeting = "/StudentPage/MeetingPage/Index";
 
     #endregion
 }
