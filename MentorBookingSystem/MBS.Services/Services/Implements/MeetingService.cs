@@ -32,31 +32,29 @@ namespace MBS.Services.Services.Implements
             return response;
         }
 
-        public async Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(int page, int size)
+        public async Task<Pagination<MeetingDto>> GetMeetingsByMentorIdPaginationAsync(string mentorId, int page, int size)
         {
-            var result = await _meetingRepository.GetPageListMeeting(page, size);
-            var listToShow = new List<MeetingDto>();
-            foreach (var item in result.Items)
+            var result = await _meetingRepository.GetPageListMeetingByMentorId(mentorId, page, size);
+            var itemsResposnes = result.Items.Where(p => p.Request.MentorId == mentorId).Select(p => new MeetingDto
             {
-                var meetingDto = new MeetingDto();
-                meetingDto.Id = item.Id;
-                meetingDto.title = item.Request.Title;
-                meetingDto.MeetUp = item.MeetUp;
-                meetingDto.Description = item.Description;
-                meetingDto.Location = item.Location;
-                meetingDto.Status = item.Status.ToString();
-                listToShow.Add(meetingDto);
-            }
-
-            var pagination = new Pagination<MeetingDto>()
+                title = p.Request.Title,
+                Description = p.Description,
+                Location = p.Location,
+                Status = p.Status.ToString(),
+                MeetUp = p.MeetUp,
+                RequestId = p.RequestId,
+                
+                
+            }).ToList();
+            var newPagination = new Pagination<MeetingDto>
             {
-                Items = listToShow,
-                PageIndex = page,
-                PageSize = size,
+                Items = itemsResposnes,
+                TotalItems = result.TotalItems,
                 TotalPages = result.TotalPages,
-                TotalItems = result.TotalItems
+                PageSize = size,
+                PageIndex = page
             };
-            return pagination;
+            return newPagination;
         }
 
         public async Task<MeetingDto> GetMeetingByRequestId(string requestId)

@@ -6,76 +6,82 @@
 @{
     Layout = "Shared/_LayoutMentor";
     var meetingPagination = Model.MeetingPagination;
-    var meetings = !meetingPagination.Items.Any() ? new List<MeetingDto>() : meetingPagination.Items;
+    var meetings = meetingPagination.Items ?? new List<MeetingDto>();
     int pageSize = Model.PageSize;
     int pageIndex = meetingPagination.PageIndex;
 }
 <div>
-    <h3 class="mt-4">Meeting List</h3>
+    <h3 class="mt-4">Search Meetings by Mentor ID</h3>
+    <form method="get" class="d-flex align-items-center mb-3">
+        <div class="me-2">
+            <label for="mentorIdInput" class="form-label">Mentor ID:</label>
+            <input type="text" id="mentorIdInput" name="mentorId" class="form-control" placeholder="Enter Mentor ID" value="@Model.MentorId" required />
+        </div>
+        <div class="me-2">
+            <label for="pageSizeInput" class="form-label">Page Size:</label>
+            <select id="pageSizeInput" name="pageSize" class="form-select">
+                <option value="5" @(pageSize == 5 ? "selected" : "")>5</option>
+                <option value="10" @(pageSize == 10 ? "selected" : "")>10</option>
+                <option value="15" @(pageSize == 15 ? "selected" : "")>15</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-4">Search</button>
+    </form>
+
+    <h4>Meeting List</h4>
     <div class="table-responsive">
         <table class="table table-hover mt-3">
             <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Title</th>
-                <th scope="col">Description</th>
-                <th scope="col">Location</th>
-                <th scope="col">MeetUp</th>
-                <th scope="col">Status</th>
-            </tr>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">MeetUp</th>
+                    <th scope="col">Status</th>
+                </tr>
             </thead>
             <tbody>
-            @if (!meetings.Any())
-            {
-            <tr>
-                <td colspan="6" class="text-center">No meetings available</td>
-            </tr>
-            }
-            else
-            {
-            foreach (var meeting in meetings)
-            {
-            <tr>
-                <td>@meeting.Id</td>
-                <td><a asp-page="/MentorPage/MeetingPage/MeetingDetail" asp-route-id="@meeting.Id">@meeting.title</a></td>
-                <td>@meeting.Description</td>
-                <td>@meeting.Location</td>
-                <td>@meeting.MeetUp</td>
-                <td>@meeting.Status</td>
-            </tr>
-            }
-            }
+                @if (!meetings.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No meetings found for Mentor ID: @Model.MentorId</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var meeting in meetings)
+                    {
+                        <tr>
+                            <td>@meeting.RequestId</td>
+                            <td>@meeting.title</td>
+                            <td>@meeting.Description</td>
+                            <td>@meeting.Location</td>
+                            <td>@meeting.MeetUp</td>
+                            <td>@meeting.Status</td>
+                        </tr>
+                    }
+                }
             </tbody>
         </table>
     </div>
 
-    <form method="get" class="d-flex justify-content-between align-items-center mt-3">
-        <div>
-            <label for="pageSize">Page Size:</label>
-            <select id="pageSize" name="pageSize" class="form-select" onchange="this.form.submit()">
-                <option value="5" selected="@(pageSize == 5)">5</option>
-                <option value="10" selected="@(pageSize == 10)">10</option>
-                <option value="15" selected="@(pageSize == 15)">15</option>
-            </select>
-        </div>
-
-        <div>
-            <nav aria-label="Pagination">
-                <ul class="pagination mb-0">
-                    <li class="page-item @(pageIndex == 1 ? "disabled" : "")">
-                        <a class="page-link" href="?pageIndex=@(pageIndex - 1)&pageSize=@pageSize">Previous</a>
-                    </li>
-                    @for (int i = 1; i <= meetingPagination.TotalPages; i++)
-                    {
+    <div class="d-flex justify-content-center mt-3">
+        <nav aria-label="Pagination">
+            <ul class="pagination">
+                <li class="page-item @(pageIndex == 1 ? "disabled" : "")">
+                    <a class="page-link" href="?mentorId=@Model.MentorId&pageIndex=@(pageIndex - 1)&pageSize=@pageSize">Previous</a>
+                </li>
+                @for (int i = 1; i <= meetingPagination.TotalPages; i++)
+                {
                     <li class="page-item @(pageIndex == i ? "active" : "")">
-                        <a class="page-link" href="?pageIndex=@i&pageSize=@pageSize">@i</a>
+                        <a class="page-link" href="?mentorId=@Model.MentorId&pageIndex=@i&pageSize=@pageSize">@i</a>
                     </li>
-                    }
-                    <li class="page-item @(pageIndex == meetingPagination.TotalPages ? "disabled" : "")">
-                        <a class="page-link" href="?pageIndex=@(pageIndex + 1)&pageSize=@pageSize">Next</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </form>
+                }
+                <li class="page-item @(pageIndex == meetingPagination.TotalPages ? "disabled" : "")">
+                    <a class="page-link" href="?mentorId=@Model.MentorId&pageIndex=@(pageIndex + 1)&pageSize=@pageSize">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>

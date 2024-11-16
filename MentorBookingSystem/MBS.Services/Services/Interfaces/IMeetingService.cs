@@ -13,7 +13,7 @@ namespace MBS.Services.Services.Interfaces
     {
         Task<IResponse> GetMeetingAsync(int page, int size);
 
-        Task<Pagination<MeetingDto>> GetMeetingsPaginationAsync(int page, int size);
+        Task<Pagination<MeetingDto>> GetMeetingsByMentorIdPaginationAsync(string mentorId, int page, int size);
         
         Task<MeetingDto> GetMeetingByRequestId(string requestId);
         

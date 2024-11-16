@@ -19,12 +19,13 @@ namespace MBS.Repositories.Implements
                predicate: m => m.RequestId == requestId);
         }
 
-        public async Task<Pagination<Meeting>> GetPageListMeeting(int page, int size)
+        public async Task<Pagination<Meeting>> GetPageListMeetingByMentorId(string mentorId, int page, int size)
         {
             return await _dao.GetPagingListAsync(
                 page: page,
                 size: size,
-                include: source => source.Include(s => s.Request)
+                include: source => source.Include(s => s.Request),
+                predicate: meeting => meeting.Request.MentorId == mentorId
             );
         }
 
