@@ -15,6 +15,26 @@ public class ProgressService : IProgressService
         _progressRepository = progressRepository;
         _projectRepository = projectRepository;
     }
+
+    public async Task<ProgressDto?> GetProgressIdAsync(Guid id)
+    {
+        var progress = await _progressRepository.GetProgressByIdAsync(id);
+        return progress.Adapt<ProgressDto>();
+    }
+
+    public async Task<bool> UpdateProgress(ProgressDto progressDto)
+    {
+        var progress = await _progressRepository.GetProgressByIdAsync(progressDto.Id);
+        progress.IsComplete = progressDto.IsComplete;
+        return _progressRepository.Update(progress);
+    }
+
+    public async Task<bool> DeleteProgress(Guid id)
+    {        
+        var progress = await _progressRepository.GetProgressByIdAsync(id);
+        return _progressRepository.Delete(progress);
+    }
+
     public async Task<IEnumerable<ProgressDto>> GetProgressByProjectIdAsync(Guid projectId)
     {
         var progresses = await _progressRepository.GetProgressesByProjectId(projectId);

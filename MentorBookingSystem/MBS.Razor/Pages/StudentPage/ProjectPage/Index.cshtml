@@ -195,8 +195,8 @@
                                                 <span>Complete: <strong>@(completeArray.Length)</strong></span>
                                                 <span>Not Complete: <strong>@(notCompleteArray.Length)</strong></span>
                                             </div>
-                                            <div class="progress mb-3" role="progressbar" aria-label="Progress bar with labeled checkboxes" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
-                                                <div class="progress-bar bg-success" style="width: 35%"></div>
+                                            <div class="progress mb-3" role="progressbar" aria-label="Progress bar with labeled checkboxes" aria-valuenow="@percent" aria-valuemin="0" aria-valuemax="100">
+                                                <div class="progress-bar bg-success" style="width: @(percent.ToString())%"></div>
                                             </div>
 
                                             <!-- Checkboxes and labels -->
@@ -212,18 +212,31 @@
                                                     @for (int i = 0; i < progressArray.Length; i++)
                                                     {
                                                         var progress = progressArray[i];
-                                                        <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between" id="@(progress.Id)" role="button">
-                                                            <div class="d-flex align-items-center">
-                                                                <input class="custom-control-input" name="progressId" type="checkbox" hidden="hidden">
-                                                                <input class="custom-control-input" id="customCheck@(i)" type="checkbox" checked="@progress.IsComplete">
-                                                                <label class="custom-control-label ms-2" for="customCheck@(i)">
-                                                                    <span>@progress.Name</span>
-                                                                </label>
+                                                        var newValueAfterChecked = !progress.IsComplete;
+                                                        <form method="post" asp-page-handler="DoProgress">
+                                                            <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between" id="@(progress.Id)" role="button">
+                                                                <div class="d-flex align-items-center">
+                                                                    <input class="custom-control-input" name="progressId" hidden="hidden" value="@progress.Id">
+                                                                    <input 
+                                                                        class="custom-control-input" 
+                                                                        id="customCheck@(i)"
+                                                                        type="checkbox" 
+                                                                        checked="@progress.IsComplete"
+                                                                        onchange="this.form.submit()" />
+                                                                    <input class="custom-control-input" name="isComplete" hidden="hidden" value="@newValueAfterChecked.ToString()">
+                                                                    <label class="custom-control-label ms-2" for="customCheck@(i)">
+                                                                        <span>@progress.Name</span>
+                                                                    </label>
+                                                                </div>
+                                                                @* <a type="submit" class="text-danger" action="delete" > *@
+                                                                @*     <i class="fas fa-trash"></i> *@
+                                                                @* </a> *@
+                                                                <button type="submit" name="action" value="delete" class="btn btn-link text-danger p-0">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </button>
                                                             </div>
-                                                            <a href="#" class="text-danger">
-                                                                <i class="fas fa-trash"></i>
-                                                            </a>
-                                                        </div>
+                                                        </form>
+                                                        
                                                     }
                                                 }
                                             }
