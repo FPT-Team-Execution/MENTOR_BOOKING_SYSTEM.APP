@@ -51,7 +51,11 @@
                     {
                         <tr>
                             <td>@meeting.RequestId</td>
-                            <td>@meeting.title</td>
+                            <td>
+                                <a asp-page="/MentorPage/MeetingPage/MeetingDetail" asp-route-id="@meeting.Id.ToString()">
+                                    @meeting.title
+                                </a>
+                            </td>
                             <td>@meeting.Description</td>
                             <td>@meeting.Location</td>
                             <td>@meeting.MeetUp</td>

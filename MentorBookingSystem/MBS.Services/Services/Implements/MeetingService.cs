@@ -44,6 +44,7 @@ namespace MBS.Services.Services.Implements
                 Status = p.Status.ToString(),
                 MeetUp = p.MeetUp,
                 RequestId = p.RequestId,
+                Id = p.Id,
                 
                 
             }).ToList();
