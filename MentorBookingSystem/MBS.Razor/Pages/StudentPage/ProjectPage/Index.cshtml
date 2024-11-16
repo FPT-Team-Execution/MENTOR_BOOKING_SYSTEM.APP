@@ -330,6 +330,42 @@
                 </table>
             </div>
         </div>
+        @* Pagination Navigaion *@
+        <form id="paginationForm" method="post" asp-page-handler="PageNavigate" class="d-flex justify-content-center">
+            <!-- Input hidden để lưu giá trị pageIndex hiện tại -->
+            <input type="hidden" id="hiddenPageIndex" name="pageIndex" value="@requestPagination.PageIndex"/>
+
+            <!-- Page Size Dropdown -->
+            <nav aria-label="page size" class="me-3 mr-2">
+                <select class="form-control" name="size" asp-for="@Model.Size" onchange="onChangeSubmit()">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                </select>
+            </nav>
+
+            <!-- Pagination Controls -->
+            <nav aria-label="Pagination">
+                <ul class="pagination mb-0">
+                    <li class="page-item">
+                        <button type="button" class="page-link @(requestPagination.TotalItems <= pageSize ? "disable" : "") " aria-label="Previous" @(requestPagination.PageIndex == 1 ? "disabled" : "") onclick="updatePageIndex(@(requestPagination.PageIndex - 1))">
+                            <span aria-hidden="true">Prev</span>
+                        </button>
+                    </li>
+                    @for (int i = 1; i <= requestPagination.TotalPages; i++)
+                    {
+                    <li class="page-item @(requestPagination.PageIndex == i ? "active" : "")">
+                        <button type="button" class="page-link" onclick="updatePageIndex(@i)">@i</button>
+                    </li>
+                    }
+                    <li class="page-item">
+                        <button type="button" class="page-link @(requestPagination.TotalItems <= pageSize ? "disable" : "")" aria-label="Next" @(requestPagination.PageIndex == requestPagination.TotalPages ? "disabled" : "") onclick="updatePageIndex(@(requestPagination.PageIndex + 1))">
+                            <span aria-hidden="true">Next</span>
+                        </button>
+                    </li>
+                </ul>
+            </nav>
+        </form>
     </div>
 </div>
 <!-- Modal -->
@@ -375,6 +411,16 @@
 </div>
 </div>
 <script>
+    function updatePageIndex(newIndex) {
+        document.getElementById('hiddenPageIndex').value = newIndex;
+        document.getElementById('paginationForm').submit();
+    }
+
+    function onChangeSubmit() {
+        document.getElementById('paginationForm').submit();
+    }
+    
+    
     function validateAndSubmit() {
         var title = document.getElementById("requestTitle").value.trim();
         // Kiểm tra xem input title có rỗng không
@@ -435,4 +481,5 @@
             }
         });
     });
+
 </script>

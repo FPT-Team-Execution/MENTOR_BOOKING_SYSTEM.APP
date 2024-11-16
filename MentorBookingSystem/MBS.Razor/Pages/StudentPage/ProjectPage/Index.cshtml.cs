@@ -175,7 +175,33 @@ public class Index : BaseAdminPage
     public void OnPostAsync()
     {
     }
+    public async Task<IActionResult> OnPostPageNavigate(string pageIndex, string size)
+    {
+        try
+        {
+            var project = GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
+            var requestPagination = GetTempData<Pagination<RequestDto>>(TempDataKeys.StudentKeys.RequestPagination)!;
+            //set pageIndex and page Size
+            Size = int.Parse(size);
+            //if total item from previous load * previous total pages is lower or equal then new size -> pageIndex = 1
+            if ((requestPagination.TotalItems * requestPagination.TotalItems) <= Size)
+                PageIndex = 1;
+            else
+                PageIndex = int.Parse(pageIndex);
+            //Save temp data to next use
+            SaveTempData(TempDataKeys.PageIndex, PageIndex);
+            SaveTempData(TempDataKeys.PageSize, Size);
+            //Load data pagination
+            await LoadRequests(project.Id);
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            Redirect(RouteEndpoints.AdminStudent);
+        }
 
+        return Page();
+    }
     public async Task<IActionResult> OnPostCreateRequest(string title, DateTime start, DateTime end)
     {
         //Check validate
@@ -311,7 +337,7 @@ public class Index : BaseAdminPage
         
         await LoadRequests(project.Id);
         SaveTempDataString(TempDataKeys.SuccessMessage, "Add successfully");
-        return Page();
+        return Redirect(RouteEndpoints.StudentProject);
     }
 
 
