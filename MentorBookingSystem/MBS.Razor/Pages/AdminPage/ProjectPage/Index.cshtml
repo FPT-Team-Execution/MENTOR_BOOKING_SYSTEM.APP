@@ -75,14 +75,16 @@
                             {
                                 var project = projects[i];
                                 var index = projectPagination.PageSize * (pageIndex - 1) + (i + 1);
-                                <tr id="@project.Id" role="button">
-                                    <th scope="row">@index</th>
-                                    <td>@project.Title</td>
-                                    <td>@project.Description</td>
-                                    <td>@project.DueDate</td>
-                                    <td>@project.Semester</td>
-                                    <td>@project.Status</td>
-                                </tr>
+                                
+                                    <tr id="@project.Id" role="button">
+                                        <th scope="row">@index</th>
+                                        <td><a href="/AdminPage/ProjectPage/ProjectDetail?id=@project.Id.ToString()">@project.Title</a></td>
+                                        <td>@project.Description</td>
+                                        <td>@project.DueDate</td>
+                                        <td>@project.Semester</td>
+                                        <td>@project.Status</td>
+                                    </tr>
+                                
                             }
                         }
                     }

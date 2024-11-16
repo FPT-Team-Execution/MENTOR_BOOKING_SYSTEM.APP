@@ -107,11 +107,11 @@ namespace MBS.Razor.Pages.AdminPage.ProjectPage.ProjectDetail
             SaveTempData(TempDataKeys.StudentKeys.Mentor, Mentor);
         }
 
-        public async Task<IActionResult> OnGetAsync(string projectId)
+        public async Task<IActionResult> OnGetAsync(string id)
         {
             try
             {
-                await GetActiveProjectInfoByUserId(projectId);
+                await GetActiveProjectInfoByUserId(id);
             }
             catch
             {
