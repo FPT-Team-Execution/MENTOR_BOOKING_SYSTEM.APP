@@ -81,31 +81,31 @@ namespace MBS.Razor.Pages.AdminPage.GroupPage
 
         public async Task<IActionResult> OnPostCreate()
         {
-            if (!ModelState.IsValid)
-            {
-                SaveTempData(TempDataKeys.ErrorMessage, "Please check the input data.");
-                return Page();
-            }
-
-            var request = new CreateNewGroupRequestModel
-            {
-                ProjectId = ChosenGroup.ProjectId,
-                StudentId = ChosenGroup.StudentId,
-                PositionId = ChosenGroup.PositionId
-            };
-
-            var response = await _groupService.CreateNewGroupAsync(request) as BaseModel<GroupResponse>;
-
-            if (response != null && response.IsSuccess)
-            {
-                SaveTempData(TempDataKeys.SuccessMessage, "Group created successfully.");
-                return RedirectToPage("Index"); // Hoặc trang bạn muốn chuyển đến sau khi tạo nhóm thành công
-            }
-            else
-            {
-                SaveTempData(TempDataKeys.ErrorMessage, response?.Message ?? "Failed to create group.");
-                return Page();
-            }
+            // if (!ModelState.IsValid)
+            // {
+            //     SaveTempData(TempDataKeys.ErrorMessage, "Please check the input data.");
+            //     return Page();
+            // }
+            //
+            // var request = new CreateNewGroupRequestModel
+            // {
+            //     ProjectId = ChosenGroup.ProjectId,
+            //     StudentId = ChosenGroup.StudentId,
+            //     PositionId = ChosenGroup.PositionId
+            // };
+            //
+            // var response = await _groupService.CreateNewGroupAsync(request) as BaseModel<GroupResponse>;
+            //
+            // if (response != null && response.IsSuccess)
+            // {
+            //     SaveTempData(TempDataKeys.SuccessMessage, "Group created successfully.");
+            //     return RedirectToPage("Index"); // Hoặc trang bạn muốn chuyển đến sau khi tạo nhóm thành công
+            // }
+            // else
+            // {
+            //     SaveTempData(TempDataKeys.ErrorMessage, response?.Message ?? "Failed to create group.");
+                 return Page();
+            // }
         }
 
         public async Task<IActionResult> OnPostUpdate()

@@ -19,6 +19,11 @@ namespace MBS.Repositories.Implements
         {
             return _dao.SingleOrDefaultAsync(x => x.Id == id);
         }
+        
+        public async Task<bool> Create(Group group)
+        {
+            return await _dao.InsertAsync(group) > 0;
+        }
 
         public Task<Group> GetGroupByProjectAndStudentIdAsync(Guid projectId, string studentId)
         {

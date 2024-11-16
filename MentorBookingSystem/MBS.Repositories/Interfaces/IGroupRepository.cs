@@ -18,5 +18,6 @@ namespace MBS.Repositories.Interfaces
 
         Task<Pagination<Group>> GetPagedListBaseAsync(int page, int size);
         Task<Group> GetGroupByProjectAndStudentIdAsync(Guid projectId, string studentId);
+        Task<bool> Create(Group group);
     }
 }

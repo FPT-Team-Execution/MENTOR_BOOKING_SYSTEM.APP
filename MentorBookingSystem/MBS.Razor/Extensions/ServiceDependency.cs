@@ -13,6 +13,7 @@ public static class ServiceDependency
     public static void AddServiceDependencies(this IServiceCollection services)
     {
         AddMapper(services);
+        services.AddMvc().AddSessionStateTempDataProvider();
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IMajorService, MajorService>();
         services.AddScoped<IClaimService, ClaimService>();

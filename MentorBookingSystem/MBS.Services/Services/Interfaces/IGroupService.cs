@@ -14,6 +14,6 @@ namespace MBS.Services.Services.Interfaces
         public Task<IEnumerable<GroupDto>> GetGroupsByStudentIdAsync(string userId, string? projectStatus = null);
         public Task<IEnumerable<GroupDto>> GetGroupsByProjectIdAsync(Guid projectId);
         public Task<IResponse> GetGroupsAsync(int page, int size);
-        Task<IResponse> CreateNewGroupAsync(CreateNewGroupRequestModel request);
+        Task<bool> CreateNewGroupAsync(CreateNewGroupRequestModel request);
     }
 }
