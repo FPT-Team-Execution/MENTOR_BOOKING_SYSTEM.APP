@@ -1,8 +1,14 @@
 @page
-@model MBS.Razor.Pages.StudentPage.MeetingPage.Index
+@using MBS.Services.Dtos
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MBS.Razor.Pages.StudentPage.MeetingPage.IndexModel
 
 @{
-    Layout = "Shared/_LayoutStudent";
+    Layout = "Shared/_LayoutMentor";
+    var meetingPagination = Model.MeetingPagination;
+    var meetings = meetingPagination.Items ?? new List<MeetingDto>();
+    int pageSize = Model.PageSize;
+    int pageIndex = meetingPagination.PageIndex;
 }
     
 <div>
