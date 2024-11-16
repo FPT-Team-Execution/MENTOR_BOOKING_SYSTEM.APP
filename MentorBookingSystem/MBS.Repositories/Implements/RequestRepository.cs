@@ -80,6 +80,7 @@ namespace MBS.Repositories.Implements
         public async Task<Pagination<Request>> GetRequestPaginationAsync(int page, int size, string sortOrder)
         {
             return await _dao.GetPagingListAsync(
+                include: q => q.Include(x => x.Project),
                 orderBy: o =>
                     (sortOrder.ToLower() == "asc")
                         ? o.OrderBy(x => x.CreatedOn)
