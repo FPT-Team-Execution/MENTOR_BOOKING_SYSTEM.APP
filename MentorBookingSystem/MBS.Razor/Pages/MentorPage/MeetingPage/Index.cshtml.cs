@@ -13,16 +13,19 @@ public class IndexModel : PageModel
     public int PageSize { get; set; } = 5;
     public int PageIndex { get; set; } = 1;
 
+    public string MentorId { get; set; } = string.Empty; 
+
     public IndexModel(IMeetingService meetingService)
     {
         _meetingService = meetingService;
     }
 
-    public async Task OnGetAsync(int pageIndex = 1, int pageSize = 5)
+    public async Task OnGetAsync(string mentorId, int pageIndex = 1, int pageSize = 5)
     {
         PageIndex = pageIndex;
         PageSize = pageSize;
+        MentorId = mentorId;
 
-        MeetingPagination = await _meetingService.GetMeetingsPaginationAsync(pageIndex, pageSize);
+        MeetingPagination = await _meetingService.GetMeetingsByMentorIdPaginationAsync(mentorId, pageIndex, pageSize);
     }
 }
