@@ -1,0 +1,312 @@
+@page
+@using MBS.BusinessObject.Enums
+@using MBS.DataAccess.Pagination
+@using MBS.Externals.Utils
+@using MBS.Services.Dtos
+@using MBS.Services.Shared
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MBS.Razor.Pages.AdminPage.ProjectPage.ProjectDetail.Index
+
+@{
+    Layout = "Shared/_LayoutAdmin";
+    //* get temp data
+    //Members in project
+    var members = Model.GetTempData<List<GroupDto>>(TempDataKeys.StudentKeys.Groups);
+    members ??= new List<GroupDto>();
+
+    //Project
+    var project = Model.GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
+    project ??= new ProjectDto();
+
+    //Mentor
+    var mentor = Model.GetTempData<MentorDto>(TempDataKeys.StudentKeys.Mentor);
+    mentor ??= new MentorDto();
+
+    //Student Pagination 
+    var requestPagination = Model.GetTempData<Pagination<RequestDto>>(TempDataKeys.StudentKeys.RequestPagination);
+    var requestArray = requestPagination == null ? Array.Empty<RequestDto>() : requestPagination.Items.ToArray();
+
+    //Progresses
+    var progresses = Model.GetTempData<List<ProgressDto>>(TempDataKeys.StudentKeys.Progresses);
+    var progressArray = progresses == null ? Array.Empty<ProgressDto>() : progresses.ToArray();
+
+    //Get Process Detail (Percent, Complete, NotComplete)
+    var percent = Double.TryParse(Model.GetTempData<string>(TempDataKeys.StudentKeys.Percent), out var result) ? result : 0;
+    
+    var complete = Model.GetTempData<List<ProgressDto>>(TempDataKeys.StudentKeys.Complete);
+    var completeArray = complete == null ? Array.Empty<ProgressDto>() : complete.ToArray();
+    
+    var notComplete = Model.GetTempData<List<ProgressDto>>(TempDataKeys.StudentKeys.NotComplete);
+    var notCompleteArray = notComplete == null ? Array.Empty<ProgressDto>() : notComplete.ToArray();
+
+    
+    //Get search & sort Order
+    string searchName = Model.GetTempData<string>(TempDataKeys.SearchName) ?? Model.SearchName;
+    string sortOrder = Model.GetTempData<string>(TempDataKeys.SortOrder) ?? Model.SortOrder;
+
+    //Get size and index
+    int pageSize = int.Parse(Model.GetTempData<string>(TempDataKeys.PageSize) ?? Model.Size.ToString());
+    int pageIndex = int.Parse(Model.GetTempData<string>(TempDataKeys.PageIndex) ?? Model.PageIndex.ToString());
+}
+
+<div class="row">
+    <div class="col-lg-8 mb-2">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Members</h5>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Full Name</th>
+                            <th scope="col">Position</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @{
+                            if (!members.Any())
+                            {
+                                <tr>
+                                    <td colspan="4" class="text-center">No member available</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                var memberArray = members.ToArray();
+                                for (int i = 0; i < memberArray.Length; i++)
+                                {
+                                    var group = memberArray[i];
+                                    <tr id="@(group.Id)" role="button">
+                                        <th scope="row">@(i + 1)</th>
+                                        <td>@group.StudentName</td>
+                                        <td>@group.PositionName</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="h-100 col-lg-4 row ">
+        <div class="col-lg-12  p-0">
+            <div class="row justify-content-center">
+                <div class="col-lg-12">
+                    <div class="nav-wrapper">
+                        <ul class="nav nav-pills nav-fill flex-column flex-md-row" id="tabs-icons-text" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0 active" id="tabs-icons-text-1-tab" data-toggle="tab"
+                                   href="#tabs-icons-text-1" role="tab" aria-controls="tabs-icons-text-1" aria-selected="true">
+                                    <i class="ni ni-calendar-grid-58 mr-2"></i>Project
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-2-tab" data-toggle="tab"
+                                   href="#tabs-icons-text-2" role="tab" aria-controls="tabs-icons-text-2" aria-selected="false">
+                                    <i class="ni ni-cloud-upload-96 mr-2"></i>Mentor
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link mb-sm-3 mb-md-0" id="tabs-icons-text-3-tab" data-toggle="tab"
+                                   href="#tabs-icons-text-3" role="tab" aria-controls="tabs-icons-text-3" aria-selected="false">
+                                    <i class="ni ni-bell-55 mr-2"></i>Process
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card shadow">
+                        <div class="card-body">
+                            <div class="tab-content" id="myTabContent">
+                                <!-- Tab Content for Project -->
+                                <div class="tab-pane fade show active" id="tabs-icons-text-1" role="tabpanel"
+                                     aria-labelledby="tabs-icons-text-1-tab">
+                                    <div class="col-lg-12">
+                                        <h4 class="mt-7">@(project.Title)</h4>
+                                        <p class="card-subtitle mt-2 mb-3">
+                                            <b>Description: </b>@(project.Description)
+                                        </p>
+                                        <p class="card-subtitle mt-2 mb-3">
+                                            <b>Semester: </b>@(project.Semester)
+                                        </p>
+                                        <p class="card-subtitle mt-2 mb-3">
+                                            <b>Due date: </b>@(ConvertUtils.FormatDateTimeToString(project.DueDate))
+                                        </p>
+                                        @{
+                                            var projectBgColor = string.Empty;
+                                            switch (project.Status)
+                                            {
+                                                case nameof(ProjectStatusEnum.Activated):
+                                                    projectBgColor = "bg-success";
+                                                    break;
+                                                case nameof(ProjectStatusEnum.Deactivated):
+                                                    projectBgColor = "bg-danger";
+                                                    break;
+                                                case nameof(ProjectStatusEnum.Closed):
+                                                    projectBgColor = "bg-gray-800";
+                                                    break;
+                                                default:
+                                                    projectBgColor = string.Empty;
+                                                    break;
+                                            }
+                                        }
+                                        <p class="card-subtitle badge badge-counter">
+                                            <span class="badge @projectBgColor  text-white fs-6 p-3">@(project.Status)</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- Tab Content for Mentor -->
+                                <div class="tab-pane fade" id="tabs-icons-text-2" role="tabpanel" aria-labelledby="tabs-icons-text-2-tab">
+                                    <div class="row">
+                                        <div class="col-lg-4" style="width: 150px; height: 150px; background-color: #f0f0f0;">
+                                            <img src="@(mentor.AvatarUrl ?? "https://via.placeholder.com/150") "
+                                                 class="img-fluid"
+                                                 style="max-width: 100%; max-height: 100%; object-fit: cover;" alt="mentor image"/>
+                                        </div>
+                                        <div class="col-lg-8">
+                                            <h4 class="mt-7">@(mentor.FullName)</h4>
+                                            <p class="card-subtitle mt-2 mb-3">
+                                                <b>Email: </b>@(mentor.Email)
+                                            </p>
+                                            <p class="card-subtitle mt-2 mb-3">
+                                                <b>Industry: </b>@(mentor.Industry)
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Tab Content for Process -->
+                                <div class="tab-pane fade" id="tabs-icons-text-3" role="tabpanel"
+                                     aria-labelledby="tabs-icons-text-3-tab">
+                                    <div class="vstack gap-4 mt-7 pt-2">
+                                        <div class="container mt-4">
+                                            <div class="progress-marks mb-3">
+                                                <!-- Progress bar section -->
+                                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                                    <span>Progress: <strong>@(percent)%</strong></span>
+                                                    <span>Complete: <strong>@(completeArray.Length)</strong></span>
+                                                    <span>Not Complete: <strong>@(notCompleteArray.Length)</strong></span>
+                                                </div>
+                                                <div class="progress mb-3" role="progressbar" aria-label="Progress bar with labeled checkboxes" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+                                                    <div class="progress-bar bg-success" style="width: 35%"></div>
+                                                </div>
+
+                                                <!-- Checkboxes and labels -->
+                                                @{
+                                                    if (!progressArray.Any())
+                                                    {
+                                                        <tr>
+                                                            <td colspan="4" class="text-center">No progress added</td>
+                                                        </tr>
+                                                    }
+                                                    else
+                                                    {
+                                                        @for (int i = 0; i < progressArray.Length; i++)
+                                                        {
+                                                            var progress = progressArray[i];
+                                                            <div class="custom-control custom-checkbox mb-3 d-flex align-items-center justify-content-between" id="@(progress.Id)" role="button">
+                                                                <div class="d-flex align-items-center">
+                                                                    <input class="custom-control-input" name="progressId" type="checkbox" hidden="hidden">
+                                                                    <input class="custom-control-input" id="customCheck@(i)" type="checkbox" checked="@progress.IsComplete">
+                                                                    <label class="custom-control-label ms-2" for="customCheck@(i)">
+                                                                        <span>@progress.Name</span>
+                                                                    </label>
+                                                                </div>
+                                                                <a href="#" class="text-danger">
+                                                                    <i class="fas fa-trash"></i>
+                                                                </a>
+                                                            </div>
+                                                        }
+                                                    }
+                                                }
+                                                <div class="pl-0 custom-control custom-checkbox mb-3">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Requests</h5>
+                <div class="table-responsive">
+                    <table class="table text-nowrap align-middle mb-0">
+                        <thead>
+                        <tr class="border-2 border-bottom border-primary border-0">
+                            <th scope="col" class="ps-0">ID</th>
+                            <th scope="col">Title</th>
+                            <th scope="col">Mentor</th>
+                            <th scope="col" class="text-center">Creater</th>
+                            <th scope="col" class="text-center">Start</th>
+                            <th scope="col" class="text-center">End</th>
+                            <th scope="col" class="text-center">CreateOn</th>
+                            <th scope="col" class="text-center">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                        @{
+                            if (!requestArray.Any())
+                            {
+                                <tr>
+                                    <td colspan="8" class="text-center">No request available</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                for (int i = 0; i < requestArray.Length; i++)
+                                {
+                                    var request = requestArray[i];
+
+                                    var requestBgColor = string.Empty;
+                                    switch (request.Status)
+                                    {
+                                        case nameof(RequestStatusEnum.Accepted):
+                                            requestBgColor = "bg-success";
+                                            break;
+                                        case nameof(RequestStatusEnum.Rejected):
+                                            requestBgColor = "bg-danger";
+                                            break;
+                                        case nameof(RequestStatusEnum.Pending):
+                                            requestBgColor = "bg-gray-800";
+                                            break;
+                                        default:
+                                            requestBgColor = string.Empty;
+                                            break;
+                                    }
+
+                                    <tr id="@(request.Id)" role="button">
+                                        <th scope="row">@(i + 1)</th>
+                                        <td>@request.Title</td>
+                                        <td>@request.MentorName</td>
+                                        <td>@request.CreaterName</td>
+                                        <td>@(ConvertUtils.FormatDateTimeToString(request.Start))</td>
+                                        <td>@(ConvertUtils.FormatDateTimeToString(request.End))</td>
+                                        <td>@(ConvertUtils.FormatDateTimeToString(request.CreatedOn))</td>
+                                        @* <p class="card-subtitle badge badge-counter"> *@
+                                        @*     <span class="badge @(requestBgColor) text-white fs-4 p-3"> *@
+                                        @*         @(request.Status) *@
+                                        @*     </span> *@
+                                        @* </p> *@
+                                        <td>
+                                            <span class="badge @requestBgColor  text-white">@(request.Status)</span>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
