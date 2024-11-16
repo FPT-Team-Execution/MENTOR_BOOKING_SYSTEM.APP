@@ -4,6 +4,7 @@ using MBS.Services.Dtos;
 using MBS.Services.Models.Requests.CalendarEvent;
 using MBS.Services.Services.Implements;
 using MBS.Services.Services.Interfaces;
+using MBS.Services.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -47,7 +48,9 @@ public class CreateMeeting : PageModel
             ModelState.AddModelError(string.Empty, "Request not found.");
             return Page();
         }
-        EventModel.AccessToken = "ya29.a0AeDClZAVXiaLxr62-WRZN1wNAyYLqW1kRqD9UCQHFbhFl9trnLDnjvjAvk3ZSsg9QUFpjVU9YHO7lh5NxCdl_kCrmFevvWlZ6pVzlIKGsCkvB33H-Ly-Ily0wTAKshcwwSgbzHOSWoQkF5aRBifWCMEZDUyGezTJ5R6E7vl3aCgYKAVASARESFQHGX2Miz-eE9h4YxK-Zpo4rfzYV3Q0175";
+        string googleAccessToken = string.Empty;
+        HttpContext.Request.Cookies.TryGetValue(CookieNames.GoogleAccessToken, out googleAccessToken);
+        EventModel.AccessToken = googleAccessToken;
         EventModel.MentorId = RequestInfo.MentorId;
         EventModel.Start = RequestInfo.Start.ToString("MM/dd/yyyy HH:mm");
         EventModel.End = RequestInfo.End.ToString("MM/dd/yyyy HH:mm");
