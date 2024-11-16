@@ -103,7 +103,8 @@ namespace MBS.Repositories.Implements
                 predicate: m => m.MentorId == mentorId,
                 include: q => q.Include(r => r.Project),
                 page: page,
-                size: size
+                size: size,
+                orderBy: o => o.OrderByDescending(x => x.CreatedOn)
             );
         }
     }
