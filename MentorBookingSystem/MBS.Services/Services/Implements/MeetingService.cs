@@ -46,6 +46,15 @@ namespace MBS.Services.Services.Implements
                 
                 
             }).ToList();
+            var newPagination = new Pagination<MeetingDto>
+            {
+                Items = itemsResposnes,
+                TotalItems = result.TotalItems,
+                TotalPages = result.TotalPages,
+                PageSize = size,
+                PageIndex = page
+            };
+            return newPagination;
         }
 
         public async Task<MeetingDto> GetMeetingByRequestId(string requestId)
