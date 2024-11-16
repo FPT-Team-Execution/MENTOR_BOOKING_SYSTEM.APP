@@ -60,6 +60,7 @@ public class CreateMeeting : BaseMentorPage
         {
             SaveTempDataString(TempDataKeys.SuccessMessage, "Calendar Event Created Successfully");
             message = "Calendar Event Created Successfully";
+            return RedirectToPage("/MentorPage/MeetingPage/MeetingDetail?id=" + result.ResponseModel.MeetingId.ToString());
         }
         else
         {
