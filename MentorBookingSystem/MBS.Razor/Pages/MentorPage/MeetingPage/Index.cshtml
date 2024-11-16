@@ -15,36 +15,36 @@
     <div class="table-responsive">
         <table class="table table-hover mt-3">
             <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Title</th>
-                <th scope="col">Description</th>
-                <th scope="col">Location</th>
-                <th scope="col">MeetUp</th>
-                <th scope="col">Status</th>
-            </tr>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">MeetUp</th>
+                    <th scope="col">Status</th>
+                </tr>
             </thead>
             <tbody>
-            @if (!meetings.Any())
-            {
-            <tr>
-                <td colspan="6" class="text-center">No meetings available</td>
-            </tr>
-            }
-            else
-            {
-            foreach (var meeting in meetings)
-            {
-            <tr>
-                <td>@meeting.Id</td>
-                <td><a asp-page="/MentorPage/MeetingPage/MeetingDetail" asp-route-id="@meeting.Id">@meeting.title</a></td>
-                <td>@meeting.Description</td>
-                <td>@meeting.Location</td>
-                <td>@meeting.MeetUp</td>
-                <td>@meeting.Status</td>
-            </tr>
-            }
-            }
+                @if (!meetings.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No meetings available</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var meeting in meetings)
+                    {
+                        <tr>
+                            <td>@meeting.RequestId</td>
+                            <td>@meeting.title</td>
+                            <td>@meeting.Description</td>
+                            <td>@meeting.Location</td>
+                            <td>@meeting.MeetUp</td>
+                            <td>@meeting.Status</td>
+                        </tr>
+                    }
+                }
             </tbody>
         </table>
     </div>
@@ -53,9 +53,9 @@
         <div>
             <label for="pageSize">Page Size:</label>
             <select id="pageSize" name="pageSize" class="form-select" onchange="this.form.submit()">
-                <option value="5" selected="@(pageSize == 5)">5</option>
-                <option value="10" selected="@(pageSize == 10)">10</option>
-                <option value="15" selected="@(pageSize == 15)">15</option>
+                <option value="5" @(pageSize == 5 ? "selected" : "")>5</option>
+                <option value="10" @(pageSize == 10 ? "selected" : "")>10</option>
+                <option value="15" @(pageSize == 15 ? "selected" : "")>15</option>
             </select>
         </div>
 
@@ -67,9 +67,9 @@
                     </li>
                     @for (int i = 1; i <= meetingPagination.TotalPages; i++)
                     {
-                    <li class="page-item @(pageIndex == i ? "active" : "")">
-                        <a class="page-link" href="?pageIndex=@i&pageSize=@pageSize">@i</a>
-                    </li>
+                        <li class="page-item @(pageIndex == i ? "active" : "")">
+                            <a class="page-link" href="?pageIndex=@i&pageSize=@pageSize">@i</a>
+                        </li>
                     }
                     <li class="page-item @(pageIndex == meetingPagination.TotalPages ? "disabled" : "")">
                         <a class="page-link" href="?pageIndex=@(pageIndex + 1)&pageSize=@pageSize">Next</a>
