@@ -29,7 +29,8 @@ namespace MBS.Repositories.Implements
         public async Task<IEnumerable<Progress>> GetProgressesByProjectId(Guid projectId)
         {
             var progress = await _dao.GetListAsync(
-                predicate: p => p.ProjectId == projectId
+                predicate: p => p.ProjectId == projectId,
+                orderBy: q => q.OrderByDescending(p => p.CreatedOn)
             );
             return progress;
         }

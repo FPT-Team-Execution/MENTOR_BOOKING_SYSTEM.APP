@@ -45,6 +45,7 @@ public class ProgressService : IProgressService
     public async Task<IEnumerable<ProgressDto>> GetProgressByProjectIdAsync(Guid projectId)
     {
         var progresses = await _progressRepository.GetProgressesByProjectId(projectId);
+        
         return progresses.Adapt<List<ProgressDto>>();
     }
     public async Task<(double Percent, IEnumerable<ProgressDto> Complete, IEnumerable<ProgressDto> NotComplete)> GetCompleteProgressPercent(Guid projectId)
