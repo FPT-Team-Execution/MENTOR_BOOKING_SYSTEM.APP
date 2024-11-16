@@ -20,5 +20,7 @@ namespace MBS.Services.Services.Interfaces
         Task<MeetingDto> GetMeetingByRequestId(string requestId);
         
         Task<MeetingDto> GetMeetingById(string id);
+
+        Task<Pagination<MeetingDto>> GetMeetingsByStudentIdPaginationAsync(string studentId, int page, int size);
     }
 }
