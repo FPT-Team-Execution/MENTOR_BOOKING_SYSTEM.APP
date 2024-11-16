@@ -21,8 +21,8 @@ namespace MBS.Razor.Mappers
                 .Map(dest => dest.StudentId, src => src.StudentId)
                 .Map(dest => dest.StudentName, src => src.Student.User.UserName)
                 .Map(dest => dest.PositionId, src => src.PositionId)
-                .Map(dest => dest.PositionName, src => src.Position.Name);
-
+                .Map(dest => dest.PositionName, src => src.Position.Name)
+                .Map(dest => dest.WalletPoint, src => src.Student.WalletPoint);
         }
     }
 }
