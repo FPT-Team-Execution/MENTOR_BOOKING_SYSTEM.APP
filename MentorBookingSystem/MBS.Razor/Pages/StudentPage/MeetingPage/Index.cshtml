@@ -2,18 +2,70 @@
 @model MBS.Razor.Pages.StudentPage.MeetingPage.Index
 
 @{
-    Layout = null;
+    Layout = "Shared/_LayoutStudent";
 }
-
-<!DOCTYPE html>
-
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-<div>
     
+<div>
+    <h3 class="mt-4">Meetings</h3>
+
+    <h4>Meeting List</h4>
+    <div class="table-responsive">
+        <table class="table table-hover mt-3">
+            <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">MeetUp</th>
+                    <th scope="col">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!meetings.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="text-center">No meetings found.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var meeting in meetings)
+                    {
+                        <tr>
+                            <td>@meeting.RequestId</td>
+                            <td>
+                                <a asp-page="/MentorPage/MeetingPage/MeetingDetail" asp-route-id="@meeting.Id.ToString()">
+                                    @meeting.title
+                                </a>
+                            </td>
+                            <td>@meeting.Description</td>
+                            <td>@meeting.Location</td>
+                            <td>@meeting.MeetUp</td>
+                            <td>@meeting.Status</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-center mt-3">
+        <nav aria-label="Pagination">
+            <ul class="pagination">
+                <li class="page-item @(pageIndex == 1 ? "disabled" : "")">
+                    <a class="page-link" href="?pageIndex=@(pageIndex - 1)&pageSize=@pageSize">Previous</a>
+                </li>
+                @for (int i = 1; i <= meetingPagination.TotalPages; i++)
+                {
+                    <li class="page-item @(pageIndex == i ? "active" : "")">
+                        <a class="page-link" href="?pageIndex=@i&pageSize=@pageSize">@i</a>
+                    </li>
+                }
+                <li class="page-item @(pageIndex == meetingPagination.TotalPages ? "disabled" : "")">
+                    <a class="page-link" href="?pageIndex=@(pageIndex + 1)&pageSize=@pageSize">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
 </div>
-</body>
-</html>

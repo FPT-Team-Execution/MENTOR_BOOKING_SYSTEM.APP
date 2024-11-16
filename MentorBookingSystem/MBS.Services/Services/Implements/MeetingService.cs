@@ -97,5 +97,31 @@ namespace MBS.Services.Services.Implements
             var meeting = await _meetingRepository.GetMeetingId(id);
             return meeting.Adapt<MeetingDto>();
         }
+
+        public async Task<Pagination<MeetingDto>> GetMeetingsByStudentIdPaginationAsync(string studentId, int page, int size)
+        {
+            var result = await _meetingRepository.GetPageListMeetingByMentorId(studentId, page, size);
+            var itemsResposnes = result.Items.Where(p => p.Request.CreaterId == studentId).Select(p => new MeetingDto
+            {
+                title = p.Request.Title,
+                Description = p.Description,
+                Location = p.Location,
+                Status = p.Status.ToString(),
+                MeetUp = p.MeetUp,
+                RequestId = p.RequestId,
+                Id = p.Id,
+
+
+            }).ToList();
+            var newPagination = new Pagination<MeetingDto>
+            {
+                Items = itemsResposnes,
+                TotalItems = result.TotalItems,
+                TotalPages = result.TotalPages,
+                PageSize = size,
+                PageIndex = page
+            };
+            return newPagination;
+        }
     }
 }
