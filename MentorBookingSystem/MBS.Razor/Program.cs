@@ -73,7 +73,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-// app.UseMiddleware<ExceptionHandlingMiddleware>();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.UseRouting();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
