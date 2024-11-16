@@ -53,5 +53,15 @@ namespace MBS.Repositories.Implements
             return await _dao.GetListAsync(
                 predicate: m => requestIds.Contains(m.Id));
         }
+
+        public async Task<Pagination<Meeting>> GetPageListMeetingByStudentId(string studentId, int page, int size)
+        {
+            return await _dao.GetPagingListAsync(
+                page: page,
+                size: size,
+                include: source => source.Include(s => s.Request).ThenInclude(s => s.Creater),
+                predicate: meeting => meeting.Request.CreaterId == studentId
+            );
+        }
     }
 }

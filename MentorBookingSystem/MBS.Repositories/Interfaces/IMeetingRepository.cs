@@ -19,5 +19,6 @@ namespace MBS.Repositories.Interfaces
         
         Task<Meeting?> GetMeetingByRequestId(string requestId);
         Task<Meeting?> GetMeetingId(string id);
+        Task<Pagination<Meeting>> GetPageListMeetingByStudentId(string studentId, int page, int size);
     }
 }
