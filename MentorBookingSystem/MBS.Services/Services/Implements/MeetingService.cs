@@ -35,7 +35,17 @@ namespace MBS.Services.Services.Implements
         public async Task<Pagination<MeetingDto>> GetMeetingsByMentorIdPaginationAsync(string mentorId, int page, int size)
         {
             var result = await _meetingRepository.GetPageListMeetingByMentorId(mentorId, page, size);
-            
+            var itemsResposnes = result.Items.Where(p => p.Request.MentorId == mentorId).Select(p => new MeetingDto
+            {
+                title = p.Request.Title,
+                Description = p.Description,
+                Location = p.Location,
+                Status = p.Status.ToString(),
+                MeetUp = p.MeetUp,
+                RequestId = p.RequestId,
+                
+                
+            }).ToList();
         }
 
         public async Task<MeetingDto> GetMeetingByRequestId(string requestId)
