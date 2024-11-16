@@ -1,6 +1,7 @@
 using MBS.DataAccess.Pagination;
 using MBS.Services.Dtos;
 using MBS.Services.Services.Interfaces;
+using MBS.Services.Shared;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MBS.Razor.Pages.MentorPage.MeetingPage;
@@ -21,7 +22,12 @@ public class IndexModel : PageModel
 
     public async Task OnGetAsync(string mentorId = "", int pageIndex = 1, int pageSize = 5)
     {
-        MentorId = mentorId;
+        if (string.IsNullOrWhiteSpace(mentorId))
+        {
+            mentorId = Request.Cookies[CookieNames.UserId]; 
+        }
+
+        MentorId = mentorId; 
         PageIndex = pageIndex;
         PageSize = pageSize;
 
@@ -42,4 +48,5 @@ public class IndexModel : PageModel
             };
         }
     }
+
 }
