@@ -1,14 +1,17 @@
 @page
 @model MBS.Razor.Pages.MentorPage.CalendarPage.Index
-
+@using MBS.Services.Shared
 @{
     Layout = "Shared/_LayoutMentor";
+    string UserEmail = String.Empty;
+    HttpContext.Request.Cookies.TryGetValue(CookieNames.UserEmail, out string mail);
+    UserEmail = mail;
 }
 
 <div style="width: 100%; height: 100vh; padding: 20px; box-sizing: border-box;">
     <div style="width: 100%; height: 100vh; padding: 20px; box-sizing: border-box;">
         <iframe
-            src="https://calendar.google.com/calendar/embed?src=truongthonguyen107@gmail.com&ctz=Asia/Ho_Chi_Minh&showTz=0"
+            src="https://calendar.google.com/calendar/embed?src=@UserEmail&ctz=Asia/Ho_Chi_Minh&showTz=0"
             style="width: 100%; height: 100%; border: none; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);">
         </iframe>
     </div>

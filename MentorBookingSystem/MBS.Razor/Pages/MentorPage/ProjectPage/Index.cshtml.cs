@@ -31,7 +31,9 @@ public class Index : BaseMentorPage
 
     private async Task LoadProject()
     {
-        var response = await _projectService.GetAllProjectByMentorId("5f10c206-033a-4930-95a5-ac66570ba58d", PageIndex, Size);
+        string userId = string.Empty;
+        if (HttpContext.Request.Cookies.TryGetValue(CookieNames.UserId, out string? id)) userId = id;
+        var response = await _projectService.GetAllProjectByMentorId(userId, PageIndex, Size);
         ProjectPagination = response;
 
         SaveTempData(TempDataKeys.AdminKeys.ProjectPagination, ProjectPagination);
