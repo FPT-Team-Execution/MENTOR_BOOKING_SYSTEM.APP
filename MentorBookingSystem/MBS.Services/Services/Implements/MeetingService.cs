@@ -71,7 +71,18 @@ namespace MBS.Services.Services.Implements
                 itemDTO.Status = item.Status.ToString();
                 itemDTO.MeetUp = item.MeetUp;
                 itemDTO.RequestId = item.RequestId;
+                itemsResponse.Add(itemDTO);
             }
+
+            var newPageList = new Pagination<MeetingDto>
+            {
+                Items = itemsResponse,
+                TotalItems = result.TotalItems,
+                TotalPages = result.TotalPages,
+                PageSize = size,
+                PageIndex = page
+            };
+            return newPageList;
         }
 
         public async Task<MeetingDto> GetMeetingByRequestId(string requestId)
