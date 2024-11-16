@@ -58,18 +58,6 @@
                                     <td>@request.End</td>
                                     <td>
                                         @request.Status.ToString()
-                                        @if (request.Status.ToString() == "Pending")
-                                        {
-                                            <div class="mt-1">
-                                                <a asp-page="/MentorPage/MeetingPage/CreateMeeting" asp-route-id="@request.RequestId.ToString()">
-                                                    <button type="button" class="btn btn-success btn-sm">Accept</button>
-                                                </a>
-                                                <form method="post" asp-page-handler="Deny">
-                                                    <input hidden type="text" name="userId" value="@request.RequestId" />
-                                                    <button type="submit" class="btn btn-danger btn-sm">Deny</button>
-                                                </form>
-                                            </div>
-                                        }
                                     </td>
                                 </tr>
                             }
