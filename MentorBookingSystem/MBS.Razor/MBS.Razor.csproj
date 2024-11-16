@@ -17,6 +17,7 @@
     <_ContentIncludedByDefault Remove="Pages\AdminPage\CalendarPage\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\StudentPage\ProjectPage\MemberPage\Index.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\MentorPage\GroupPage\Index.cshtml" />
+    <_ContentIncludedByDefault Remove="Pages\AdminPage\DashboardPage\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

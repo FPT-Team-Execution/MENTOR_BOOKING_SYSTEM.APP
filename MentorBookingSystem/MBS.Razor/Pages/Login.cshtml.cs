@@ -101,7 +101,7 @@ namespace MBS.Razor.Pages
 
             return claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)!.Value.ToString() switch
             {
-                UserRole.Admin => Redirect(RouteEndpoints.AdminDashboard),
+                UserRole.Admin => Redirect(RouteEndpoints.AdminStudent),
                 UserRole.Student => Redirect(RouteEndpoints.StudentProject),
                 UserRole.Mentor => Redirect(RouteEndpoints.MentorMeeting),
                 _ => Redirect(RouteEndpoints.Login)
