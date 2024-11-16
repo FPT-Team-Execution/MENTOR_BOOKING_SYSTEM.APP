@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace MBS.Razor.Pages.MentorPage.MeetingPage;
 
-public class CreateMeeting : PageModel
+public class CreateMeeting : BaseMentorPage
 {
     
     private readonly IRequestService _requestService;
@@ -58,10 +58,13 @@ public class CreateMeeting : PageModel
         var result = await _calendarEventService.CreateCalendarEventOnelFlow(EventModel);
         if (result.IsSuccess)
         {
+            SaveTempDataString(TempDataKeys.SuccessMessage, "Calendar Event Created Successfully");
             message = "Calendar Event Created Successfully";
+            return RedirectToPage("/MentorPage/MeetingPage/MeetingDetail?id=" + result.ResponseModel.MeetingId.ToString());
         }
         else
         {
+            SaveTempDataString(TempDataKeys.ErrorMessage, result.Message);
             message = result.Message;
         }
        return Page();
