@@ -107,5 +107,15 @@ namespace MBS.Repositories.Implements
                 orderBy: o => o.OrderByDescending(x => x.CreatedOn)
             );
         }
+
+        public Task<Pagination<Request>> GetRequestsByStudentId(string studentId, int page, int size)
+        {
+            return _dao.GetPagingListAsync(
+                predicate: m => m.CreaterId == studentId,
+                include: q => q.Include(r => r.Project),
+                page: page,
+                size: size
+            );
+        }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace MBS.Services.Constants;
+namespace MBS.Services.Constants;
 
 public static class RouteEndpoints
 {
@@ -88,6 +88,7 @@ public static class RouteEndpoints
     public const string Student = "/StudentPage";
     public const string StudentProject = "/StudentPage/ProjectPage/Index";
     public const string StudentMeeting = "/StudentPage/MeetingPage/Index";
+    public const string StudentRequest = "/StudentPage/RequestPage/Index";
 
     #endregion
 }

@@ -18,6 +18,6 @@ namespace MBS.Repositories.Interfaces
         Task<Request?> GetRequestById(Guid id);
         Task<Pagination<Request>> GetRequestsByMentorId(string mentorId, int page, int size);
 
-
+        Task<Pagination<Request>> GetRequestsByStudentId(string studentId, int page, int size);
     }
 }
