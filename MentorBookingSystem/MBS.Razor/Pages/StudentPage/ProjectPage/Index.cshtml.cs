@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using System.Transactions;
+using Mapster;
 using MBS.BusinessObject.Entities;
 using MBS.BusinessObject.Enums;
 using MBS.DataAccess.Pagination;
@@ -27,6 +28,7 @@ public class Index : BaseAdminPage
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IStudentService _studentService;
     private readonly IPointTransactionService _pointTransactionService;
+    private readonly IMeetingService _meetingService;
 
     public Index(
         IGroupService groupService,
@@ -38,7 +40,8 @@ public class Index : BaseAdminPage
         ICalendarEventService calendarEventService,
         UserManager<ApplicationUser> userManager,
         IStudentService studentService,
-        IPointTransactionService pointTransactionService
+        IPointTransactionService pointTransactionService,
+        IMeetingService meetingService
     )
     {
         _groupService = groupService;
@@ -51,6 +54,7 @@ public class Index : BaseAdminPage
         _userManager = userManager;
         _studentService = studentService;
         _pointTransactionService = pointTransactionService;
+        _meetingService = meetingService;
     }
 
     public ProjectDto Project { get; set; } = new();
@@ -63,9 +67,8 @@ public class Index : BaseAdminPage
     public List<ProgressDto> Complete { get; set; } = new();
     public List<ProgressDto> NotComplete { get; set; } = new();
 
-    [BindProperty]
-    public RequestDto Request { get; set; }
-    
+    [BindProperty] public RequestDto Request { get; set; }
+
     //TODO: add search name
     public string SearchName { get; set; } = string.Empty;
 
@@ -135,8 +138,19 @@ public class Index : BaseAdminPage
 
     public async Task LoadRequests(Guid projectId)
     {
-        var request =
-            await _reqService.GetRequestsByProjectIdPaginationAsync(projectId, PageIndex, Size, SortOrder);
+        var request = await _reqService.GetRequestsByProjectIdPaginationAsync(projectId, PageIndex, Size, SortOrder);
+        var items = request.Items.ToList();
+        foreach (var requestItem in items)
+        {
+            if (requestItem.Status == RequestStatusEnum.Accepted.ToString())
+            {
+                var meetingByRequestId = await _meetingService.GetMeetingByRequestId(requestItem.Id.ToString());
+                requestItem.MeetingLink = meetingByRequestId.MeetUp;
+            }
+        }
+
+        request.Items = items;
+
         RequestsPagination = request;
 
         SaveTempData(TempDataKeys.StudentKeys.RequestPagination, RequestsPagination);
@@ -144,6 +158,7 @@ public class Index : BaseAdminPage
         SaveTempData(TempDataKeys.PageSize, Size);
         SaveTempData(TempDataKeys.SortOrder, SortOrder);
     }
+
     public async Task<IActionResult> OnGetAsync()
     {
         try
@@ -154,14 +169,105 @@ public class Index : BaseAdminPage
         catch
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
-            return RedirectToPage(RouteEndpoints.AdminStudent);
+            return RedirectToPage(RouteEndpoints.StudentProject);
         }
 
         return Page();
     }
 
-    public void OnPostAsync()
+    public async Task<IActionResult> OnPostCreateProgress(string name)
     {
+        try
+        {
+            var project = GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
+            var newProgress = new Progress
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                IsComplete = false,
+                ProjectId = project.Id,
+            };
+            var addRs = await _progressService.CreateProgress(newProgress);
+            if (!addRs)
+                SaveTempDataString(TempDataKeys.ErrorMessage, "Add failed");
+            else SaveTempDataString(TempDataKeys.SuccessMessage, "Add successful");
+            return Redirect(RouteEndpoints.StudentProject);
+
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "error");
+            return Redirect(RouteEndpoints.StudentProject);
+        }
+    }
+    public async Task<IActionResult> OnPostDoProgress(string action, string progressId, string isComplete)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(progressId))
+            {
+                return Redirect(RouteEndpoints.StudentProject);
+            }
+
+            var progress = await _progressService.GetProgressIdAsync(Guid.Parse(progressId));
+            if (progress == null)
+            {
+                SaveTempDataString(TempDataKeys.ErrorMessage, "progress not found!");
+                return Page();
+            }
+
+            switch (action)
+            {
+                case null:
+                    progress.IsComplete = isComplete.ToLower() == "true";
+                    var updateRs = await _progressService.UpdateProgress(progress.Adapt<ProgressDto>());
+                    if (!updateRs)
+                        SaveTempDataString(TempDataKeys.ErrorMessage, "Update failed");
+                    else SaveTempDataString(TempDataKeys.SuccessMessage, "Update successful");
+                    break;
+                case "delete":
+                    var deleteRs = await _progressService.DeleteProgress(progress.Id);
+                    if (!deleteRs)
+                        SaveTempDataString(TempDataKeys.ErrorMessage, "Delete failed");
+                    else SaveTempDataString(TempDataKeys.SuccessMessage, "Delete successful");
+                    break;
+            }
+
+            return Redirect(RouteEndpoints.StudentProject);
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "error");
+            return Redirect(RouteEndpoints.StudentProject);
+        }
+    }
+
+    public async Task<IActionResult> OnPostPageNavigate(string pageIndex, string size)
+    {
+        try
+        {
+            var project = GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
+            var requestPagination = GetTempData<Pagination<RequestDto>>(TempDataKeys.StudentKeys.RequestPagination)!;
+            //set pageIndex and page Size
+            Size = int.Parse(size);
+            //if total item from previous load * previous total pages is lower or equal then new size -> pageIndex = 1
+            if ((requestPagination.TotalItems * requestPagination.TotalItems) <= Size)
+                PageIndex = 1;
+            else
+                PageIndex = int.Parse(pageIndex);
+            //Save temp data to next use
+            SaveTempData(TempDataKeys.PageIndex, PageIndex);
+            SaveTempData(TempDataKeys.PageSize, Size);
+            //Load data pagination
+            await LoadRequests(project.Id);
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "Some error occurred");
+            Redirect(RouteEndpoints.StudentProject);
+        }
+
+        return Page();
     }
 
     public async Task<IActionResult> OnPostCreateRequest(string title, DateTime start, DateTime end)
@@ -179,7 +285,9 @@ public class Index : BaseAdminPage
             SaveTempDataString(TempDataKeys.ErrorMessage, "Invalid start and end time!");
             return Page();
         }
-        if (start <= DateTime.Now.AddHours(1).Date.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute))
+
+        var hourLater = DateTime.Now.AddHours(1);
+        if (start < hourLater)
         {
             SaveTempDataString(TempDataKeys.ErrorMessage, "Request is valid from 1 hour later");
             return Page();
@@ -210,6 +318,7 @@ public class Index : BaseAdminPage
         {
             return Redirect(RouteEndpoints.Login);
         }
+
         //Check request overlap
         var requests = await _reqService.GetRequestsByProjectId(project.Id, RequestStatusEnum.Pending.ToString());
         var requestDtos = requests.ToList();
@@ -224,10 +333,11 @@ public class Index : BaseAdminPage
                 }
             }
         }
+
         //check overlap
         var dateRange = ConvertUtils.GetStartEndTime(start);
         var existedEvents = await _calendarEventService.GetCalendarEventsByMentorId(
-            mentorId: mentor.Id, 
+            mentorId: mentor.Id,
             startDate: dateRange.Start,
             endDate: dateRange.End);
 
@@ -293,9 +403,12 @@ public class Index : BaseAdminPage
             transactionScope.Complete();
         }
 
+        //clear request info
+        Request = new RequestDto();
+
         await LoadRequests(project.Id);
         SaveTempDataString(TempDataKeys.SuccessMessage, "Add successfully");
-        return Page();
+        return Redirect(RouteEndpoints.StudentProject);
     }
 
 
