@@ -175,6 +175,31 @@ public class Index : BaseAdminPage
         return Page();
     }
 
+    public async Task<IActionResult> OnPostCreateProgress(string name)
+    {
+        try
+        {
+            var project = GetTempData<ProjectDto>(TempDataKeys.StudentKeys.Project);
+            var newProgress = new Progress
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                IsComplete = false,
+                ProjectId = project.Id,
+            };
+            var addRs = await _progressService.CreateProgress(newProgress);
+            if (!addRs)
+                SaveTempDataString(TempDataKeys.ErrorMessage, "Add failed");
+            else SaveTempDataString(TempDataKeys.SuccessMessage, "Add successful");
+            return Redirect(RouteEndpoints.StudentProject);
+
+        }
+        catch (Exception e)
+        {
+            SaveTempDataString(TempDataKeys.ErrorMessage, "error");
+            return Redirect(RouteEndpoints.StudentProject);
+        }
+    }
     public async Task<IActionResult> OnPostDoProgress(string action, string progressId, string isComplete)
     {
         try

@@ -1,4 +1,5 @@
 using Mapster;
+using MBS.BusinessObject.Entities;
 using MBS.Repositories.Interfaces;
 using MBS.Services.Dtos;
 using MBS.Services.Services.Interfaces;
@@ -33,6 +34,12 @@ public class ProgressService : IProgressService
     {        
         var progress = await _progressRepository.GetProgressByIdAsync(id);
         return _progressRepository.Delete(progress);
+    }
+
+    public async Task<bool> CreateProgress(Progress newProgress)
+    {
+        
+        return await _progressRepository.CreateAsync(newProgress);
     }
 
     public async Task<IEnumerable<ProgressDto>> GetProgressByProjectIdAsync(Guid projectId)
