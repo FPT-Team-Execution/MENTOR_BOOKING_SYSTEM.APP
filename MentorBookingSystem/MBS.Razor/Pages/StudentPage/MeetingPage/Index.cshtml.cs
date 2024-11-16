@@ -18,28 +18,28 @@ public class IndexModel : PageModel
     public Pagination<MeetingDto> MeetingPagination { get; set; } = new();
     public int PageSize { get; set; } = 5;
     public int PageIndex { get; set; } = 1;
-    public string MentorId { get; set; } = string.Empty;
+    public string StudentId { get; set; } = string.Empty;
 
     public IndexModel(IMeetingService meetingService)
     {
         _meetingService = meetingService;
     }
 
-    public async Task OnGetAsync(string mentorId = "", int pageIndex = 1, int pageSize = 5)
+    public async Task OnGetAsync(string studentId = "", int pageIndex = 1, int pageSize = 5)
     {
-        if (string.IsNullOrWhiteSpace(mentorId))
+        if (string.IsNullOrWhiteSpace(studentId))
         {
-            mentorId = Request.Cookies[CookieNames.UserId];
+            studentId = Request.Cookies[CookieNames.UserId];
         }
 
-        MentorId = mentorId;
+        StudentId = studentId;
         PageIndex = pageIndex;
         PageSize = pageSize;
 
-        if (!string.IsNullOrWhiteSpace(mentorId))
+        if (!string.IsNullOrWhiteSpace(studentId))
         {
             MeetingPagination =
-                await _meetingService.GetMeetingsByMentorIdPaginationAsync(mentorId, pageIndex, pageSize);
+                await _meetingService.GetMeetingsByStudentIdPaginationAsync(studentId, pageIndex, pageSize);
         }
         else
         {

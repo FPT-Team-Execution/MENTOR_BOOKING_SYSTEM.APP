@@ -4,7 +4,7 @@
 @model MBS.Razor.Pages.StudentPage.MeetingPage.IndexModel
 
 @{
-    Layout = "Shared/_LayoutMentor";
+    Layout = "Shared/_LayoutStudent";
     var meetingPagination = Model.MeetingPagination;
     var meetings = meetingPagination.Items ?? new List<MeetingDto>();
     int pageSize = Model.PageSize;
