@@ -6,10 +6,11 @@
 @inject IClaimService ClaimService
 @{
     var name = string.Empty;
-    var roleClaim = ClaimService.GetCookieValue(CookieNames.UserRole);
+    var roleClaim = ClaimService.GetClaim(ClaimTypes.Role);
     if (roleClaim != UserRole.Mentor || string.IsNullOrEmpty(roleClaim))
     {
         Context.Response.Redirect(RouteEndpoints.AccessDenied);
+    
     }
     name = roleClaim;
 }

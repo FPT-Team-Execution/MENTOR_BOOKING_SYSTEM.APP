@@ -171,6 +171,19 @@ namespace MBS.Razor.Pages
                 _claimService.AppendCookie(CookieNames.UserRole, userRole);
                 _claimService.AppendCookie(CookieNames.GoogleAccessToken, token.access_token);
 
+                
+                var claims = new List<Claim>
+                {
+                    //User Name
+                    new Claim(ClaimTypes.Name, user.Email!),
+                    //Role
+                    new Claim(ClaimTypes.Role, userRole),
+                    //User Id
+                    new Claim(ClaimTypes.NameIdentifier, user.Id)
+                };
+                
+                await _claimService.SignInAsync(claims);
+                
                 SaveTempDataString(TempDataKeys.ErrorMessage, "Login Successful!");
                 return Redirect(RouteEndpoints.Mentor);
             }
