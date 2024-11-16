@@ -226,8 +226,10 @@ public class Index : BaseAdminPage
         }
         //check overlap
         var dateRange = ConvertUtils.GetStartEndTime(start);
-        var existedEvents = await _calendarEventService.GetCalendarEventsByMentorId(mentor.Id, dateRange.Start,
-            dateRange.End);
+        var existedEvents = await _calendarEventService.GetCalendarEventsByMentorId(
+            mentorId: mentor.Id, 
+            startDate: dateRange.Start,
+            endDate: dateRange.End);
 
         var isOverlapped = IsOverlapping(start, end, existedEvents.Where(x => x.Start >= DateTime.Now).ToList());
         if (isOverlapped)
