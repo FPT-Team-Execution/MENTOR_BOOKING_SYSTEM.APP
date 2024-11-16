@@ -80,10 +80,4 @@ public class Index : BaseMentorPage
         return Page();
     }
     
-    public async Task<IActionResult> OnPostDeny(string userId)
-    {
-        bool check = await _requestService.UpdateRequestStatus(Guid.Parse(userId), RequestStatusEnum.Rejected);
-        LoadProject();
-        return Redirect(RouteEndpoints.MentorRequest);
-    }
 }
