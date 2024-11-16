@@ -29,8 +29,10 @@ public class Index : BaseMentorPage
 
     private async Task LoadProject()
     {
+        string userId = string.Empty;
+        if (HttpContext.Request.Cookies.TryGetValue(CookieNames.UserId, out string? id)) userId = id;
         //Todo: get request from service
-        RequestPagination = await _requestService.GetAllRequestByMentorId("5f10c206-033a-4930-95a5-ac66570ba58d", PageIndex, Size);
+        RequestPagination = await _requestService.GetAllRequestByMentorId(userId, PageIndex, Size);
         
         SaveTempData(TempDataKeys.MentorKeys.RequestPagination, RequestPagination);
         SaveTempData(TempDataKeys.PageIndex, PageIndex);
