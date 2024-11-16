@@ -14,7 +14,9 @@ namespace MBS.Repositories.Interfaces
         Task<IEnumerable<Meeting>> GetMeetingsByRequest(Guid requestId);
 
         Task<Pagination<Meeting>> GetPageListMeetingByMentorId(string mentorId, int page, int size);
-
+        
+        Task<Pagination<Meeting>> GetPageListMeetings(int page, int size);
+        
         Task<Meeting?> GetMeetingByRequestId(string requestId);
         Task<Meeting?> GetMeetingId(string id);
     }

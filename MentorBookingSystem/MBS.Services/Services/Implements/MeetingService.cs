@@ -57,6 +57,11 @@ namespace MBS.Services.Services.Implements
             return newPagination;
         }
 
+        public Task<Pagination<MeetingDto>> GetMeetingsPageList(int page, int size)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<MeetingDto> GetMeetingByRequestId(string requestId)
         {
             var meeting = await _meetingRepository.GetMeetingByRequestId(requestId);
