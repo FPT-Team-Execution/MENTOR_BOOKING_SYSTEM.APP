@@ -15,12 +15,12 @@ namespace MBS.Services.Services.Interfaces
     public interface ICalendarEventService
     {
         Task<IEnumerable<CalendarEvent>> GetCalendarEventsByMentorId(string mentorId, DateTime startDate, DateTime endDate);
-        Task<BaseModel<CreateCalendarResponseModel, CreateCalendarRequestModel>> CreateCalendarEvent(CreateCalendarRequestModel request);
+       // Task<BaseModel<CreateCalendarResponseModel, CreateCalendarRequestModel>> CreateCalendarEvent(CreateCalendarRequestModel request);
         // Task<BaseModel<Pagination<CalendarEvent>>> GetCalendarEventsByMentorId(string mentorId,string accessToken, GetCalendarEventRequestModel parameters);
-        Task<BaseModel<CalendarEventResponseModel>> GetCalendarEventId(string calendarEventId);
-        Task<BaseModel<GetBusyEventResponse, GetBusyEventRequestModel>> GetBusyEvent(GetBusyEventRequestModel request);
-        Task<BaseModel<UpdateCalendarEventResponseModel>> UpdateCalendarEvent(string calendarEventId, string accessToken, UpdateCalendarEventRequestModel request);
-        Task<BaseModel> DeleteCalendarEvent(string calendarEventId);
+        //Task<BaseModel<CalendarEventResponseModel>> GetCalendarEventId(string calendarEventId);
+       // Task<BaseModel<GetBusyEventResponse, GetBusyEventRequestModel>> GetBusyEvent(GetBusyEventRequestModel request);
+        //Task<BaseModel<UpdateCalendarEventResponseModel>> UpdateCalendarEvent(string calendarEventId, string accessToken, UpdateCalendarEventRequestModel request);
+        //Task<BaseModel> DeleteCalendarEvent(string calendarEventId);
         Task<BaseModel<CreateCalendarEventOneFlowResponse, CreateCalendarEventOneFlowRequest>> CreateCalendarEventOnelFlow(CreateCalendarEventOneFlowRequest request);
 
     }
