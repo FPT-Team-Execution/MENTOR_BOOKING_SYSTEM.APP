@@ -2,6 +2,7 @@ using MBS.BusinessObject.Entities;
 using MBS.BusinessObject.Enums;
 using MBS.DataAccess.Pagination;
 using MBS.Services.Constants;
+using MBS.Services.Dtos;
 using MBS.Services.Models.Responses.Requests;
 using MBS.Services.Services.Interfaces;
 using MBS.Services.Shared;
@@ -11,7 +12,7 @@ namespace MBS.Razor.Pages.MentorPage.RequestPage;
 
 public class Index : BaseMentorPage
 {
-    public Pagination<RequestResponse> RequestPagination { get; set; } = new();
+    public Pagination<RequestDto> RequestPagination { get; set; } = new();
 
     public string SortOrder { get; set; } = "asc";
     public string search { get; set; } = "";

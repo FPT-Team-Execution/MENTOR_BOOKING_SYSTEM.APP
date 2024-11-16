@@ -24,5 +24,7 @@ public class RequestDto
     public string Status { get; set; } = string.Empty;
     public DateTime? CreatedOn { get; set; }
     public string MeetingLink { get; set; } = string.Empty;
+    public string ProjectName { get; set; }
+
 
 }
