@@ -11,19 +11,7 @@
     int pageIndex = meetingPagination.PageIndex;
 }
 <div>
-    <h3 class="mt-4">Search Meetings by Mentor ID</h3>
-    <form method="get" class="d-flex align-items-center mb-3">
-        <div class="me-2">
-            <label for="mentorIdInput" class="form-label">Mentor ID:</label>
-            <input type="text" id="mentorIdInput" name="mentorId" class="form-control" placeholder="Enter Mentor ID" value="@Model.MentorId" required />
-        </div>
-        <div class="me-2">
-            <label for="pageSizeInput" class="form-label">Page Size:</label>
-            <select id="pageSizeInput" name="pageSize" class="form-select">
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary mt-4">Search</button>
-    </form>
+    <h3 class="mt-4">Meetings</h3>
 
     <h4>Meeting List</h4>
     <div class="table-responsive">
