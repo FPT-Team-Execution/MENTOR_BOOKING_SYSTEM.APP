@@ -55,18 +55,18 @@ namespace MBS.Services.Services.Implements
             return project.Adapt<ProjectDto>();
         }
 
-        public async Task<Pagination<ProjectResponse>> GetProjectAsync(int page, int size, string search)
+        public async Task<Pagination<ProjectDto>> GetProjectAsync(int page, int size, string search)
         {
             var result = await _projectRepository.GetAllProjects(page, size);
-            return result.Adapt<Pagination<ProjectResponse>>();
+            return result.Adapt<Pagination<ProjectDto>>();
         }
 
 
-        public async Task<Pagination<ProjectResponse>> GetAllProjectByMentorId(string mentorId, int page, int size)
+        public async Task<Pagination<ProjectDto>> GetAllProjectByMentorId(string mentorId, int page, int size)
         {
 
             var result = await _projectRepository.GetProjectsByMentorId(mentorId, page, size);
-            var projectResponse = result.Items.Where(project => project.MentorId == mentorId).Select(project => new ProjectResponse
+            var projectResponse = result.Items.Where(project => project.MentorId == mentorId).Select(project => new ProjectDto()
             {
                 Title = project.Title,  
                 Description = project.Description,
@@ -75,7 +75,7 @@ namespace MBS.Services.Services.Implements
                 DueDate = project.DueDate   
                 
             }).ToList();
-            var projectPagination = new Pagination<ProjectResponse>
+            var projectPagination = new Pagination<ProjectDto>
             {
                 Items = projectResponse,
                 PageIndex = page,

@@ -39,19 +39,19 @@ public class RequestService : IRequestService
         return request.Adapt<Pagination<RequestDto>>();
     }
 
-    public async Task<Pagination<RequestResponse>> GetAllRequestByMentorId(string mentorId, int page, int size)
+    public async Task<Pagination<RequestDto>> GetAllRequestByMentorId(string mentorId, int page, int size)
     {
         var result = await _requestRepository.GetRequestsByMentorId(mentorId, page, size);
-        var response = result.Items.Where(q => q.MentorId == mentorId).Select(p => new RequestResponse
+        var response = result.Items.Where(q => q.MentorId == mentorId).Select(p => new RequestDto
         {
-            RequestId = p.Id,
+            Id = p.Id,
             Title = p.Title,
             Start = p.Start,
             End = p.End,
-            Status = p.Status,
+            Status = p.Status.ToString(),
             ProjectName = p.Project.Title
         }).ToList();
-        var paginationParse = new Pagination<RequestResponse>
+        var paginationParse = new Pagination<RequestDto>
         {
             Items = response,
             PageIndex = page,

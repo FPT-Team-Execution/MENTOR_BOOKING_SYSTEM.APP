@@ -10,7 +10,7 @@ namespace MBS.Services.Services.Interfaces;
 public interface IRequestService
 {
     Task<Pagination<RequestDto>> GetRequestsByProjectIdPaginationAsync(Guid projectId, int pageNumber, int pageSize, string sortOrder = "desc", string? projectStatus = null);
-    public Task<Pagination<RequestResponse>> GetAllRequestByMentorId(string mentorId, int page, int size);
+    public Task<Pagination<RequestDto>> GetAllRequestByMentorId(string mentorId, int page, int size);
     public Task<bool> UpdateRequestStatus(Guid requestId, RequestStatusEnum status);
     public Task<RequestDto> GetRequestById(Guid requestId);
     Task<bool> CreateProjectRequest(Request request);

@@ -19,7 +19,7 @@ namespace MBS.Services.Services.Interfaces
     {
         public Task<Pagination<MentorDto>> GetMentorsPaginationAsync(int page, int size);
 
-        public Task<IEnumerable<MentorsResponse>> GetMentorsAsync();
+        public Task<IEnumerable<MentorDto>> GetMentorsAsync();
 
 
         public Task<IResponse> UpdateMentorAsync(UpdateMentorRequest request);
